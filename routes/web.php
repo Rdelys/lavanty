@@ -13,6 +13,10 @@ Route::get('/products', function () {
     return view('products'); // ta page statique
 })->name('products.public');
 
+Route::get('/product-detail', function () {
+    return view('product-detail');
+})->name('product.detail');
+
 // Auth admin
 Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');

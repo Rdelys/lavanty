@@ -37,9 +37,11 @@
                         </div>
                     </div>
                 </div>
-                <button class="mt-6 w-full bg-gradient-to-r from-red-500 via-yellow-400 to-red-600 text-black font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition">
-                    💰 Placer une enchère
-                </button>
+                <a href="{{ route('product.detail') }}" 
+   class="mt-6 w-full bg-gradient-to-r from-red-500 via-yellow-400 to-red-600 text-black font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition block text-center">
+    💰 Placer une enchère
+</a>
+
             </div>
         </div>
 
@@ -73,9 +75,11 @@
                         </div>
                     </div>
                 </div>
-                <button class="mt-6 w-full bg-gradient-to-r from-red-500 via-yellow-400 to-red-600 text-black font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition">
-                    💰 Placer une enchère
-                </button>
+                <a href="{{ route('product.detail') }}" 
+   class="mt-6 w-full bg-gradient-to-r from-red-500 via-yellow-400 to-red-600 text-black font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition block text-center">
+    💰 Placer une enchère
+</a>
+
             </div>
         </div>
 
@@ -109,9 +113,11 @@
                         </div>
                     </div>
                 </div>
-                <button class="mt-6 w-full bg-gradient-to-r from-red-500 via-yellow-400 to-red-600 text-black font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition">
-                    💰 Placer une enchère
-                </button>
+               <a href="{{ route('product.detail') }}" 
+   class="mt-6 w-full bg-gradient-to-r from-red-500 via-yellow-400 to-red-600 text-black font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition block text-center">
+    💰 Placer une enchère
+</a>
+
             </div>
         </div>
 
