@@ -7,22 +7,41 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
+  <style>
+    /* Small custom tweaks to complement Tailwind */
+    .table-header-sticky thead th {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(4px);
+    }
+    .truncate-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    /* subtle card glow on hover */
+    .card-hover:hover { box-shadow: 0 12px 30px rgba(79, 70, 229, 0.12); transform: translateY(-3px); }
+  </style>
 </head>
-<body class="flex bg-gray-100 min-h-screen">
+<body class="flex bg-gray-100 min-h-screen text-gray-800">
 
   <!-- Sidebar -->
-  <aside class="w-64 bg-gradient-to-b from-indigo-700 to-purple-800 text-white flex flex-col p-5 shadow-xl">
-    <div class="text-2xl font-bold mb-10 flex items-center gap-2">
+  <aside class="w-64 bg-gradient-to-b from-indigo-700 to-purple-800 text-white flex flex-col p-6 shadow-xl">
+    <div class="text-2xl font-extrabold mb-8 flex items-center gap-3">
       <i class="fas fa-gem text-white text-2xl"></i>
-      Admin Panel
+      <span>Admin Panel</span>
     </div>
-    <nav class="flex-1 space-y-2">
-      <a href="#dashboard" class="flex items-center gap-3 p-3 rounded-lg hover:bg-indigo-600 transition duration-300">
+
+    <nav class="flex-1 space-y-2 text-sm">
+      <a href="#dashboard" class="flex items-center gap-3 p-3 rounded-lg hover:bg-indigo-600 transition duration-200">
         <i class="fas fa-tachometer-alt w-5"></i>
         <span>Dashboard</span>
       </a>
+
       <div>
-        <button onclick="toggleSubmenu('produits')" class="flex items-center justify-between w-full p-3 rounded-lg hover:bg-indigo-600 transition duration-300">
+        <button onclick="toggleSubmenu('produits')" class="flex items-center justify-between w-full p-3 rounded-lg hover:bg-indigo-600 transition duration-200">
           <span class="flex items-center gap-3"><i class="fas fa-box-open w-5"></i>Produits</span>
           <i id="icon-produits" class="fas fa-chevron-down transition-transform duration-300"></i>
         </button>
@@ -31,8 +50,9 @@
           <a href="#lister-produits" class="block p-2 text-sm rounded hover:bg-indigo-500 transition">📋 Lister</a>
         </div>
       </div>
+
       <div>
-        <button onclick="toggleSubmenu('enchere')" class="flex items-center justify-between w-full p-3 rounded-lg hover:bg-indigo-600 transition duration-300">
+        <button onclick="toggleSubmenu('enchere')" class="flex items-center justify-between w-full p-3 rounded-lg hover:bg-indigo-600 transition duration-200">
           <span class="flex items-center gap-3"><i class="fas fa-gavel w-5"></i>Enchères</span>
           <i id="icon-enchere" class="fas fa-chevron-down transition-transform duration-300"></i>
         </button>
@@ -41,9 +61,10 @@
           <a href="#non-prises" class="block p-2 text-sm rounded hover:bg-indigo-500 transition">❌ Produits non pris</a>
         </div>
       </div>
-      <form action="{{ route('admin.logout') }}" method="POST" class="mt-5">
+
+      <form action="{{ route('admin.logout') }}" method="POST" class="mt-6">
         @csrf
-        <button type="submit" class="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-red-600 transition duration-300">
+        <button type="submit" class="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-red-600 transition duration-200">
           <i class="fas fa-sign-out-alt w-5"></i>Déconnexion
         </button>
       </form>
@@ -52,198 +73,237 @@
 
   <!-- Contenu -->
   <main class="flex-1 p-6 md:p-10">
-    <!-- Dashboard -->
+
+    <!-- Dashboard header -->
     <section id="dashboard">
-      <h1 class="text-3xl font-bold mb-4 text-gray-800 flex items-center gap-2">
-        <i class="fas fa-chart-line text-indigo-600"></i>Dashboard
-      </h1>
-      <p class="text-gray-600">Bienvenue sur votre tableau de bord admin.</p>
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3"><i class="fas fa-chart-line text-indigo-600"></i>Dashboard</h1>
+          <p class="text-sm text-gray-500 mt-1">Bienvenue sur votre tableau de bord admin.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <input type="text" id="globalSearch" placeholder="Rechercher un produit..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          </div>
+          <a href="#ajouter-produit" class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition"><i class="fas fa-plus"></i>Ajouter</a>
+        </div>
+      </div>
     </section>
 
-    <!-- Formulaire -->
+    <!-- Formulaire - Ajouter -->
     <section id="ajouter-produit" class="hidden">
-      <h1 class="text-3xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-        <i class="fas fa-plus text-indigo-600"></i>Ajouter un produit
-      </h1>
-      <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" 
-            class="space-y-6 bg-white p-6 rounded-2xl shadow-lg border border-gray-200 transition hover:shadow-2xl">
+      <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2"><i class="fas fa-plus text-indigo-600"></i>Ajouter un produit</h2>
+
+      <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 card-hover">
         @csrf
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Titre</label>
-          <input type="text" name="title" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500" required>
-        </div>
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Description</label>
-          <textarea name="description" rows="4" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500" required></textarea>
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Titre</label>
+            <input type="text" name="title" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Ex: Sac vintage" required>
+          </div>
 
-        <div>
-            <label class="block font-semibold text-gray-700 mb-1">Statut</label>
-            <select name="status" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500">
-                <option value="a_venir">À venir</option>
-                <option value="en_cours" selected>En cours</option>
-                <option value="termine">Terminé</option>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Statut</label>
+            <select name="status" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+              <option value="a_venir">À venir</option>
+              <option value="en_cours" selected>En cours</option>
+              <option value="termine">Terminé</option>
             </select>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+            <textarea name="description" rows="4" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Courte description..."></textarea>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Prix de départ (Ariary)</label>
+            <input type="number" step="0.01" name="starting_price" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" required>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <input type="checkbox" name="mise_en_vente" value="1" checked class="w-5 h-5 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-200">
+            <label class="text-sm font-semibold text-gray-700">Mise en vente</label>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Images</label>
+            <input type="file" name="images[]" multiple class="w-full border rounded-lg p-3">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Début</label>
+            <input type="datetime-local" name="start_time" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" required>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Fin</label>
+            <input type="datetime-local" name="end_time" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" required>
+          </div>
+
         </div>
 
-        <div class="flex items-center gap-2">
-            <input type="checkbox" name="mise_en_vente" value="1" checked class="w-5 h-5 text-indigo-600 rounded">
-            <label class="font-semibold text-gray-700">Mise en vente</label>
+        <div class="flex justify-end mt-6">
+          <button type="reset" class="px-5 py-2 rounded-lg bg-gray-100 border border-gray-200 mr-3">Annuler</button>
+          <button type="submit" class="px-6 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow hover:scale-105 transition">➕ Ajouter</button>
         </div>
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Images</label>
-          <input type="file" name="images[]" multiple class="w-full border rounded-lg p-3">
-        </div>
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Prix de départ (Ariary)</label>
-          <input type="number" step="0.01" name="starting_price" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500" required>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block font-semibold text-gray-700 mb-1">Début</label>
-            <input type="datetime-local" name="start_time" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500" required>
-          </div>
-          <div>
-            <label class="block font-semibold text-gray-700 mb-1">Fin</label>
-            <input type="datetime-local" name="end_time" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500" required>
-          </div>
-        </div>
-        <button type="submit" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl shadow hover:scale-105 transition">➕ Ajouter</button>
       </form>
     </section>
 
-    <!-- Tableau -->
-    <section id="lister-produits" class="hidden">
-      <h1 class="text-3xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-        <i class="fas fa-list text-indigo-600"></i>Liste des produits
-      </h1>
-      <div class="overflow-x-auto rounded-xl shadow-lg">
-        <table class="w-full text-left border-collapse">
-          <thead class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-            <tr>
-              <th class="p-3">ID</th>
-              <th class="p-3">Titre</th>
-              <th class="p-3">Photos</th>
-              <th class="p-3">Prix départ</th>
-              <th class="p-3">Début</th>
-              <th class="p-3">Fin</th>
-              <th class="p-3">Statut</th>
-              <th class="p-3">Mise en vente</th>
-              <th class="p-3">Actions</th>
+    <!-- Tableau - Liste des produits -->
+    <section id="lister-produits" class="mt-6 hidden">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2"><i class="fas fa-list text-indigo-600"></i>Liste des produits</h2>
+        <div class="text-sm text-gray-500">Total : <strong>{{ $products->count() }}</strong></div>
+      </div>
+
+      <div class="overflow-x-auto rounded-xl shadow-lg bg-white border border-gray-200">
+        <table class="min-w-full table-auto text-sm table-header-sticky">
+          <thead class="bg-white">
+            <tr class="border-b">
+              <th class="p-3 text-left text-xs text-gray-500 uppercase tracking-wider">ID</th>
+              <th class="p-3 text-left text-xs text-gray-500 uppercase tracking-wider">Titre</th>
+              <th class="p-3 text-left text-xs text-gray-500 uppercase tracking-wider">Photos</th>
+              <th class="p-3 text-right text-xs text-gray-500 uppercase tracking-wider">Prix</th>
+              <th class="p-3 text-left text-xs text-gray-500 uppercase tracking-wider">Début</th>
+              <th class="p-3 text-left text-xs text-gray-500 uppercase tracking-wider">Fin</th>
+              <th class="p-3 text-center text-xs text-gray-500 uppercase tracking-wider">Statut</th>
+              <th class="p-3 text-center text-xs text-gray-500 uppercase tracking-wider">Mise en vente</th>
+              <th class="p-3 text-center text-xs text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
+
+          <tbody class="divide-y divide-gray-100">
             @foreach($products as $product)
             <tr class="hover:bg-gray-50 transition">
-              <td class="p-3">{{ $product->id }}</td>
-              <td class="p-3 font-medium text-gray-700">{{ $product->title }}</td>
-              <td class="p-3 flex gap-2 flex-wrap">
-                @if($product->images)
-                  @foreach($product->images as $img)
-                    <img src="{{ asset('storage/'.$img) }}" class="w-14 h-14 object-cover rounded-lg border">
-                  @endforeach
+              <td class="p-3 align-middle">{{ $product->id }}</td>
+              <td class="p-3 align-middle max-w-xs">
+                <div class="font-medium text-gray-800 truncate-2">{{ $product->title }}</div>
+                <div class="text-xs text-gray-400">ID: {{ $product->id }} • {{ $product->created_at->diffForHumans() }}</div>
+              </td>
+
+              <td class="p-3 align-middle">
+                <div class="flex items-center gap-2">
+                  @if($product->images)
+                    @foreach($product->images as $img)
+                      <img src="{{ asset('storage/'.$img) }}" class="w-12 h-12 object-cover rounded-md border" alt="thumb">
+                    @endforeach
+                  @else
+                    <span class="text-gray-400 text-xs">Aucune</span>
+                  @endif
+                </div>
+              </td>
+
+              <td class="p-3 text-right align-middle font-semibold">{{ number_format($product->starting_price, 0, ',', ' ') }} €</td>
+              <td class="p-3 align-middle text-sm text-gray-600">{{ $product->start_time->format('d/m/Y H:i') }}</td>
+              <td class="p-3 align-middle text-sm text-gray-600">{{ $product->end_time->format('d/m/Y H:i') }}</td>
+
+              <td class="p-3 align-middle text-center">
+                @if($product->status == 'a_venir')
+                  <span class="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700">À venir</span>
+                @elseif($product->status == 'en_cours')
+                  <span class="px-3 py-1 text-sm rounded-full bg-green-50 text-green-600">En cours</span>
                 @else
-                  <span class="text-gray-400">Aucune</span>
+                  <span class="px-3 py-1 text-sm rounded-full bg-red-50 text-red-600">Terminé</span>
                 @endif
               </td>
-              <td class="p-3">{{ $product->starting_price }} €</td>
-              <td class="p-3">{{ $product->start_time->format('d/m/Y H:i') }}</td>
-              <td class="p-3">{{ $product->end_time->format('d/m/Y H:i') }}</td>
-              <td class="p-3">
-                @if($product->status == 'a_venir')
-                    <span class="px-3 py-1 text-sm rounded-full bg-gray-200 text-gray-700">À venir</span>
-                @elseif($product->status == 'en_cours')
-                    <span class="px-3 py-1 text-sm rounded-full bg-green-100 text-green-600">En cours</span>
-                @else
-                    <span class="px-3 py-1 text-sm rounded-full bg-red-100 text-red-600">Terminé</span>
-                @endif
-                </td>
 
-                <td class="p-3">
-                <button onclick="toggleMiseEnVente({{ $product->id }})" 
-                        class="px-3 py-1 rounded-full text-white text-sm 
-                                {{ $product->mise_en_vente ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-400 hover:bg-gray-500' }}">
-                    {{ $product->mise_en_vente ? 'Oui' : 'Non' }}
+              <td class="p-3 align-middle text-center">
+                <button onclick="toggleMiseEnVente({{ $product->id }})" title="Basculer mise en vente" class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm text-white shadow-sm {{ $product->mise_en_vente ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-400 hover:bg-gray-500' }}">
+                  {{ $product->mise_en_vente ? 'Oui' : 'Non' }}
                 </button>
-                </td>
+              </td>
 
-              <td class="p-3 flex gap-2">
-  <!-- Bouton modifier -->
-                <button onclick="openEditModal({{ $product->id }})" 
-                        class="px-4 py-2 bg-yellow-500 text-white rounded-lg shadow hover:scale-105 transition">
+              <td class="p-3 align-middle text-center">
+                <div class="inline-flex items-center gap-2">
+                  <button onclick="openEditModal({{ $product->id }})" title="Modifier" class="p-2 rounded-md bg-yellow-500 hover:bg-yellow-600 text-white shadow-sm transition">
                     <i class="fas fa-edit"></i>
-                </button>
+                  </button>
 
-                <!-- Bouton supprimer -->
-                <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Supprimer ce produit ?');">
+                  <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Supprimer ce produit ?');">
                     @csrf
                     @method('DELETE')
-                    <button class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:scale-105 transition">
-                    <i class="fas fa-trash"></i>
+                    <button type="submit" title="Supprimer" class="p-2 rounded-md bg-red-600 hover:bg-red-700 text-white shadow-sm transition">
+                      <i class="fas fa-trash"></i>
                     </button>
-                </form>
-                </td>
+                  </form>
+                </div>
+              </td>
 
             </tr>
             @endforeach
           </tbody>
         </table>
       </div>
+
     </section>
+
   </main>
 
   <!-- Modal -->
-  <div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-2xl shadow-2xl w-11/12 md:w-2/3 lg:w-1/2 p-8 relative animate-fadeIn">
-      <h2 class="text-2xl font-bold mb-6 text-gray-800">Modifier le produit</h2>
+  <div id="editModal" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-6 relative">
+      <button onclick="closeEditModal()" class="absolute top-4 right-4 p-2 rounded-md bg-gray-100 hover:bg-gray-200"><i class="fas fa-times"></i></button>
+
+      <h2 class="text-xl font-bold mb-4 text-gray-800">Modifier le produit</h2>
+
       <form id="editForm" method="POST" enctype="multipart/form-data" class="space-y-4">
         @csrf @method('PUT')
         <input type="hidden" id="editProductId" name="id">
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Titre</label>
-          <input type="text" id="editTitle" name="title" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Description</label>
-          <textarea id="editDescription" name="description" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"></textarea>
-        </div>
-        <div>
-            <label class="block font-semibold text-gray-700 mb-1">Statut</label>
-            <select name="status" id="editStatus" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500">
-                <option value="a_venir">À venir</option>
-                <option value="en_cours">En cours</option>
-                <option value="termine">Terminé</option>
-            </select>
-        </div>
 
-        <div class="flex items-center gap-2">
-            <input type="checkbox" name="mise_en_vente" id="editMiseEnVente" value="1" class="w-5 h-5 text-indigo-600 rounded">
-            <label class="font-semibold text-gray-700">Mise en vente</label>
-        </div>
-
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Prix de départ (€)</label>
-          <input type="number" id="editPrice" name="starting_price" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500">
-        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block font-semibold text-gray-700 mb-1">Début</label>
-            <input type="datetime-local" id="editStart" name="start_time" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Titre</label>
+            <input type="text" id="editTitle" name="title" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200">
           </div>
+
           <div>
-            <label class="block font-semibold text-gray-700 mb-1">Fin</label>
-            <input type="datetime-local" id="editEnd" name="end_time" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Statut</label>
+            <select name="status" id="editStatus" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+              <option value="a_venir">À venir</option>
+              <option value="en_cours">En cours</option>
+              <option value="termine">Terminé</option>
+            </select>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
+            <textarea id="editDescription" name="description" rows="3" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Prix de départ (€)</label>
+            <input type="number" id="editPrice" name="starting_price" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+          </div>
+
+          <div class="flex items-center gap-3">
+            <input type="checkbox" name="mise_en_vente" id="editMiseEnVente" value="1" class="w-5 h-5 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-200">
+            <label class="text-sm font-semibold text-gray-700">Mise en vente</label>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Début</label>
+            <input type="datetime-local" id="editStart" name="start_time" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Fin</label>
+            <input type="datetime-local" id="editEnd" name="end_time" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Nouvelles images</label>
+            <input type="file" name="images[]" multiple class="w-full border rounded-lg p-3">
           </div>
         </div>
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Nouvelles images</label>
-          <input type="file" name="images[]" multiple class="w-full border rounded-lg p-3">
-        </div>
-        <div class="flex justify-end gap-3 pt-4">
-          <button type="button" onclick="closeEditModal()" class="px-6 py-3 bg-gray-400 text-white rounded-lg hover:scale-105 transition">Annuler</button>
-          <button type="submit" class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg shadow hover:scale-105 transition">💾 Enregistrer</button>
+
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" onclick="closeEditModal()" class="px-4 py-2 rounded-lg bg-gray-100">Annuler</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white">💾 Enregistrer</button>
         </div>
       </form>
+
     </div>
   </div>
 
@@ -254,6 +314,7 @@
       submenu.classList.toggle('hidden');
       icon.classList.toggle('rotate-180');
     }
+
     document.querySelectorAll("a[href^='#']").forEach(link => {
       link.addEventListener("click", function(e) {
         e.preventDefault();
@@ -262,113 +323,112 @@
         document.getElementById(targetId).classList.remove("hidden");
       });
     });
+
     function csrfToken() {
-    const m = document.querySelector('meta[name="csrf-token"]');
-    return m ? m.getAttribute('content') : '';
-  }
-
-  async function openEditModal(id) {
-    try {
-      const res = await fetch(`/products/${id}/edit`, {
-        headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken() }
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-
-      document.getElementById('editProductId').value = data.id;
-      document.getElementById('editTitle').value = data.title || '';
-      document.getElementById('editDescription').value = data.description || '';
-      document.getElementById('editPrice').value = data.starting_price ?? '';
-      document.getElementById('editStart').value = data.start_time || '';
-      document.getElementById('editEnd').value = data.end_time || '';
-      document.getElementById('editStatus').value = data.status || '';
-      document.getElementById('editMiseEnVente').checked = !!data.mise_en_vente;
-
-      const form = document.getElementById('editForm');
-      form.action = `/products/${id}`;
-      document.getElementById('editModal').classList.remove('hidden');
-    } catch (err) {
-      console.error('openEditModal error', err);
-      alert('Impossible de charger le produit (voir console).');
-    }
-  }
-
-  // gestion de la soumission du formulaire (AJAX)
-  document.getElementById('editForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const form = e.target;
-    const action = form.action;
-    if (!action) {
-      return alert('Action du formulaire non définie.');
+      const m = document.querySelector('meta[name="csrf-token"]');
+      return m ? m.getAttribute('content') : '';
     }
 
-    const fd = new FormData(form);
-    // method spoofing pour Laravel
-    fd.set('_method', 'PUT');
+    async function openEditModal(id) {
+      try {
+        const res = await fetch(`/products/${id}/edit`, {
+          headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken() }
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
 
-    try {
-      const res = await fetch(action, {
-        method: 'POST', // on laisse POST et on envoie _method=PUT dans le FormData
-        headers: {
-          'X-CSRF-TOKEN': csrfToken(),
-          'Accept': 'application/json'
-        },
-        body: fd
-      });
+        document.getElementById('editProductId').value = data.id;
+        document.getElementById('editTitle').value = data.title || '';
+        document.getElementById('editDescription').value = data.description || '';
+        document.getElementById('editPrice').value = data.starting_price ?? '';
+        document.getElementById('editStart').value = data.start_time || '';
+        document.getElementById('editEnd').value = data.end_time || '';
+        document.getElementById('editStatus').value = data.status || '';
+        document.getElementById('editMiseEnVente').checked = !!data.mise_en_vente;
 
-      const contentType = res.headers.get('content-type') || '';
-      if (res.ok) {
-        // success JSON attendu
-        let json = {};
-        if (contentType.includes('application/json')) json = await res.json();
-        // si le back a renvoyé success
-        if (json.success === true || res.status === 200) {
-          // fermer modal + recharger table (ou mettre à jour dynamiquement)
-          document.getElementById('editModal').classList.add('hidden');
+        const form = document.getElementById('editForm');
+        form.action = `/products/${id}`;
+        document.getElementById('editModal').classList.remove('hidden');
+      } catch (err) {
+        console.error('openEditModal error', err);
+        alert('Impossible de charger le produit (voir console).');
+      }
+    }
+
+    // gestion de la soumission du formulaire (AJAX)
+    document.getElementById('editForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const action = form.action;
+      if (!action) {
+        return alert('Action du formulaire non définie.');
+      }
+
+      const fd = new FormData(form);
+      fd.set('_method', 'PUT');
+
+      try {
+        const res = await fetch(action, {
+          method: 'POST',
+          headers: { 'X-CSRF-TOKEN': csrfToken(), 'Accept': 'application/json' },
+          body: fd
+        });
+
+        const contentType = res.headers.get('content-type') || '';
+        if (res.ok) {
+          let json = {};
+          if (contentType.includes('application/json')) json = await res.json();
+          if (json.success === true || res.status === 200) {
+            document.getElementById('editModal').classList.add('hidden');
+            location.reload();
+            return;
+          }
+          alert('Mis à jour terminée, rechargez la page.');
           location.reload();
           return;
         }
-        // fallback
-        alert('Mis à jour terminée, rechargez la page.');
-        location.reload();
-        return;
+
+        if (contentType.includes('application/json')) {
+          const json = await res.json();
+          const errs = json.errors || json;
+          console.error('Validation errors', errs);
+          alert('Erreur de validation — voir console pour détails.');
+          return;
+        }
+
+        const text = await res.text();
+        console.error('Server error:', text);
+        alert('Erreur serveur (voir console).');
+
+      } catch (err) {
+        console.error('submit editForm error', err);
+        alert('Erreur réseau (voir console).');
       }
+    });
 
-      // si erreur de validation (JSON)
-      if (contentType.includes('application/json')) {
-        const json = await res.json();
-        const errs = json.errors || json;
-        console.error('Validation errors', errs);
-        alert('Erreur de validation — voir console pour détails.');
-        return;
-      }
-
-      // autre erreur serveur
-      const text = await res.text();
-      console.error('Server error:', text);
-      alert('Erreur serveur (voir console).');
-
-    } catch (err) {
-      console.error('submit editForm error', err);
-      alert('Erreur réseau (voir console).');
-    }
-  });
     function closeEditModal() {
       document.getElementById('editModal').classList.add('hidden');
     }
 
     function toggleMiseEnVente(id) {
-        fetch(`/products/${id}/toggle`, {
-            method: 'PATCH',
-            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-            location.reload(); // ou bien mettre à jour dynamiquement le bouton
-            }
-        });
-        }
+      fetch(`/products/${id}/toggle`, {
+        method: 'PATCH',
+        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) location.reload();
+      });
+    }
+
+    // Basic client-side search (filtre simple)
+    document.getElementById('globalSearch').addEventListener('input', function(e){
+      const q = e.target.value.toLowerCase().trim();
+      document.querySelectorAll('tbody tr').forEach(row => {
+        const txt = row.innerText.toLowerCase();
+        row.style.display = txt.includes(q) ? '' : 'none';
+      });
+    });
 
   </script>
 </body>
