@@ -46,3 +46,6 @@ Route::middleware('auth:admin')->group(function () {
     // CRUD produits
     Route::resource('products', ProductController::class);
 });
+
+Route::patch('/products/{product}/toggle', [ProductController::class, 'toggleMiseEnVente'])
+    ->name('products.toggle');

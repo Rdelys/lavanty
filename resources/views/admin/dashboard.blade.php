@@ -74,12 +74,26 @@
           <label class="block font-semibold text-gray-700 mb-1">Description</label>
           <textarea name="description" rows="4" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500" required></textarea>
         </div>
+
+        <div>
+            <label class="block font-semibold text-gray-700 mb-1">Statut</label>
+            <select name="status" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500">
+                <option value="a_venir">À venir</option>
+                <option value="en_cours" selected>En cours</option>
+                <option value="termine">Terminé</option>
+            </select>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <input type="checkbox" name="mise_en_vente" value="1" checked class="w-5 h-5 text-indigo-600 rounded">
+            <label class="font-semibold text-gray-700">Mise en vente</label>
+        </div>
         <div>
           <label class="block font-semibold text-gray-700 mb-1">Images</label>
           <input type="file" name="images[]" multiple class="w-full border rounded-lg p-3">
         </div>
         <div>
-          <label class="block font-semibold text-gray-700 mb-1">Prix de départ (€)</label>
+          <label class="block font-semibold text-gray-700 mb-1">Prix de départ (Ariary)</label>
           <input type="number" step="0.01" name="starting_price" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500" required>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -111,6 +125,8 @@
               <th class="p-3">Prix départ</th>
               <th class="p-3">Début</th>
               <th class="p-3">Fin</th>
+              <th class="p-3">Statut</th>
+              <th class="p-3">Mise en vente</th>
               <th class="p-3">Actions</th>
             </tr>
           </thead>
@@ -131,14 +147,41 @@
               <td class="p-3">{{ $product->starting_price }} €</td>
               <td class="p-3">{{ $product->start_time->format('d/m/Y H:i') }}</td>
               <td class="p-3">{{ $product->end_time->format('d/m/Y H:i') }}</td>
+              <td class="p-3">
+                @if($product->status == 'a_venir')
+                    <span class="px-3 py-1 text-sm rounded-full bg-gray-200 text-gray-700">À venir</span>
+                @elseif($product->status == 'en_cours')
+                    <span class="px-3 py-1 text-sm rounded-full bg-green-100 text-green-600">En cours</span>
+                @else
+                    <span class="px-3 py-1 text-sm rounded-full bg-red-100 text-red-600">Terminé</span>
+                @endif
+                </td>
+
+                <td class="p-3">
+                <button onclick="toggleMiseEnVente({{ $product->id }})" 
+                        class="px-3 py-1 rounded-full text-white text-sm 
+                                {{ $product->mise_en_vente ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-400 hover:bg-gray-500' }}">
+                    {{ $product->mise_en_vente ? 'Oui' : 'Non' }}
+                </button>
+                </td>
+
               <td class="p-3 flex gap-2">
+  <!-- Bouton modifier -->
                 <button onclick="openEditModal({{ $product->id }})" 
-                        class="px-4 py-2 bg-yellow-500 text-white rounded-lg shadow hover:scale-105 transition">✏ Modifier</button>
+                        class="px-4 py-2 bg-yellow-500 text-white rounded-lg shadow hover:scale-105 transition">
+                    <i class="fas fa-edit"></i>
+                </button>
+
+                <!-- Bouton supprimer -->
                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Supprimer ce produit ?');">
-                  @csrf @method('DELETE')
-                  <button class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:scale-105 transition">🗑 Supprimer</button>
+                    @csrf
+                    @method('DELETE')
+                    <button class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:scale-105 transition">
+                    <i class="fas fa-trash"></i>
+                    </button>
                 </form>
-              </td>
+                </td>
+
             </tr>
             @endforeach
           </tbody>
@@ -162,6 +205,20 @@
           <label class="block font-semibold text-gray-700 mb-1">Description</label>
           <textarea id="editDescription" name="description" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"></textarea>
         </div>
+        <div>
+            <label class="block font-semibold text-gray-700 mb-1">Statut</label>
+            <select name="status" id="editStatus" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500">
+                <option value="a_venir">À venir</option>
+                <option value="en_cours">En cours</option>
+                <option value="termine">Terminé</option>
+            </select>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <input type="checkbox" name="mise_en_vente" id="editMiseEnVente" value="1" class="w-5 h-5 text-indigo-600 rounded">
+            <label class="font-semibold text-gray-700">Mise en vente</label>
+        </div>
+
         <div>
           <label class="block font-semibold text-gray-700 mb-1">Prix de départ (€)</label>
           <input type="number" id="editPrice" name="starting_price" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500">
@@ -213,6 +270,9 @@
           document.getElementById('editPrice').value = data.starting_price;
           document.getElementById('editStart').value = data.start_time.replace(' ', 'T');
           document.getElementById('editEnd').value = data.end_time.replace(' ', 'T');
+          document.getElementById('editStatus').value = data.status;
+          document.getElementById('editMiseEnVente').checked = data.mise_en_vente;
+
           const form = document.getElementById('editForm');
           form.action = `/products/${id}`;
           document.getElementById('editModal').classList.remove('hidden');
@@ -221,6 +281,20 @@
     function closeEditModal() {
       document.getElementById('editModal').classList.add('hidden');
     }
+
+    function toggleMiseEnVente(id) {
+        fetch(`/products/${id}/toggle`, {
+            method: 'PATCH',
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+            location.reload(); // ou bien mettre à jour dynamiquement le bouton
+            }
+        });
+        }
+
   </script>
 </body>
 </html>

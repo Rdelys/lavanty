@@ -21,8 +21,12 @@ class ProductController extends Controller
             'starting_price' => 'required|numeric|min:0',
             'start_time' => 'required|date',
             'end_time' => 'required|date|after:start_time',
+            'status' => 'required|in:a_venir,en_cours,termine',
+            'mise_en_vente' => 'nullable|boolean',
             'images.*' => 'image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        $data['mise_en_vente'] = $request->has('mise_en_vente');
 
         $images = [];
         if ($request->hasFile('images')) {
@@ -51,8 +55,13 @@ class ProductController extends Controller
             'starting_price' => 'required|numeric|min:0',
             'start_time' => 'required|date',
             'end_time' => 'required|date|after:start_time',
+            'status' => 'required|in:a_venir,en_cours,termine',
+            'mise_en_vente' => 'nullable|boolean',
             'images.*' => 'image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        $data['mise_en_vente'] = $request->has('mise_en_vente');
+
 
         $images = $product->images ?? [];
         if ($request->hasFile('images')) {
@@ -72,5 +81,14 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Produit supprimé.');
     }
+
+    public function toggleMiseEnVente(Product $product)
+{
+    $product->mise_en_vente = !$product->mise_en_vente;
+    $product->save();
+
+    return response()->json(['success' => true, 'mise_en_vente' => $product->mise_en_vente]);
+}
+
 }
 

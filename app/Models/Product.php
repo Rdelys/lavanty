@@ -10,18 +10,22 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'description',
-        'images',
-        'starting_price',
-        'start_time',
-        'end_time',
-    ];
+    'title',
+    'description',
+    'images',
+    'starting_price',
+    'start_time',
+    'end_time',
+    'status',
+    'mise_en_vente',
+];
 
-    protected $casts = [
-        'images' => 'array', // JSON -> tableau
-        'start_time' => 'datetime',
-        'end_time' => 'datetime',
-    ];
+protected $casts = [
+    'images' => 'array',
+    'start_time' => 'datetime',
+    'end_time' => 'datetime',
+    'mise_en_vente' => 'boolean',
+];
+
 }
 
