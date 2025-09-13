@@ -36,4 +36,13 @@ use Illuminate\Support\Facades\Auth;
 
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
+// Product management routes
+use App\Http\Controllers\ProductController;
 
+Route::middleware('auth:admin')->group(function () {
+    // Dashboard = liste des produits
+    Route::get('/admin', [ProductController::class, 'index'])->name('admin.dashboard');
+
+    // CRUD produits
+    Route::resource('products', ProductController::class);
+});
