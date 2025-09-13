@@ -23,6 +23,10 @@
     }
     /* subtle card glow on hover */
     .card-hover:hover { box-shadow: 0 12px 30px rgba(79, 70, 229, 0.12); transform: translateY(-3px); }
+
+    .spin-slow {
+    animation: spin 3s linear infinite;
+  }
   </style>
 </head>
 <body class="flex bg-gray-100 min-h-screen text-gray-800">
@@ -47,7 +51,6 @@
         </button>
         <div id="submenu-produits" class="ml-6 mt-1 space-y-1 hidden">
           <a href="#ajouter-produit" class="block p-2 text-sm rounded hover:bg-indigo-500 transition">➕ Ajouter</a>
-          <a href="#lister-produits" class="block p-2 text-sm rounded hover:bg-indigo-500 transition">📋 Lister</a>
         </div>
       </div>
 
@@ -76,84 +79,84 @@
 
     <!-- Dashboard header -->
     <section id="dashboard">
-      <div class="flex items-center justify-between mb-6">
-        <div>
-          <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3"><i class="fas fa-chart-line text-indigo-600"></i>Dashboard</h1>
-          <p class="text-sm text-gray-500 mt-1">Bienvenue sur votre tableau de bord admin.</p>
+  <div class="flex flex-col gap-6">
+    <!-- En-tête -->
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+          <i class="fas fa-chart-line text-indigo-600"></i>Dashboard
+        </h1>
+        <p class="text-sm text-gray-500 mt-1">Bienvenue sur votre tableau de bord admin.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <input type="text" id="globalSearch" placeholder="Rechercher un produit..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+          <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
         </div>
-        <div class="flex items-center gap-3">
-          <div class="relative">
-            <input type="text" id="globalSearch" placeholder="Rechercher un produit..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-200" />
-            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-          </div>
-          <a href="#ajouter-produit" class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition"><i class="fas fa-plus"></i>Ajouter</a>
+        <a href="#ajouter-produit" class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition">
+          <i class="fas fa-plus"></i>Ajouter
+        </a>
+      </div>
+    </div>
+
+    <!-- Cartes de statistiques -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Total produits -->
+      <div class="bg-white rounded-2xl shadow-md p-5 flex items-center gap-4 card-hover">
+        <div class="p-3 rounded-xl bg-indigo-100 text-indigo-600"><i class="fas fa-box-open text-2xl"></i></div>
+        <div>
+          <p class="text-sm text-gray-500">Produits créés</p>
+          <h3 class="text-2xl font-bold">{{ $products->count() }}</h3>
         </div>
       </div>
-    </section>
 
-    <!-- Formulaire - Ajouter -->
-    <section id="ajouter-produit" class="hidden">
-      <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2"><i class="fas fa-plus text-indigo-600"></i>Ajouter un produit</h2>
-
-      <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 card-hover">
-        @csrf
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Titre</label>
-            <input type="text" name="title" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Ex: Sac vintage" required>
-          </div>
-
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Statut</label>
-            <select name="status" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200">
-              <option value="a_venir">À venir</option>
-              <option value="en_cours" selected>En cours</option>
-              <option value="termine">Terminé</option>
-            </select>
-          </div>
-
-          <div class="md:col-span-2">
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
-            <textarea name="description" rows="4" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Courte description..."></textarea>
-          </div>
-
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Prix de départ (Ariary)</label>
-            <input type="number" step="0.01" name="starting_price" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" required>
-          </div>
-
-          <div class="flex items-center gap-3">
-            <input type="checkbox" name="mise_en_vente" value="1" checked class="w-5 h-5 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-200">
-            <label class="text-sm font-semibold text-gray-700">Mise en vente</label>
-          </div>
-
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Images</label>
-            <input type="file" name="images[]" multiple class="w-full border rounded-lg p-3">
-          </div>
-
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Début</label>
-            <input type="datetime-local" name="start_time" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" required>
-          </div>
-
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Fin</label>
-            <input type="datetime-local" name="end_time" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" required>
-          </div>
-
+      <!-- Produits en cours -->
+      <!-- Carte Produits en cours -->
+        <div class="bg-white rounded-2xl shadow-md p-6 flex items-center gap-4 hover:shadow-lg transition-transform hover:-translate-y-1">
+        <!-- Icône à gauche -->
+        <div class="bg-green-100 text-green-600 p-4 rounded-xl flex items-center justify-center">
+            <i class="fas fa-spinner animate-spin text-xl"></i>
         </div>
 
-        <div class="flex justify-end mt-6">
-          <button type="reset" class="px-5 py-2 rounded-lg bg-gray-100 border border-gray-200 mr-3">Annuler</button>
-          <button type="submit" class="px-6 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow hover:scale-105 transition">➕ Ajouter</button>
+        <!-- Texte aligné à droite de l'icône -->
+        <div class="flex flex-col justify-center">
+            <p class="text-sm text-gray-500">Produits en cours</p>
+            <h2 class="text-2xl font-bold text-gray-800">
+            {{ $products->where('status', 'en_cours')->count() }}
+            </h2>
         </div>
-      </form>
-    </section>
+        </div>
 
-    <!-- Tableau - Liste des produits -->
-    <section id="lister-produits" class="mt-6 hidden">
-      <div class="flex items-center justify-between mb-4">
+
+
+      <!-- Produits vendus / terminés -->
+      <div class="bg-white rounded-2xl shadow-md p-5 flex items-center gap-4 card-hover">
+        <div class="p-3 rounded-xl bg-red-100 text-red-600"><i class="fas fa-check-circle text-2xl"></i></div>
+        <div>
+          <p class="text-sm text-gray-500">Vendus</p>
+          <h3 class="text-2xl font-bold">{{ $products->where('status','termine')->count() }}</h3>
+        </div>
+      </div>
+
+      <!-- Produits à venir -->
+      <div class="bg-white rounded-2xl shadow-md p-5 flex items-center gap-4 card-hover">
+        <div class="p-3 rounded-xl bg-yellow-100 text-yellow-600"><i class="fas fa-clock text-2xl"></i></div>
+        <div>
+          <p class="text-sm text-gray-500">À venir</p>
+          <h3 class="text-2xl font-bold">{{ $products->where('status','a_venir')->count() }}</h3>
+        </div>
+      </div>
+
+      <!-- Produits remis aux clients -->
+      <div class="bg-white rounded-2xl shadow-md p-5 flex items-center gap-4 card-hover sm:col-span-2 lg:col-span-4">
+        <div class="p-3 rounded-xl bg-purple-100 text-purple-600"><i class="fas fa-handshake text-2xl"></i></div>
+        <div>
+          <p class="text-sm text-gray-500">Remis aux clients</p>
+          <h3 class="text-2xl font-bold">{{ $products->where('status','termine')->where('mise_en_vente',false)->count() }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2"><i class="fas fa-list text-indigo-600"></i>Liste des produits</h2>
         <div class="text-sm text-gray-500">Total : <strong>{{ $products->count() }}</strong></div>
       </div>
@@ -236,7 +239,68 @@
           </tbody>
         </table>
       </div>
+  </div>
+</section>
 
+
+    <!-- Formulaire - Ajouter -->
+    <section id="ajouter-produit" class="hidden">
+      <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2"><i class="fas fa-plus text-indigo-600"></i>Ajouter un produit</h2>
+
+      <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 card-hover">
+        @csrf
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Titre</label>
+            <input type="text" name="title" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Ex: Sac vintage" required>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Statut</label>
+            <select name="status" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+              <option value="a_venir">À venir</option>
+              <option value="en_cours" selected>En cours</option>
+              <option value="termine">Terminé</option>
+            </select>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+            <textarea name="description" rows="4" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Courte description..."></textarea>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Prix de départ (Ariary)</label>
+            <input type="number" step="0.01" name="starting_price" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" required>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <input type="checkbox" name="mise_en_vente" value="1" checked class="w-5 h-5 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-200">
+            <label class="text-sm font-semibold text-gray-700">Mise en vente</label>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Images</label>
+            <input type="file" name="images[]" multiple class="w-full border rounded-lg p-3">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Début</label>
+            <input type="datetime-local" name="start_time" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" required>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Fin</label>
+            <input type="datetime-local" name="end_time" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" required>
+          </div>
+
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button type="reset" class="px-5 py-2 rounded-lg bg-gray-100 border border-gray-200 mr-3">Annuler</button>
+          <button type="submit" class="px-6 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow hover:scale-105 transition">➕ Ajouter</button>
+        </div>
+      </form>
     </section>
 
   </main>
