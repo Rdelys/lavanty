@@ -43,8 +43,18 @@ class ProductController extends Controller
 
     public function edit(Product $product)
 {
-    return response()->json($product);
+    return response()->json([
+        'id' => $product->id,
+        'title' => $product->title,
+        'description' => $product->description,
+        'starting_price' => $product->starting_price,
+        'start_time' => $product->start_time ? $product->start_time->format('Y-m-d\TH:i') : null,
+        'end_time' => $product->end_time ? $product->end_time->format('Y-m-d\TH:i') : null,
+        'status' => $product->status,
+        'mise_en_vente' => (bool) $product->mise_en_vente,
+    ]);
 }
+
 
 
     public function update(Request $request, Product $product)
@@ -73,8 +83,11 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return redirect()->route('products.index')->with('success', 'Produit mis à jour.');
-    }
+if ($request->wantsJson() || $request->ajax()) {
+    return response()->json(['success' => true, 'product' => $product]);
+}
+
+return redirect()->route('admin.dashboard')->with('success', 'Produit mis à jour.');    }
 
     public function destroy(Product $product)
     {

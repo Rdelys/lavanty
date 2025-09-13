@@ -5,6 +5,8 @@
   <title>Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
 </head>
 <body class="flex bg-gray-100 min-h-screen">
 
@@ -196,7 +198,7 @@
       <h2 class="text-2xl font-bold mb-6 text-gray-800">Modifier le produit</h2>
       <form id="editForm" method="POST" enctype="multipart/form-data" class="space-y-4">
         @csrf @method('PUT')
-        <input type="hidden" id="editProductId">
+        <input type="hidden" id="editProductId" name="id">
         <div>
           <label class="block font-semibold text-gray-700 mb-1">Titre</label>
           <input type="text" id="editTitle" name="title" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500">
@@ -260,24 +262,97 @@
         document.getElementById(targetId).classList.remove("hidden");
       });
     });
-    function openEditModal(id) {
-      fetch(`/products/${id}/edit`)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById('editProductId').value = data.id;
-          document.getElementById('editTitle').value = data.title;
-          document.getElementById('editDescription').value = data.description;
-          document.getElementById('editPrice').value = data.starting_price;
-          document.getElementById('editStart').value = data.start_time.replace(' ', 'T');
-          document.getElementById('editEnd').value = data.end_time.replace(' ', 'T');
-          document.getElementById('editStatus').value = data.status;
-          document.getElementById('editMiseEnVente').checked = data.mise_en_vente;
+    function csrfToken() {
+    const m = document.querySelector('meta[name="csrf-token"]');
+    return m ? m.getAttribute('content') : '';
+  }
 
-          const form = document.getElementById('editForm');
-          form.action = `/products/${id}`;
-          document.getElementById('editModal').classList.remove('hidden');
-        });
+  async function openEditModal(id) {
+    try {
+      const res = await fetch(`/products/${id}/edit`, {
+        headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken() }
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+
+      document.getElementById('editProductId').value = data.id;
+      document.getElementById('editTitle').value = data.title || '';
+      document.getElementById('editDescription').value = data.description || '';
+      document.getElementById('editPrice').value = data.starting_price ?? '';
+      document.getElementById('editStart').value = data.start_time || '';
+      document.getElementById('editEnd').value = data.end_time || '';
+      document.getElementById('editStatus').value = data.status || '';
+      document.getElementById('editMiseEnVente').checked = !!data.mise_en_vente;
+
+      const form = document.getElementById('editForm');
+      form.action = `/products/${id}`;
+      document.getElementById('editModal').classList.remove('hidden');
+    } catch (err) {
+      console.error('openEditModal error', err);
+      alert('Impossible de charger le produit (voir console).');
     }
+  }
+
+  // gestion de la soumission du formulaire (AJAX)
+  document.getElementById('editForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const action = form.action;
+    if (!action) {
+      return alert('Action du formulaire non définie.');
+    }
+
+    const fd = new FormData(form);
+    // method spoofing pour Laravel
+    fd.set('_method', 'PUT');
+
+    try {
+      const res = await fetch(action, {
+        method: 'POST', // on laisse POST et on envoie _method=PUT dans le FormData
+        headers: {
+          'X-CSRF-TOKEN': csrfToken(),
+          'Accept': 'application/json'
+        },
+        body: fd
+      });
+
+      const contentType = res.headers.get('content-type') || '';
+      if (res.ok) {
+        // success JSON attendu
+        let json = {};
+        if (contentType.includes('application/json')) json = await res.json();
+        // si le back a renvoyé success
+        if (json.success === true || res.status === 200) {
+          // fermer modal + recharger table (ou mettre à jour dynamiquement)
+          document.getElementById('editModal').classList.add('hidden');
+          location.reload();
+          return;
+        }
+        // fallback
+        alert('Mis à jour terminée, rechargez la page.');
+        location.reload();
+        return;
+      }
+
+      // si erreur de validation (JSON)
+      if (contentType.includes('application/json')) {
+        const json = await res.json();
+        const errs = json.errors || json;
+        console.error('Validation errors', errs);
+        alert('Erreur de validation — voir console pour détails.');
+        return;
+      }
+
+      // autre erreur serveur
+      const text = await res.text();
+      console.error('Server error:', text);
+      alert('Erreur serveur (voir console).');
+
+    } catch (err) {
+      console.error('submit editForm error', err);
+      alert('Erreur réseau (voir console).');
+    }
+  });
     function closeEditModal() {
       document.getElementById('editModal').classList.add('hidden');
     }
