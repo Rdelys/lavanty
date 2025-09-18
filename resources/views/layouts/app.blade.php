@@ -15,6 +15,8 @@
             <a href="{{ url('/') }}" class="text-2xl font-bold text-blue-600 flex items-center gap-2">
                 <i class="fas fa-gavel text-yellow-400"></i> Lavanty.mg
             </a>
+
+            <!-- Desktop Nav -->
             <nav class="hidden md:flex items-center gap-6">
                 <a href="{{ url('/') }}" class="hover:text-blue-600 transition">Accueil</a>
                 <a href="{{ url('/products') }}" class="hover:text-blue-600 transition">Produits</a>
@@ -24,9 +26,28 @@
                     Inscription
                 </button>
             </nav>
+
+            <!-- Mobile Nav Toggle -->
+            <div class="md:hidden">
+                <button id="mobileMenuButton" class="text-blue-600 text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobileMenu" class="md:hidden hidden flex-col gap-2 px-6 pb-4 bg-white shadow-md">
+            <a href="{{ url('/') }}" class="block py-2 text-gray-700 hover:text-blue-600">Accueil</a>
+            <a href="{{ url('/products') }}" class="block py-2 text-gray-700 hover:text-blue-600">Produits</a>
+            <a href="{{ url('/contact') }}" class="block py-2 text-gray-700 hover:text-blue-600">Contact</a>
+            <button id="openLoginMobile" class="block w-full text-left py-2 text-gray-700 hover:text-yellow-500">Connexion</button>
+            <button id="openRegisterMobile" class="w-full bg-blue-600 text-yellow-400 py-2 rounded-lg shadow mt-2">
+                Inscription
+            </button>
         </div>
     </header>
 
+    <!-- Main Content -->
     <main class="flex-1">
         @yield('content')
     </main>
@@ -39,7 +60,7 @@
         </div>
     </footer>
 
-    <!-- Modals -->
+    <!-- Modals Overlay -->
     <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
 
     <!-- Modal Inscription -->
@@ -48,11 +69,14 @@
             <button id="closeRegister" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">
                 <i class="fas fa-times"></i>
             </button>
-            <h2 class="text-2xl font-bold mb-4 text-center">Inscription</h2>
+            <h2 class="text-2xl font-bold mb-4 text-center text-blue-600">Inscription</h2>
             <form class="flex flex-col gap-4">
-                <input type="text" placeholder="Nom complet" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                <input type="email" placeholder="Email" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <input type="text" placeholder="Nom" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <input type="text" placeholder="Prénoms" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <input type="email" placeholder="Adresse email" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <input type="tel" placeholder="Numéro de téléphone" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
                 <input type="password" placeholder="Mot de passe" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <input type="password" placeholder="Confirmation du mot de passe" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
                 <button type="submit" class="bg-blue-600 text-yellow-400 font-bold py-2 rounded hover:bg-blue-700 transition">Créer un compte</button>
             </form>
         </div>
@@ -64,7 +88,7 @@
             <button id="closeLogin" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">
                 <i class="fas fa-times"></i>
             </button>
-            <h2 class="text-2xl font-bold mb-4 text-center">Connexion</h2>
+            <h2 class="text-2xl font-bold mb-4 text-center text-yellow-600">Connexion</h2>
             <form class="flex flex-col gap-4">
                 <input type="email" placeholder="Email" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
                 <input type="password" placeholder="Mot de passe" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
@@ -73,17 +97,31 @@
         </div>
     </div>
 
-    <!-- Script pour ouvrir/fermer les modals -->
+    <!-- Scripts -->
     <script>
         const overlay = document.getElementById('modalOverlay');
 
         const registerModal = document.getElementById('registerModal');
         const loginModal = document.getElementById('loginModal');
 
-        document.getElementById('openRegister').addEventListener('click', () => openModal(registerModal));
-        document.getElementById('closeRegister').addEventListener('click', () => closeModal(registerModal));
+        const openRegisterButtons = [
+            document.getElementById('openRegister'),
+            document.getElementById('openRegisterMobile')
+        ];
+        const openLoginButtons = [
+            document.getElementById('openLogin'),
+            document.getElementById('openLoginMobile')
+        ];
 
-        document.getElementById('openLogin').addEventListener('click', () => openModal(loginModal));
+        openRegisterButtons.forEach(btn => {
+            btn?.addEventListener('click', () => openModal(registerModal));
+        });
+
+        openLoginButtons.forEach(btn => {
+            btn?.addEventListener('click', () => openModal(loginModal));
+        });
+
+        document.getElementById('closeRegister').addEventListener('click', () => closeModal(registerModal));
         document.getElementById('closeLogin').addEventListener('click', () => closeModal(loginModal));
 
         overlay.addEventListener('click', () => {
@@ -106,6 +144,13 @@
                 overlay.classList.add('hidden');
             }, 200);
         }
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
     </script>
 
 </body>
