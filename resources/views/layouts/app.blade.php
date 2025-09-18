@@ -12,15 +12,15 @@
     <!-- Header -->
     <header class="bg-white shadow-md sticky top-0 z-50">
         <div class="container mx-auto flex items-center justify-between px-6 py-4">
-            <a href="{{ url('/') }}" class="text-2xl font-bold text-green-600 flex items-center gap-2">
-                <i class="fas fa-gavel"></i> Lavanty.mg
+            <a href="{{ url('/') }}" class="text-2xl font-bold text-blue-600 flex items-center gap-2">
+                <i class="fas fa-gavel text-yellow-400"></i> Lavanty.mg
             </a>
             <nav class="hidden md:flex items-center gap-6">
-                <a href="{{ url('/') }}" class="hover:text-red-600 transition">Accueil</a>
-                <a href="{{ url('/products') }}" class="hover:text-red-600 transition">Produits</a>
-                <a href="{{ url('/contact') }}" class="hover:text-red-600 transition">Contact</a>
-                <a href="#" class="hover:text-green-600 transition">Connexion</a>
-                <a href="#" class="px-4 py-2 bg-gradient-to-r from-green-600 to-red-600 text-white rounded-lg shadow hover:scale-105 transition">
+                <a href="{{ url('/') }}" class="hover:text-blue-600 transition">Accueil</a>
+                <a href="{{ url('/products') }}" class="hover:text-blue-600 transition">Produits</a>
+                <a href="{{ url('/contact') }}" class="hover:text-blue-600 transition">Contact</a>
+                <a href="#" class="hover:text-yellow-500 transition">Connexion</a>
+                <a href="#" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-yellow-400 text-white rounded-lg shadow hover:scale-105 transition">
                     Inscription
                 </a>
             </nav>
@@ -32,10 +32,10 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 py-6 mt-10">
+    <footer class="bg-blue-900 text-gray-200 py-6 mt-10">
         <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
             <p>&copy; {{ date('Y') }} Lavanty.mg - Tous droits réservés.</p>
-            <p class="text-sm mt-2 md:mt-0">Développé par <span class="text-green-400 font-semibold">Dev Art Agency</span></p>
+            <p class="text-sm mt-2 md:mt-0">Développé par <span class="text-yellow-400 font-semibold">Dev Art Agency</span></p>
         </div>
     </footer>
 
