@@ -47,21 +47,25 @@
                 </div>
             </div>
 
+            <!-- Placer enchère -->
             @auth
-                <button class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-8 py-4 rounded-xl 
-                            shadow-lg hover:shadow-xl hover:scale-105 transition w-fit">
-                    💰 Placer une enchère
+            <div class="mb-6 flex gap-3 items-center">
+                <input type="number" id="bidAmount" placeholder="Votre enchère (Ar)"
+                       class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <button id="placeBidBtn" class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-6 py-2 rounded-xl transition">
+                    💰 Placer
                 </button>
+            </div>
             @else
                 <p class="text-gray-500 font-semibold">Connectez-vous pour pouvoir placer une enchère.</p>
             @endauth
         </div>
     </div>
 
-    <!-- Tableau d'enchères statique -->
+    <!-- Tableau enchères -->
     <div class="mt-16">
         <h2 class="text-2xl font-bold mb-4">Historique des enchères</h2>
-        <table class="w-full text-left border-collapse">
+        <table id="bidsTable" class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-gray-100">
                     <th class="border px-4 py-2">#</th>
@@ -70,39 +74,25 @@
                     <th class="border px-4 py-2">Date / Heure</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td class="border px-4 py-2">1</td>
-                    <td class="border px-4 py-2">Hervé</td>
-                    <td class="border px-4 py-2">500 000</td>
-                    <td class="border px-4 py-2">21/09/2025 15:30</td>
-                </tr>
-                <tr class="bg-gray-50">
-                    <td class="border px-4 py-2">2</td>
-                    <td class="border px-4 py-2">Aina</td>
-                    <td class="border px-4 py-2">550 000</td>
-                    <td class="border px-4 py-2">21/09/2025 16:10</td>
-                </tr>
-                <tr>
-                    <td class="border px-4 py-2">3</td>
-                    <td class="border px-4 py-2">Rado</td>
-                    <td class="border px-4 py-2">600 000</td>
-                    <td class="border px-4 py-2">21/09/2025 16:45</td>
-                </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 </section>
 
+<!-- Modale pour messages -->
+<div id="messageModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-xl shadow-lg max-w-sm w-full p-6 text-center relative">
+        <button id="closeModal" class="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+        <p id="modalMessage" class="text-gray-800 text-lg"></p>
+    </div>
+</div>
+
 <!-- Scripts -->
 <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
 <script>
-    // Panzoom pour image interactive
+    // Panzoom
     const element = document.getElementById('zoomContainer');
-    const panzoom = Panzoom(element, {
-        maxScale: 3,
-        contain: 'outside'
-    });
+    const panzoom = Panzoom(element, { maxScale: 3, contain: 'outside' });
     element.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
     // Countdown
@@ -135,5 +125,107 @@
         }
         updateCountdown();
     });
+
+    // Modale
+    function showModal(message) {
+        const modal = document.getElementById('messageModal');
+        const modalMsg = document.getElementById('modalMessage');
+        modalMsg.textContent = message;
+        modal.classList.remove('hidden');
+    }
+    document.getElementById('closeModal').addEventListener('click', () => {
+        document.getElementById('messageModal').classList.add('hidden');
+    });
+    document.getElementById('messageModal').addEventListener('click', e => {
+        if(e.target.id === 'messageModal') e.target.classList.add('hidden');
+    });
+
+    const productId = {{ $product->id }};
+    const bidsTableBody = document.querySelector('#bidsTable tbody');
+    const bidInput = document.getElementById('bidAmount');
+
+    // Charger enchères
+    async function loadBids() {
+        try {
+            const res = await fetch(`/products/${productId}/bids`, {
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                console.error('Erreur fetch bids:', text);
+                return showModal('Impossible de charger les enchères.');
+            }
+
+            const bids = await res.json();
+
+            bidsTableBody.innerHTML = '';
+            bids.forEach((bid, index) => {
+                const tr = document.createElement('tr');
+                if(index % 2 === 1) tr.classList.add('bg-gray-50');
+                if(index === 0) tr.classList.add('bg-yellow-100');
+                tr.innerHTML = `
+                    <td class="border px-4 py-2">${index + 1}</td>
+                    <td class="border px-4 py-2">${bid.user.nom} ${bid.user.prenoms}</td>
+                    <td class="border px-4 py-2 font-bold text-blue-700">${Number(bid.amount).toLocaleString('fr-FR')}</td>
+                    <td class="border px-4 py-2">${new Date(bid.created_at).toLocaleString('fr-FR')}</td>
+                `;
+                bidsTableBody.appendChild(tr);
+            });
+
+            @auth
+                const lastUserBid = bids.find(b => b.user.id === {{ auth()->id() }});
+                if(lastUserBid) bidInput.value = lastUserBid.amount;
+            @endauth
+
+        } catch(err) {
+            console.error('Erreur JS:', err);
+            showModal('Erreur lors du chargement des enchères.');
+        }
+    }
+
+    loadBids();
+
+    // Placer une enchère
+    @auth
+    document.getElementById('placeBidBtn').addEventListener('click', async () => {
+        const amount = parseFloat(bidInput.value);
+        if(!amount || amount <= 0) return showModal('Veuillez saisir un montant valide.');
+
+        const lastBidRow = bidsTableBody.querySelector('tr');
+        let minAmount = {{ $product->starting_price }};
+        if(lastBidRow){
+            minAmount = parseFloat(lastBidRow.children[2].textContent.replace(/\s/g,''));
+            minAmount += 1;
+        }
+        if(amount < minAmount){
+            return showModal(`Votre enchère doit dépasser le dernier montant : ${minAmount.toLocaleString('fr-FR')} Ar`);
+        }
+
+        try {
+            const res = await fetch(`/products/${productId}/bid`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ amount })
+            });
+
+            if(res.ok){
+                bidInput.value = '';
+                loadBids();
+                showModal('✅ Enchère placée avec succès !');
+            } else {
+                const data = await res.json();
+                showModal(data.message || 'Erreur lors de l\'enchère.');
+            }
+        } catch(err) {
+            console.error('Erreur JS:', err);
+            showModal('Erreur lors de l\'enchère.');
+        }
+    });
+    @endauth
 </script>
 @endsection

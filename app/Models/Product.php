@@ -26,6 +26,9 @@ protected $casts = [
     'end_time' => 'datetime',
     'mise_en_vente' => 'boolean',
 ];
-
+public function bids()
+    {
+        return $this->hasMany(Bid::class);
+    }
 }
 

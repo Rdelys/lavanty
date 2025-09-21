@@ -43,3 +43,11 @@ Route::middleware('auth:admin')->group(function () {
     Route::patch('admin/products/{product}/toggle', [ProductController::class, 'toggleMiseEnVente'])
         ->name('admin.products.toggle');
 });
+
+use App\Http\Controllers\BidController;
+
+Route::middleware('auth')->group(function() {
+    Route::post('/products/{product}/bid', [BidController::class, 'store'])->name('bids.store');
+});
+
+Route::get('/products/{product}/bids', [BidController::class, 'index'])->name('bids.index');
