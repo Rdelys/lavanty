@@ -395,7 +395,7 @@
 
     async function openEditModal(id) {
       try {
-        const res = await fetch(`/products/${id}/edit`, {
+        const res = await fetch(`/admin/products/${id}/edit`, {
           headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken() }
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -411,7 +411,7 @@
         document.getElementById('editMiseEnVente').checked = !!data.mise_en_vente;
 
         const form = document.getElementById('editForm');
-        form.action = `/products/${id}`;
+        form.action = `/admin/products/${id}`;
         document.getElementById('editModal').classList.remove('hidden');
       } catch (err) {
         console.error('openEditModal error', err);
@@ -475,7 +475,7 @@
     }
 
     function toggleMiseEnVente(id) {
-      fetch(`/products/${id}/toggle`, {
+      fetch(`/admin/products/${id}/toggle`, {
         method: 'PATCH',
         headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
       })
