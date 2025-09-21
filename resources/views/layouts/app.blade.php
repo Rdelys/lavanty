@@ -21,10 +21,21 @@
                 <a href="{{ url('/') }}" class="hover:text-blue-600 transition">Accueil</a>
                 <a href="{{ url('/products') }}" class="hover:text-blue-600 transition">Produits</a>
                 <a href="{{ url('/contact') }}" class="hover:text-blue-600 transition">Contact</a>
-                <button id="openLogin" class="hover:text-yellow-500 transition">Connexion</button>
-                <button id="openRegister" class="px-4 py-2 bg-blue-600 text-yellow-400 rounded-lg shadow hover:scale-105 transition">
-                    Inscription
-                </button>
+
+                @auth
+                    <span class="text-gray-700 font-semibold">{{ auth()->user()->nom }} {{ auth()->user()->prenoms }}</span>
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition">
+                            Déconnexion
+                        </button>
+                    </form>
+                @else
+                    <button id="openLogin" class="hover:text-yellow-500 transition">Connexion</button>
+                    <button id="openRegister" class="px-4 py-2 bg-blue-600 text-yellow-400 rounded-lg shadow hover:scale-105 transition">
+                        Inscription
+                    </button>
+                @endauth
             </nav>
 
             <!-- Mobile Nav Toggle -->
@@ -40,10 +51,19 @@
             <a href="{{ url('/') }}" class="block py-2 text-gray-700 hover:text-blue-600">Accueil</a>
             <a href="{{ url('/products') }}" class="block py-2 text-gray-700 hover:text-blue-600">Produits</a>
             <a href="{{ url('/contact') }}" class="block py-2 text-gray-700 hover:text-blue-600">Contact</a>
-            <button id="openLoginMobile" class="block w-full text-left py-2 text-gray-700 hover:text-yellow-500">Connexion</button>
-            <button id="openRegisterMobile" class="w-full bg-blue-600 text-yellow-400 py-2 rounded-lg shadow mt-2">
-                Inscription
-            </button>
+
+            @auth
+                <span class="block py-2 text-gray-700 font-semibold">{{ auth()->user()->nom }} {{ auth()->user()->prenoms }}</span>
+                <form action="{{ route('logout') }}" method="POST" class="block">
+                    @csrf
+                    <button type="submit" class="w-full text-left py-2 text-red-600 font-bold">Déconnexion</button>
+                </form>
+            @else
+                <button id="openLoginMobile" class="block w-full text-left py-2 text-gray-700 hover:text-yellow-500">Connexion</button>
+                <button id="openRegisterMobile" class="w-full bg-blue-600 text-yellow-400 py-2 rounded-lg shadow mt-2">
+                    Inscription
+                </button>
+            @endauth
         </div>
     </header>
 
@@ -70,13 +90,14 @@
                 <i class="fas fa-times"></i>
             </button>
             <h2 class="text-2xl font-bold mb-4 text-center text-blue-600">Inscription</h2>
-            <form class="flex flex-col gap-4">
-                <input type="text" placeholder="Nom" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                <input type="text" placeholder="Prénoms" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                <input type="email" placeholder="Adresse email" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                <input type="tel" placeholder="Numéro de téléphone" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                <input type="password" placeholder="Mot de passe" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                <input type="password" placeholder="Confirmation du mot de passe" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-4">
+                @csrf
+                <input type="text" name="nom" placeholder="Nom" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <input type="text" name="prenoms" placeholder="Prénoms" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <input type="email" name="email" placeholder="Adresse email" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <input type="tel" name="telephone" placeholder="Numéro de téléphone" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <input type="password" name="password" placeholder="Mot de passe" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <input type="password" name="password_confirmation" placeholder="Confirmation du mot de passe" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
                 <button type="submit" class="bg-blue-600 text-yellow-400 font-bold py-2 rounded hover:bg-blue-700 transition">Créer un compte</button>
             </form>
         </div>
@@ -89,9 +110,10 @@
                 <i class="fas fa-times"></i>
             </button>
             <h2 class="text-2xl font-bold mb-4 text-center text-yellow-600">Connexion</h2>
-            <form class="flex flex-col gap-4">
-                <input type="email" placeholder="Email" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                <input type="password" placeholder="Mot de passe" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-4">
+                @csrf
+                <input type="email" name="email" placeholder="Email" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <input type="password" name="password" placeholder="Mot de passe" class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
                 <button type="submit" class="bg-yellow-600 text-white font-bold py-2 rounded hover:bg-yellow-500 transition">Se connecter</button>
             </form>
         </div>
@@ -100,7 +122,6 @@
     <!-- Scripts -->
     <script>
         const overlay = document.getElementById('modalOverlay');
-
         const registerModal = document.getElementById('registerModal');
         const loginModal = document.getElementById('loginModal');
 
@@ -113,13 +134,8 @@
             document.getElementById('openLoginMobile')
         ];
 
-        openRegisterButtons.forEach(btn => {
-            btn?.addEventListener('click', () => openModal(registerModal));
-        });
-
-        openLoginButtons.forEach(btn => {
-            btn?.addEventListener('click', () => openModal(loginModal));
-        });
+        openRegisterButtons.forEach(btn => btn?.addEventListener('click', () => openModal(registerModal)));
+        openLoginButtons.forEach(btn => btn?.addEventListener('click', () => openModal(loginModal)));
 
         document.getElementById('closeRegister').addEventListener('click', () => closeModal(registerModal));
         document.getElementById('closeLogin').addEventListener('click', () => closeModal(loginModal));
