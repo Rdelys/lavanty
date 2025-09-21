@@ -47,10 +47,14 @@
                 </div>
             </div>
 
-            <button class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-8 py-4 rounded-xl 
-                           shadow-lg hover:shadow-xl hover:scale-105 transition w-fit">
-                💰 Placer une enchère
-            </button>
+            @auth
+                <button class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-8 py-4 rounded-xl 
+                            shadow-lg hover:shadow-xl hover:scale-105 transition w-fit">
+                    💰 Placer une enchère
+                </button>
+            @else
+                <p class="text-gray-500 font-semibold">Connectez-vous pour pouvoir placer une enchère.</p>
+            @endauth
         </div>
     </div>
 
