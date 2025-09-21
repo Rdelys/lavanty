@@ -3,15 +3,17 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\HomeController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Page publique produits
-Route::get('/products', function () {
-    return view('products'); // ta page statique
-})->name('products.public');
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/products', [HomeController::class, 'products'])->name('products.public');
+
 
 Route::get('/product-detail', function () {
     return view('product-detail');
