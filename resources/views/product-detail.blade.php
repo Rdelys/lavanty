@@ -51,14 +51,16 @@
             @auth
             <div class="mb-6 flex gap-3 items-center">
                 <input type="number" id="bidAmount" placeholder="Votre enchère (Ar)"
-                       class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
                 <button id="placeBidBtn" class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-6 py-2 rounded-xl transition">
                     💰 Placer
                 </button>
             </div>
-            @else
-                <p class="text-gray-500 font-semibold">Connectez-vous pour pouvoir placer une enchère.</p>
             @endauth
+
+            @guest
+                <p class="text-sm text-gray-500 mb-4">Veuillez vous connecter pour placer une enchère.</p>
+            @endguest
         </div>
     </div>
 
@@ -87,145 +89,113 @@
     </div>
 </div>
 
-<!-- Scripts -->
 <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
 <script>
-    // Panzoom
-    const element = document.getElementById('zoomContainer');
-    const panzoom = Panzoom(element, { maxScale: 3, contain: 'outside' });
-    element.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
+const element = document.getElementById('zoomContainer');
+const panzoom = Panzoom(element, { maxScale: 3, contain: 'outside' });
+element.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
-    // Countdown
-    document.querySelectorAll('.countdown').forEach(card => {
-        const endTime = new Date(card.dataset.end).getTime();
-        const daysEl = card.querySelector(".days");
-        const hoursEl = card.querySelector(".hours");
-        const minutesEl = card.querySelector(".minutes");
-        const secondsEl = card.querySelector(".seconds");
+// Countdown
+document.querySelectorAll('.countdown').forEach(card => {
+    const endTime = new Date(card.dataset.end).getTime();
+    const daysEl = card.querySelector(".days");
+    const hoursEl = card.querySelector(".hours");
+    const minutesEl = card.querySelector(".minutes");
+    const secondsEl = card.querySelector(".seconds");
 
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const diff = endTime - now;
-            if (diff <= 0) {
-                daysEl.textContent = "0";
-                hoursEl.textContent = "0";
-                minutesEl.textContent = "0";
-                secondsEl.textContent = "0";
-                return;
-            }
-            const d = Math.floor(diff / (1000*60*60*24));
-            const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-            const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-            const s = Math.floor((diff % (1000*60)) / 1000);
-            daysEl.textContent = d;
-            hoursEl.textContent = h;
-            minutesEl.textContent = m;
-            secondsEl.textContent = s;
-            requestAnimationFrame(updateCountdown);
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const diff = endTime - now;
+        if (diff <= 0) {
+            daysEl.textContent = "0"; hoursEl.textContent = "0"; minutesEl.textContent = "0"; secondsEl.textContent = "0";
+            return;
         }
-        updateCountdown();
-    });
-
-    // Modale
-    function showModal(message) {
-        const modal = document.getElementById('messageModal');
-        const modalMsg = document.getElementById('modalMessage');
-        modalMsg.textContent = message;
-        modal.classList.remove('hidden');
+        const d = Math.floor(diff / (1000*60*60*24));
+        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+        const s = Math.floor((diff % (1000*60)) / 1000);
+        daysEl.textContent = d; hoursEl.textContent = h; minutesEl.textContent = m; secondsEl.textContent = s;
+        requestAnimationFrame(updateCountdown);
     }
-    document.getElementById('closeModal').addEventListener('click', () => {
-        document.getElementById('messageModal').classList.add('hidden');
-    });
-    document.getElementById('messageModal').addEventListener('click', e => {
-        if(e.target.id === 'messageModal') e.target.classList.add('hidden');
-    });
+    updateCountdown();
+});
 
-    const productId = {{ $product->id }};
-    const bidsTableBody = document.querySelector('#bidsTable tbody');
-    const bidInput = document.getElementById('bidAmount');
+// Modale
+function showModal(message){
+    const modal = document.getElementById('messageModal');
+    modal.querySelector('#modalMessage').textContent = message;
+    modal.classList.remove('hidden');
+}
+document.getElementById('closeModal').addEventListener('click', () => {
+    document.getElementById('messageModal').classList.add('hidden');
+});
+document.getElementById('messageModal').addEventListener('click', e => {
+    if(e.target.id === 'messageModal') e.target.classList.add('hidden');
+});
 
-    // Charger enchères
-    async function loadBids() {
-        try {
-            const res = await fetch(`/products/${productId}/bids`, {
-                headers: { 'Accept': 'application/json' }
-            });
+const productId = {{ $product->id }};
+const bidsTableBody = document.querySelector('#bidsTable tbody');
+const bidInput = document.getElementById('bidAmount');
+let lastDisplayedAmount = 0;
 
-            if (!res.ok) {
-                const text = await res.text();
-                console.error('Erreur fetch bids:', text);
-                return showModal('Impossible de charger les enchères.');
-            }
+async function loadBids(){
+    try{
+        const res = await fetch(`/products/${productId}/bids`, { headers:{'Accept':'application/json'} });
+        if(!res.ok) return;
+        const bids = await res.json();
+        const highestAmount = bids.length ? Math.max(...bids.map(b=>b.amount)) : 0;
+        if(highestAmount <= lastDisplayedAmount) return;
+        lastDisplayedAmount = highestAmount;
 
-            const bids = await res.json();
+        bidsTableBody.innerHTML = '';
+        bids.forEach((bid, index)=>{
+            const tr = document.createElement('tr');
+            if(index%2===1) tr.classList.add('bg-gray-50');
+            if(index===0) tr.classList.add('bg-yellow-100');
+            tr.innerHTML = `
+                <td class="border px-4 py-2">${index+1}</td>
+                <td class="border px-4 py-2">${bid.user.nom} ${bid.user.prenoms}</td>
+                <td class="border px-4 py-2 font-bold text-blue-700">${Number(bid.amount).toLocaleString('fr-FR')}</td>
+                <td class="border px-4 py-2">${new Date(bid.created_at).toLocaleString('fr-FR')}</td>
+            `;
+            bidsTableBody.appendChild(tr);
+        });
 
-            bidsTableBody.innerHTML = '';
-            bids.forEach((bid, index) => {
-                const tr = document.createElement('tr');
-                if(index % 2 === 1) tr.classList.add('bg-gray-50');
-                if(index === 0) tr.classList.add('bg-yellow-100');
-                tr.innerHTML = `
-                    <td class="border px-4 py-2">${index + 1}</td>
-                    <td class="border px-4 py-2">${bid.user.nom} ${bid.user.prenoms}</td>
-                    <td class="border px-4 py-2 font-bold text-blue-700">${Number(bid.amount).toLocaleString('fr-FR')}</td>
-                    <td class="border px-4 py-2">${new Date(bid.created_at).toLocaleString('fr-FR')}</td>
-                `;
-                bidsTableBody.appendChild(tr);
-            });
+        @auth
+        const lastUserBid = bids.find(b=>b.user.id=== {{ auth()->id() }});
+        if(lastUserBid) bidInput.value = lastUserBid.amount;
+        @endauth
 
-            @auth
-                const lastUserBid = bids.find(b => b.user.id === {{ auth()->id() }});
-                if(lastUserBid) bidInput.value = lastUserBid.amount;
-            @endauth
+    } catch(err){ console.error(err); }
+}
 
-        } catch(err) {
-            console.error('Erreur JS:', err);
-            showModal('Erreur lors du chargement des enchères.');
+loadBids();
+setInterval(loadBids, 2000);
+
+@auth
+document.getElementById('placeBidBtn').addEventListener('click', async ()=>{
+    const amount = parseFloat(bidInput.value);
+    if(!amount || amount<=0) return showModal('Veuillez saisir un montant valide.');
+    try{
+        const res = await fetch(`/products/${productId}/bid`, {
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'X-CSRF-TOKEN':'{{ csrf_token() }}',
+                'Accept':'application/json'
+            },
+            body: JSON.stringify({amount})
+        });
+        if(res.ok){
+            bidInput.value='';
+            loadBids();
+            showModal('✅ Enchère placée avec succès !');
+        } else {
+            const data = await res.json();
+            showModal(data.message || 'Erreur lors de l\'enchère.');
         }
-    }
-
-    loadBids();
-
-    // Placer une enchère
-    @auth
-    document.getElementById('placeBidBtn').addEventListener('click', async () => {
-        const amount = parseFloat(bidInput.value);
-        if(!amount || amount <= 0) return showModal('Veuillez saisir un montant valide.');
-
-        const lastBidRow = bidsTableBody.querySelector('tr');
-        let minAmount = {{ $product->starting_price }};
-        if(lastBidRow){
-            minAmount = parseFloat(lastBidRow.children[2].textContent.replace(/\s/g,''));
-            minAmount += 1;
-        }
-        if(amount < minAmount){
-            return showModal(`Votre enchère doit dépasser le dernier montant : ${minAmount.toLocaleString('fr-FR')} Ar`);
-        }
-
-        try {
-            const res = await fetch(`/products/${productId}/bid`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ amount })
-            });
-
-            if(res.ok){
-                bidInput.value = '';
-                loadBids();
-                showModal('✅ Enchère placée avec succès !');
-            } else {
-                const data = await res.json();
-                showModal(data.message || 'Erreur lors de l\'enchère.');
-            }
-        } catch(err) {
-            console.error('Erreur JS:', err);
-            showModal('Erreur lors de l\'enchère.');
-        }
-    });
-    @endauth
+    } catch(err){ showModal('Erreur lors de l\'enchère.'); }
+});
+@endauth
 </script>
 @endsection
