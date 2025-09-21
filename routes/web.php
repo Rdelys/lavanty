@@ -15,9 +15,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [HomeController::class, 'products'])->name('products.public');
 
 
-Route::get('/product-detail', function () {
-    return view('product-detail');
-})->name('product.detail');
+// routes/web.php
+Route::get('/product/{id}', [HomeController::class, 'productDetail'])->name('product.detail');
+
 
 // Auth admin
 Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
