@@ -53,5 +53,11 @@ class Product extends Model
             }
         }
     }
+
+    public function getFinalPriceAttribute()
+{
+    $lastBid = $this->bids()->orderByDesc('amount')->first();
+    return $lastBid ? $lastBid->amount : $this->starting_price;
+}
 }
 

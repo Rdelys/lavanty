@@ -8,10 +8,31 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     public function index()
-    {
-        $products = Product::latest()->get();
-        return view('admin.dashboard', compact('products'));
-    }
+{
+    $products = Product::latest()->get();
+
+    // Produits pris (adjugés)
+    $productsPrises = Product::with('lastBidUser')
+        ->where('status', 'adjugé')
+        ->get();
+
+    // Produits non pris (terminés sans enchères)
+    $productsNonPrises = Product::where('status', 'terminé')
+        ->whereNull('last_bid_user_id')
+        ->get();
+
+    // Produits vendus
+    $productsVendus = Product::where('status', 'vendu')->get();
+
+    return view('admin.dashboard', compact(
+        'products',
+        'productsPrises',      // ✅ cohérent avec ta vue
+        'productsNonPrises',   // ✅ cohérent avec ta vue
+        'productsVendus'       // ✅ pour la section vendus
+    ));
+}
+
+
 
     public function store(Request $request)
     {

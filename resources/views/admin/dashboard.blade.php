@@ -64,6 +64,18 @@
           <a href="#non-prises" class="block p-2 text-sm rounded hover:bg-indigo-500 transition">❌ Produits non pris</a>
         </div>
       </div>
+      <div>
+        <button onclick="toggleSubmenu('vendus')" class="flex items-center justify-between w-full p-3 rounded-lg hover:bg-indigo-600 transition duration-200">
+          <span class="flex items-center gap-3">
+            <i class="fas fa-dollar-sign w-5"></i>Produits vendus
+          </span>
+          <i id="icon-vendus" class="fas fa-chevron-down transition-transform duration-300"></i>
+        </button>
+        <div id="submenu-vendus" class="ml-6 mt-1 space-y-1 hidden">
+          <a href="#produits-vendus" class="block p-2 text-sm rounded hover:bg-indigo-500 transition">💰 Liste des vendus</a>
+        </div>
+      </div>
+
 
       <form action="{{ route('admin.logout') }}" method="POST" class="mt-6">
         @csrf
@@ -130,11 +142,36 @@
 
 
       <!-- Produits vendus / terminés -->
+      <!-- Produits vendus -->
       <div class="bg-white rounded-2xl shadow-md p-5 flex items-center gap-4 card-hover">
-        <div class="p-3 rounded-xl bg-red-100 text-red-600"><i class="fas fa-check-circle text-2xl"></i></div>
+        <div class="p-3 rounded-xl bg-red-100 text-red-600">
+          <i class="fas fa-dollar-sign text-2xl"></i>
+        </div>
         <div>
-          <p class="text-sm text-gray-500">Vendus</p>
-          <h3 class="text-2xl font-bold">{{ $products->where('status','termine')->count() }}</h3>
+          <p class="text-sm text-gray-500">Produits vendus</p>
+          <h3 class="text-2xl font-bold">{{ $productsVendus->count() }}</h3>
+        </div>
+      </div>
+
+      <!-- Produits adjugés -->
+      <div class="bg-white rounded-2xl shadow-md p-5 flex items-center gap-4 card-hover">
+        <div class="p-3 rounded-xl bg-green-100 text-green-600">
+          <i class="fas fa-gavel text-2xl"></i>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Adjugés</p>
+          <h3 class="text-2xl font-bold">{{ $productsPrises->count() }}</h3>
+        </div>
+      </div>
+
+      <!-- Produits non adjugés -->
+      <div class="bg-white rounded-2xl shadow-md p-5 flex items-center gap-4 card-hover">
+        <div class="p-3 rounded-xl bg-yellow-100 text-yellow-600">
+          <i class="fas fa-times-circle text-2xl"></i>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Non adjugés</p>
+          <h3 class="text-2xl font-bold">{{ $productsNonPrises->count() }}</h3>
         </div>
       </div>
 
@@ -144,15 +181,6 @@
         <div>
           <p class="text-sm text-gray-500">À venir</p>
           <h3 class="text-2xl font-bold">{{ $products->where('status','a_venir')->count() }}</h3>
-        </div>
-      </div>
-
-      <!-- Produits remis aux clients -->
-      <div class="bg-white rounded-2xl shadow-md p-5 flex items-center gap-4 card-hover sm:col-span-2 lg:col-span-4">
-        <div class="p-3 rounded-xl bg-purple-100 text-purple-600"><i class="fas fa-handshake text-2xl"></i></div>
-        <div>
-          <p class="text-sm text-gray-500">Remis aux clients</p>
-          <h3 class="text-2xl font-bold">{{ $products->where('status','termine')->where('mise_en_vente',false)->count() }}</h3>
         </div>
       </div>
     </div>
@@ -302,7 +330,108 @@
         </div>
       </form>
     </section>
+<section id="prises" class="hidden">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+    <i class="fas fa-check text-green-600"></i> Produits pris (Adjugés)
+  </h2>
 
+  <div class="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-200">
+    <table class="min-w-full table-auto text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="p-3 text-left">ID</th>
+          <th class="p-3 text-left">Titre</th>
+          <th class="p-3 text-left">Gagnant</th>
+          <th class="p-3 text-right">Prix de départ</th>
+          <th class="p-3 text-right">Prix final</th> <!-- ✅ ajouté -->
+          <th class="p-3 text-left">Fin</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        @forelse($productsPrises as $product)
+          <tr class="hover:bg-gray-50">
+            <td class="p-3">{{ $product->id }}</td>
+            <td class="p-3 font-semibold">{{ $product->title }}</td>
+            <td class="p-3">
+              {{ $product->lastBidUser?->nom }} {{ $product->lastBidUser?->prenoms }}
+            </td>
+            <td class="p-3 text-right">{{ number_format($product->starting_price, 0, ',', ' ') }} Ar</td>
+            <td class="p-3 text-right font-bold text-green-600">
+              {{ number_format($product->final_price, 0, ',', ' ') }} Ar
+            </td>
+            <td class="p-3">{{ $product->end_time->format('d/m/Y H:i') }}</td>
+          </tr>
+        @empty
+          <tr><td colspan="6" class="text-center py-4 text-gray-500">Aucun produit adjugé.</td></tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
+</section>
+<section id="non-prises" class="hidden">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+    <i class="fas fa-times text-red-600"></i> Produits non pris (Terminés sans enchère)
+  </h2>
+
+  <div class="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-200">
+    <table class="min-w-full table-auto text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="p-3 text-left">ID</th>
+          <th class="p-3 text-left">Titre</th>
+          <th class="p-3 text-right">Prix de départ</th>
+          <th class="p-3 text-left">Fin</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        @forelse($productsNonPrises as $product)
+          <tr class="hover:bg-gray-50">
+            <td class="p-3">{{ $product->id }}</td>
+            <td class="p-3 font-semibold">{{ $product->title }}</td>
+            <td class="p-3 text-right">{{ number_format($product->starting_price, 0, ',', ' ') }} Ar</td>
+            <td class="p-3">{{ $product->end_time->format('d/m/Y H:i') }}</td>
+          </tr>
+        @empty
+          <tr><td colspan="4" class="text-center py-4 text-gray-500">Aucun produit non pris.</td></tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
+</section>
+<section id="produits-vendus" class="hidden">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+    <i class="fas fa-dollar-sign text-red-600"></i> Produits vendus
+  </h2>
+
+  <div class="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-200">
+    <table class="min-w-full table-auto text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="p-3 text-left">ID</th>
+          <th class="p-3 text-left">Titre</th>
+          <th class="p-3 text-left">Prix final</th>
+          <th class="p-3 text-left">Date de fin</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        @forelse($productsVendus as $product)
+          <tr class="hover:bg-gray-50">
+            <td class="p-3">{{ $product->id }}</td>
+            <td class="p-3 font-semibold">{{ $product->title }}</td>
+            <td class="p-3 text-right font-bold text-green-600">
+              {{ number_format($product->final_price, 0, ',', ' ') }} Ar
+            </td>
+            <td class="p-3">{{ $product->end_time->format('d/m/Y H:i') }}</td>
+          </tr>
+        @empty
+          <tr>
+            <td colspan="4" class="text-center py-4 text-gray-500">Aucun produit vendu.</td>
+          </tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
+</section>
   </main>
 
   <!-- Modal -->
