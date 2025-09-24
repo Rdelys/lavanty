@@ -58,3 +58,4 @@ Route::get('/products/{product}/bids', [BidController::class, 'index'])->name('b
 Route::middleware('auth')->group(function() {
     Route::post('/products/{product}/auto-bid', [AutoBidController::class, 'store'])->name('auto-bids.store');
 });
+Route::get('/admin/bids/filter', [\App\Http\Controllers\BidController::class, 'filter'])->name('admin.bids.filter');

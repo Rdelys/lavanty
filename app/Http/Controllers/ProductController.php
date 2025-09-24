@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Bid;
 
 class ProductController extends Controller
 {
@@ -25,13 +27,18 @@ class ProductController extends Controller
 
     // Produits vendus
     $productsVendus = Product::where('status', 'vendu')->get();
+    $users = User::all();
+    $bids = Bid::with(['user','product'])->get();
 
     return view('admin.dashboard', compact(
         'products',
-        'productsPrises',      // ✅ cohérent avec ta vue
-        'productsNonPrises',   // ✅ cohérent avec ta vue
-        'productsVendus'       // ✅ pour la section vendus
+        'productsPrises',
+        'productsNonPrises',
+        'productsVendus',
+        'users',
+        'bids'
     ));
+
 }
 
 

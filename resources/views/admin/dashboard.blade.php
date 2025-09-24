@@ -53,6 +53,24 @@
           <a href="#ajouter-produit" class="block p-2 text-sm rounded hover:bg-indigo-500 transition">➕ Ajouter</a>
         </div>
       </div>
+      <div>
+        <button onclick="toggleSubmenu('clients')" class="flex items-center justify-between w-full p-3 rounded-lg hover:bg-indigo-600 transition duration-200">
+          <span class="flex items-center gap-3"><i class="fas fa-users w-5"></i>Clients</span>
+          <i id="icon-clients" class="fas fa-chevron-down transition-transform duration-300"></i>
+        </button>
+        <div id="submenu-clients" class="ml-6 mt-1 space-y-1 hidden">
+          <a href="#liste-clients" class="block p-2 text-sm rounded hover:bg-indigo-500 transition">👥 Liste des clients</a>
+        </div>
+      </div>
+      <div>
+        <button onclick="toggleSubmenu('bids')" class="flex items-center justify-between w-full p-3 rounded-lg hover:bg-indigo-600 transition duration-200">
+          <span class="flex items-center gap-3"><i class="fas fa-hand-holding-usd w-5"></i>Enchères (Bids)</span>
+          <i id="icon-bids" class="fas fa-chevron-down transition-transform duration-300"></i>
+        </button>
+        <div id="submenu-bids" class="ml-6 mt-1 space-y-1 hidden">
+          <a href="#liste-bids" class="block p-2 text-sm rounded hover:bg-indigo-500 transition">📑 Liste des bids</a>
+        </div>
+      </div>
 
       <div>
         <button onclick="toggleSubmenu('enchere')" class="flex items-center justify-between w-full p-3 rounded-lg hover:bg-indigo-600 transition duration-200">
@@ -183,6 +201,15 @@
           <h3 class="text-2xl font-bold">{{ $products->where('status','a_venir')->count() }}</h3>
         </div>
       </div>
+      <!-- Total clients -->
+      <div class="bg-white rounded-2xl shadow-md p-5 flex items-center gap-4 card-hover">
+        <div class="p-3 rounded-xl bg-blue-100 text-blue-600"><i class="fas fa-users text-2xl"></i></div>
+        <div>
+          <p class="text-sm text-gray-500">Clients inscrits</p>
+          <h3 class="text-2xl font-bold">{{ $users->count() }}</h3>
+        </div>
+      </div>
+
     </div>
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2"><i class="fas fa-list text-indigo-600"></i>Liste des produits</h2>
@@ -434,6 +461,85 @@
     </table>
   </div>
 </section>
+
+<section id="liste-clients" class="hidden">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+    <i class="fas fa-users text-indigo-600"></i> Liste des clients
+  </h2>
+
+  <div class="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-200">
+    <table class="min-w-full table-auto text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="p-3 text-left">ID</th>
+          <th class="p-3 text-left">Nom</th>
+          <th class="p-3 text-left">Prénoms</th>
+          <th class="p-3 text-left">Email</th>
+          <th class="p-3 text-left">Téléphone</th>
+          <th class="p-3 text-left">Date d’inscription</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        @forelse($users as $user)
+          <tr class="hover:bg-gray-50">
+            <td class="p-3">{{ $user->id }}</td>
+            <td class="p-3">{{ $user->nom }}</td>
+            <td class="p-3">{{ $user->prenoms }}</td>
+            <td class="p-3">{{ $user->email }}</td>
+            <td class="p-3">{{ $user->telephone }}</td>
+            <td class="p-3">{{ $user->created_at->format('d/m/Y') }}</td>
+          </tr>
+        @empty
+          <tr><td colspan="6" class="text-center py-4 text-gray-500">Aucun client enregistré.</td></tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
+</section>
+<section id="liste-bids" class="hidden">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+    <i class="fas fa-hand-holding-usd text-green-600"></i> Liste des bids
+  </h2>
+
+  <!-- Filtres -->
+  <form id="filterBidsForm" class="flex gap-4 mb-4">
+    <select name="client" id="filterClient" class="border rounded-lg p-2">
+      <option value="">-- Tous les clients --</option>
+      @foreach($users as $u)
+        <option value="{{ $u->id }}">{{ $u->nom }} {{ $u->prenoms }}</option>
+      @endforeach
+    </select>
+
+    <select name="produit" id="filterProduit" class="border rounded-lg p-2">
+      @foreach($products as $p)
+        <option value="{{ $p->id }}" {{ $loop->first ? 'selected' : '' }}>
+          {{ $p->title }}
+        </option>
+      @endforeach
+    </select>
+
+    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg">Filtrer</button>
+  </form>
+
+  <!-- Tableau scrollable -->
+  <div class="overflow-y-auto max-h-96 bg-white rounded-xl shadow-lg border border-gray-200">
+    <table class="min-w-full table-auto text-sm">
+      <thead class="bg-gray-50 sticky top-0">
+        <tr>
+          <th class="p-3 text-left">Client</th>
+          <th class="p-3 text-left">Produit</th>
+          <th class="p-3 text-right">Montant</th>
+          <th class="p-3 text-left">Date</th>
+        </tr>
+      </thead>
+      <tbody id="bidsTable" class="divide-y divide-gray-100">
+        <!-- Contenu chargé par AJAX -->
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
   </main>
 
   <!-- Modal -->
@@ -624,6 +730,51 @@
         row.style.display = txt.includes(q) ? '' : 'none';
       });
     });
+
+    // Fonction pour afficher les bids dans le tableau
+function renderBids(bids) {
+  const tbody = document.getElementById('bidsTable');
+  tbody.innerHTML = '';
+
+  if (!bids.length) {
+    tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-gray-500">Aucun bid trouvé.</td></tr>`;
+    return;
+  }
+
+  bids.forEach(bid => {
+    const row = `
+      <tr class="hover:bg-gray-50">
+        <td class="p-3">${bid.user.nom} ${bid.user.prenoms}</td>
+        <td class="p-3">${bid.product.title}</td>
+        <td class="p-3 text-right font-bold">${Number(bid.amount).toLocaleString()} Ar</td>
+        <td class="p-3">${new Date(bid.created_at).toLocaleString()}</td>
+      </tr>
+    `;
+    tbody.insertAdjacentHTML('beforeend', row);
+  });
+}
+
+// Charger initialement les bids
+async function loadBids() {
+  const client = document.getElementById('filterClient').value;
+  const produit = document.getElementById('filterProduit').value;
+
+  const url = `/admin/bids/filter?client=${client}&produit=${produit}`;
+  const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+  if (res.ok) {
+    const bids = await res.json();
+    renderBids(bids);
+  }
+}
+
+// Gérer le formulaire sans rechargement
+document.getElementById('filterBidsForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  loadBids();
+});
+
+// Charger les 30 premiers bids par défaut
+document.addEventListener('DOMContentLoaded', loadBids);
 
   </script>
 </body>

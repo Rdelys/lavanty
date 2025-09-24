@@ -51,4 +51,22 @@ return response()->json([
 ]);
 
     }
+
+    public function filter(Request $request)
+{
+    $query = Bid::with(['user','product'])->orderByDesc('created_at');
+
+    if ($request->client) {
+        $query->where('user_id', $request->client);
+    }
+
+    if ($request->produit) {
+        $query->where('product_id', $request->produit);
+    }
+
+    $bids = $query->take(30)->get();
+
+    return response()->json($bids);
+}
+
 }
