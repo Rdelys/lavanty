@@ -9,6 +9,8 @@ class ProductController extends Controller
 {
     public function index()
 {
+            Product::checkExpiredAuctions(); // ✅ vérifier avant d’afficher
+
     $products = Product::latest()->get();
 
     // Produits pris (adjugés)
@@ -36,6 +38,8 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+                Product::checkExpiredAuctions(); // ✅ vérifier avant d’afficher
+
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required',
@@ -64,6 +68,8 @@ class ProductController extends Controller
 
     public function edit(Product $product)
 {
+            Product::checkExpiredAuctions(); // ✅ vérifier avant d’afficher
+
     return response()->json([
         'id' => $product->id,
         'title' => $product->title,
@@ -80,6 +86,8 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
+                Product::checkExpiredAuctions(); // ✅ vérifier avant d’afficher
+
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required',
@@ -112,12 +120,16 @@ return redirect()->route('admin.dashboard')->with('success', 'Produit mis à jou
 
     public function destroy(Product $product)
     {
+                Product::checkExpiredAuctions(); // ✅ vérifier avant d’afficher
+
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Produit supprimé.');
     }
 
     public function toggleMiseEnVente(Product $product)
 {
+            Product::checkExpiredAuctions(); // ✅ vérifier avant d’afficher
+
     $product->mise_en_vente = !$product->mise_en_vente;
     $product->save();
 

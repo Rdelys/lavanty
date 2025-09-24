@@ -40,19 +40,21 @@ class Product extends Model
 
     // ✅ méthode réutilisable
     public static function checkExpiredAuctions()
-    {
-        $products = self::where('status', 'en_cours')
-            ->where('end_time', '<', now())
-            ->get();
+{
+    $products = self::query()
+        ->where('status', 'en_cours')
+        ->where('end_time', '<=', now()) // <= pour inclure pile à la seconde
+        ->get();
 
-        foreach ($products as $product) {
-            if ($product->last_bid_user_id) {
-                $product->update(['status' => 'adjugé']);
-            } else {
-                $product->update(['status' => 'terminé']);
-            }
+    foreach ($products as $product) {
+        if ($product->last_bid_user_id) {
+            $product->update(['status' => 'adjugé']);
+        } else {
+            $product->update(['status' => 'terminé']);
         }
     }
+}
+
 
     public function getFinalPriceAttribute()
 {
