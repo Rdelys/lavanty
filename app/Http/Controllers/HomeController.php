@@ -16,7 +16,10 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        return view('welcome', compact('products'));
+        $productsAdjug = Product::latest()
+        ->get();
+
+        return view('welcome', compact('products', 'productsAdjug'));
     }
 
 

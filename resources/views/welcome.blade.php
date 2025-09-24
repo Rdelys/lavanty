@@ -24,7 +24,7 @@
 
 <!-- Produits en vedette -->
 <section id="produits" class="container mx-auto px-6 py-20">
-    <h2 class="text-4xl font-extrabold text-gray-900 text-center mb-12">🔥 Produits en Vedette</h2>
+    <h2 class="text-4xl font-extrabold text-gray-900 text-center mb-12">🔥 Nouvelles produits</h2>
     <p class="text-center text-lg text-gray-600 max-w-2xl mx-auto mb-16">
         Explorez nos <strong>enchères exclusives</strong> sur des articles tendance : smartphones, ordinateurs portables, téléviseurs et bien plus encore.  
         Tous nos produits sont certifiés et garantis pour vous offrir la <span class="text-blue-700 font-semibold">meilleure expérience d’enchères en ligne à Madagascar</span>.
@@ -113,9 +113,106 @@
         </div>
     @endforelse
 </div>
+<!-- Produits adjugés -->
+<section id="produits-adjuge" class="container mx-auto px-6 py-20">
+    <h2 class="text-4xl font-extrabold text-gray-900 text-center mb-12">✅ Produits adjugés</h2>
+    <p class="text-center text-lg text-gray-600 max-w-2xl mx-auto mb-16">
+        Découvrez les derniers <strong>produits adjugés</strong> sur notre plateforme.  
+        Chaque vente conclue reflète la <span class="text-blue-700 font-semibold">confiance</span> de notre communauté.
+    </p>
 
+    <!-- Swiper -->
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            @forelse($productsAdjug as $product)
+                <div class="swiper-slide">
+                    <div class="group block bg-white rounded-2xl shadow-md overflow-hidden relative 
+                                transform transition duration-700 ease-out hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
 
+                        <div class="relative overflow-hidden">
+                            @php
+                                $images = $product->images 
+                                    ? (is_array($product->images) ? $product->images : json_decode($product->images, true)) 
+                                    : [];
+                            @endphp
+
+                            @if(count($images) > 0)
+                                <img src="{{ asset('storage/'.$images[0]) }}" 
+                                     alt="{{ $product->title }}" 
+                                     class="w-full h-64 object-cover transition duration-700 group-hover:scale-110">
+                            @else
+                                <img src="https://via.placeholder.com/400x300?text=Pas+d'image" 
+                                     alt="placeholder" 
+                                     class="w-full h-64 object-cover">
+                            @endif
+
+                            @if($product->status == 'adjugé')
+                                <span class="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+                                    ✅ Adjugé
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800">{{ $product->title }}</h3>
+                            <p class="text-gray-600 mt-2">
+                                Adjugé à <span class="font-semibold text-blue-700">
+                                    {{ number_format($product->starting_price, 0, ',', ' ') }} Ar
+                                </span>
+                            </p>
+                            <p class="text-sm text-gray-500 mt-2">
+                                {{ Str::limit($product->description, 100) }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="text-center py-16">
+                    <p class="text-gray-600 text-lg">
+                        😢 Aucun produit adjugé disponible pour le moment.  
+                        <br>
+                        <span class="text-blue-700 font-semibold">Reviens bientôt pour découvrir les résultats des enchères !</span>
+                    </p>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Pagination & Navigation -->
+        <div class="swiper-pagination mt-6"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
 </section>
+
+<!-- SwiperJS CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+<script>
+  var swiper = new Swiper(".mySwiper", {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    loop: true,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    breakpoints: {
+      640: { slidesPerView: 1 },
+      768: { slidesPerView: 2 },
+      1024: { slidesPerView: 3 },
+    },
+  });
+</script>
+
 
 <!-- Call to action -->
 <section class="bg-gray-100 py-20 text-center">
