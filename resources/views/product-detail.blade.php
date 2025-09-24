@@ -49,15 +49,14 @@
 
             <!-- Placer enchère -->
             @auth
-            <div class="mb-6 flex gap-3 items-center">
-                <input type="number" id="bidAmount" placeholder="Votre enchère (Ar)"
-                    class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                <button id="placeBidBtn" class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-6 py-2 rounded-xl transition">
-                    💰 Placer
-                </button>
-            </div>
+                <div id="bidSection" class="mb-6 flex gap-3 items-center">
+                    <input type="number" id="bidAmount" placeholder="Votre enchère (Ar)"
+                        class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <button id="placeBidBtn" class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-6 py-2 rounded-xl transition">
+                        💰 Placer
+                    </button>
+                </div>
             @endauth
-
             @guest
                 <p class="text-sm text-gray-500 mb-4">Veuillez vous connecter pour placer une enchère.</p>
             @endguest
@@ -96,6 +95,7 @@ const panzoom = Panzoom(element, { maxScale: 3, contain: 'outside' });
 element.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
 // Countdown
+// Countdown
 document.querySelectorAll('.countdown').forEach(card => {
     const endTime = new Date(card.dataset.end).getTime();
     const daysEl = card.querySelector(".days");
@@ -107,18 +107,32 @@ document.querySelectorAll('.countdown').forEach(card => {
         const now = new Date().getTime();
         const diff = endTime - now;
         if (diff <= 0) {
-            daysEl.textContent = "0"; hoursEl.textContent = "0"; minutesEl.textContent = "0"; secondsEl.textContent = "0";
+            daysEl.textContent = "0"; 
+            hoursEl.textContent = "0"; 
+            minutesEl.textContent = "0"; 
+            secondsEl.textContent = "0";
+
+            // 🔴 Masquer la section enchère si le chrono est fini
+            const bidSection = document.getElementById("bidSection");
+            if (bidSection) {
+                bidSection.classList.add("hidden");
+            }
             return;
         }
         const d = Math.floor(diff / (1000*60*60*24));
         const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
         const m = Math.floor((diff % (1000*60*60)) / (1000*60));
         const s = Math.floor((diff % (1000*60)) / 1000);
-        daysEl.textContent = d; hoursEl.textContent = h; minutesEl.textContent = m; secondsEl.textContent = s;
+        daysEl.textContent = d; 
+        hoursEl.textContent = h; 
+        minutesEl.textContent = m; 
+        secondsEl.textContent = s;
+
         requestAnimationFrame(updateCountdown);
     }
     updateCountdown();
 });
+
 
 // Modale
 function showModal(message){
