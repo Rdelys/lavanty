@@ -31,7 +31,7 @@
     </p>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-    @foreach($products as $product)
+    @forelse($products as $product)
         <a href="{{ route('product.detail', ['id' => $product->id]) }}" 
            class="group block bg-white rounded-2xl shadow-md overflow-hidden relative 
                   transform transition duration-700 ease-out hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
@@ -39,7 +39,9 @@
             <div class="relative overflow-hidden">
                 @php
                     // récupérer la première image
-                    $image = $product->images ? (is_array($product->images) ? $product->images[0] : json_decode($product->images, true)[0] ?? null) : null;
+                    $image = $product->images 
+                        ? (is_array($product->images) ? $product->images[0] : json_decode($product->images, true)[0] ?? null) 
+                        : null;
                 @endphp
                 @if($image)
                     <img src="{{ asset('storage/'.$image) }}" 
@@ -101,8 +103,17 @@
                 </div>
             </div>
         </a>
-    @endforeach
+    @empty
+        <div class="col-span-3 text-center py-16">
+            <p class="text-gray-600 text-lg">
+                😢 Aucun produit nouveau disponible pour le moment.  
+                <br>
+                <span class="text-blue-700 font-semibold">Reviens bientôt pour découvrir de nouvelles enchères exclusives !</span>
+            </p>
+        </div>
+    @endforelse
 </div>
+
 
 </section>
 
