@@ -36,8 +36,12 @@ class BidController extends Controller
             'product_id'=>$product->id,
             'amount'=>$request->amount
         ]);
-        $bid->load('user');
+        
+        // ✅ mise à jour du dernier enchérisseur
+        $product->update(['last_bid_user_id' => $userId]);
 
+        $bid->load('user');
+        
         return response()->json([
             'message'=>'✅ Enchère placée avec succès !',
             'bids'=>$product->bids()->with('user')->orderByDesc('amount')->get()

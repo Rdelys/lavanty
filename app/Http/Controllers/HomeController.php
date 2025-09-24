@@ -8,9 +8,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Produits en vente, non expirés
+        Product::checkExpiredAuctions(); // ✅ vérifier avant d’afficher
+
         $products = Product::where('mise_en_vente', 1)
-            ->where('end_time', '>', now())   // exclure chrono terminé
+            ->where('end_time', '>', now())
             ->latest()
             ->take(3)
             ->get();
@@ -18,26 +19,31 @@ class HomeController extends Controller
         return view('welcome', compact('products'));
     }
 
+
     public function products()
     {
-        // Tous les produits en vente, non expirés
+        Product::checkExpiredAuctions(); // ✅
+
         $products = Product::where('mise_en_vente', 1)
-            ->where('end_time', '>', now())   // exclure chrono terminé
+            ->where('end_time', '>', now())
             ->latest()
             ->get();
 
         return view('products', compact('products'));
     }
 
+
     public function productDetail($id)
     {
+        Product::checkExpiredAuctions(); // ✅
+
         $product = Product::findOrFail($id);
 
-        // si ton champ images est un JSON, on le décode en tableau
         $images = $product->images 
             ? (is_array($product->images) ? $product->images : json_decode($product->images, true)) 
             : [];
 
         return view('product-detail', compact('product', 'images'));
     }
+
 }
