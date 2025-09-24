@@ -85,18 +85,21 @@
     <!-- Tableau enchères -->
     <div class="mt-16">
         <h2 class="text-2xl font-bold mb-4">Historique des enchères</h2>
-        <table id="bidsTable" class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="border px-4 py-2">#</th>
-                    <th class="border px-4 py-2">Nom du participant</th>
-                    <th class="border px-4 py-2">Montant (Ar)</th>
-                    <th class="border px-4 py-2">Date / Heure</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="border rounded-xl shadow-lg overflow-auto max-h-[500px]">
+            <table id="bidsTable" class="w-full text-left border-collapse">
+                <thead class="bg-blue-100 sticky top-0">
+                    <tr>
+                        <th class="border px-4 py-2">#</th>
+                        <th class="border px-4 py-2">Nom du participant</th>
+                        <th class="border px-4 py-2">Montant (Ar)</th>
+                        <th class="border px-4 py-2">Date / Heure</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
+
 </section>
 
 <!-- Modale pour messages -->
