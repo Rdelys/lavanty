@@ -134,13 +134,21 @@ document.querySelectorAll('.countdown').forEach(card => {
             minutesEl.textContent = "0"; 
             secondsEl.textContent = "0";
 
-            // 🔴 Masquer la section enchère si le chrono est fini
+            // 🔴 Masquer la section enchère manuelle si le chrono est fini
             const bidSection = document.getElementById("bidSection");
             if (bidSection) {
                 bidSection.classList.add("hidden");
             }
+
+            // 🔴 Masquer la section enchère automatique aussi
+            const autoBidSection = document.getElementById("autoBidSection");
+            if (autoBidSection) {
+                autoBidSection.classList.add("hidden");
+            }
+
             return;
         }
+
         const d = Math.floor(diff / (1000*60*60*24));
         const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
         const m = Math.floor((diff % (1000*60*60)) / (1000*60));

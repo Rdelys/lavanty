@@ -157,9 +157,12 @@
 
                             <div class="p-6">
                                 <h3 class="text-xl font-bold text-gray-800">{{ $product->title }}</h3>
+                                @php
+                                    $lastBid = $product->bids()->orderByDesc('amount')->first();
+                                @endphp
                                 <p class="text-gray-600 mt-2">
                                     Adjugé à <span class="font-semibold text-blue-700">
-                                        {{ number_format($product->starting_price, 0, ',', ' ') }} Ar
+                                        {{ $lastBid ? number_format($lastBid->amount, 0, ',', ' ') : number_format($product->starting_price, 0, ',', ' ') }} Ar
                                     </span>
                                 </p>
                                 <p class="text-sm text-gray-500 mt-2">
