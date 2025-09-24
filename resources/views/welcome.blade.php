@@ -5,8 +5,8 @@
 @section('content')
 <!-- Section Héro -->
 <section id="top" class="relative bg-cover bg-center h-[90vh]" 
-    style="background-image: url('https://images.unsplash.com/photo-1607082349566-187342f87b2d?auto=format&fit=crop&w=1600&q=80');">
-    <div class="absolute inset-0 bg-blue-900 bg-opacity-70"></div>
+    style="background-image: url('https://c0.wallpaperflare.com/preview/450/707/805/gavel-auction-hammer-justice.jpg');">
+    <div class="absolute inset-0 bg-blue-900 bg-opacity-10"></div>
     <div class="relative z-10 flex flex-col items-center justify-center text-center text-white h-full px-6">
         <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
             Enchères en ligne à <span class="text-yellow-600">Madagascar</span>
@@ -124,58 +124,64 @@
     <!-- Swiper -->
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
-            @forelse($productsAdjug as $product)
-                <div class="swiper-slide">
-                    <div class="group block bg-white rounded-2xl shadow-md overflow-hidden relative 
-                                transform transition duration-700 ease-out hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+            @php $hasAdjuges = false; @endphp
 
-                        <div class="relative overflow-hidden">
-                            @php
-                                $images = $product->images 
-                                    ? (is_array($product->images) ? $product->images : json_decode($product->images, true)) 
-                                    : [];
-                            @endphp
+            @foreach($productsAdjug as $product)
+                @if($product->status === 'adjugé')
+                    @php $hasAdjuges = true; @endphp
+                    <div class="swiper-slide">
+                        <div class="group block bg-white rounded-2xl shadow-md overflow-hidden relative 
+                                    transform transition duration-700 ease-out hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
 
-                            @if(count($images) > 0)
-                                <img src="{{ asset('storage/'.$images[0]) }}" 
-                                     alt="{{ $product->title }}" 
-                                     class="w-full h-64 object-cover transition duration-700 group-hover:scale-110">
-                            @else
-                                <img src="https://via.placeholder.com/400x300?text=Pas+d'image" 
-                                     alt="placeholder" 
-                                     class="w-full h-64 object-cover">
-                            @endif
+                            <div class="relative overflow-hidden">
+                                @php
+                                    $images = $product->images 
+                                        ? (is_array($product->images) ? $product->images : json_decode($product->images, true)) 
+                                        : [];
+                                @endphp
 
-                            @if($product->status == 'adjugé')
+                                @if(count($images) > 0)
+                                    <img src="{{ asset('storage/'.$images[0]) }}" 
+                                        alt="{{ $product->title }}" 
+                                        class="w-full h-64 object-cover transition duration-700 group-hover:scale-110">
+                                @else
+                                    <img src="https://via.placeholder.com/400x300?text=Pas+d'image" 
+                                        alt="placeholder" 
+                                        class="w-full h-64 object-cover">
+                                @endif
+
                                 <span class="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
                                     ✅ Adjugé
                                 </span>
-                            @endif
-                        </div>
+                            </div>
 
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-800">{{ $product->title }}</h3>
-                            <p class="text-gray-600 mt-2">
-                                Adjugé à <span class="font-semibold text-blue-700">
-                                    {{ number_format($product->starting_price, 0, ',', ' ') }} Ar
-                                </span>
-                            </p>
-                            <p class="text-sm text-gray-500 mt-2">
-                                {{ Str::limit($product->description, 100) }}
-                            </p>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-gray-800">{{ $product->title }}</h3>
+                                <p class="text-gray-600 mt-2">
+                                    Adjugé à <span class="font-semibold text-blue-700">
+                                        {{ number_format($product->starting_price, 0, ',', ' ') }} Ar
+                                    </span>
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    {{ Str::limit($product->description, 100) }}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @empty
-                <div class="text-center py-16">
+                @endif
+            @endforeach
+
+            @if(!$hasAdjuges)
+                <div class="text-center py-16 w-full">
                     <p class="text-gray-600 text-lg">
                         😢 Aucun produit adjugé disponible pour le moment.  
                         <br>
                         <span class="text-blue-700 font-semibold">Reviens bientôt pour découvrir les résultats des enchères !</span>
                     </p>
                 </div>
-            @endforelse
+            @endif
         </div>
+
 
         <!-- Pagination & Navigation -->
         <div class="swiper-pagination mt-6"></div>
