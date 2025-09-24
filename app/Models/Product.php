@@ -43,12 +43,18 @@ class Product extends Model
 {
     $products = self::query()
         ->where('status', 'en_cours')
-        ->where('end_time', '<=', now()) // <= pour inclure pile à la seconde
+        ->where('end_time', '<=', now())
         ->get();
 
     foreach ($products as $product) {
         if ($product->last_bid_user_id) {
             $product->update(['status' => 'adjugé']);
+
+            // ✅ Envoyer un email au gagnant
+            if ($product->lastBidUser && $product->lastBidUser->email) {
+                Mail::to($product->lastBidUser->email)
+                    ->send(new AuctionWonMail($product));
+            }
         } else {
             $product->update(['status' => 'terminé']);
         }
