@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Bid;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Controllers\AutoBidController;
+
 
 class BidController extends Controller
 {
@@ -39,12 +41,14 @@ class BidController extends Controller
         
         // ✅ mise à jour du dernier enchérisseur
         $product->update(['last_bid_user_id' => $userId]);
+        AutoBidController::processAutoBids($product);
 
-        $bid->load('user');
-        
-        return response()->json([
-            'message'=>'✅ Enchère placée avec succès !',
-            'bids'=>$product->bids()->with('user')->orderByDesc('amount')->get()
-        ]);
+$bids = $product->bids()->with('user')->orderByDesc('amount')->get();
+
+return response()->json([
+    'message' => '✅ Enchère placée avec succès !',
+    'bids' => $bids
+]);
+
     }
 }

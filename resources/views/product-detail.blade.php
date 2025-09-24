@@ -33,8 +33,17 @@
             <p class="text-lg text-gray-600 mb-6">{{ $product->description }}</p>
             <p class="text-2xl font-bold text-blue-700 mb-4">
                 Prix de départ : {{ number_format($product->starting_price, 0, ',', ' ') }} Ar
+                @auth
+                    @php
+                        $autoBid = \App\Models\AutoBid::where('user_id', auth()->id())
+                                    ->where('product_id', $product->id)
+                                    ->first();
+                    @endphp
+                    @if($autoBid)
+                        <span class="ml-4 text-sm text-green-600">(Votre max : {{ number_format($autoBid->max_price, 0, ',', ' ') }} Ar)</span>
+                    @endif
+                @endauth
             </p>
-
             <!-- Countdown -->
             <div class="mb-6">
                 <span class="block text-sm text-gray-500 mb-2">⏳ Temps restant :</span>
@@ -57,6 +66,16 @@
                     </button>
                 </div>
             @endauth
+            @auth
+            <div id="autoBidSection" class="mb-6 flex gap-3 items-center">
+                <input type="number" id="autoBidAmount" placeholder="Votre prix max (Ar)"
+                    class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
+                <button id="setAutoBidBtn" class="bg-green-600 hover:bg-green-500 text-white font-bold px-6 py-2 rounded-xl transition">
+                    🤖 Enchère automatique
+                </button>
+            </div>
+            @endauth
+
             @guest
                 <p class="text-sm text-gray-500 mb-4">Veuillez vous connecter pour placer une enchère.</p>
             @endguest
@@ -211,5 +230,35 @@ document.getElementById('placeBidBtn').addEventListener('click', async ()=>{
     } catch(err){ showModal('Erreur lors de l\'enchère.'); }
 });
 @endauth
+
+const autoBidInput = document.getElementById('autoBidAmount');
+const setAutoBidBtn = document.getElementById('setAutoBidBtn');
+
+if(setAutoBidBtn){
+    setAutoBidBtn.addEventListener('click', async ()=>{
+        const max_price = parseFloat(autoBidInput.value);
+        if(!max_price || max_price<=0) return showModal('Veuillez saisir un montant valide.');
+
+        try{
+            const res = await fetch(`/products/${productId}/auto-bid`, {
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json',
+                    'X-CSRF-TOKEN':'{{ csrf_token() }}',
+                    'Accept':'application/json'
+                },
+                body: JSON.stringify({max_price})
+            });
+            if(res.ok){
+                autoBidInput.value='';
+                showModal('✅ Enchère automatique définie avec succès !');
+            } else {
+                const data = await res.json();
+                showModal(data.message || 'Erreur.');
+            }
+        } catch(err){ showModal('Erreur.'); }
+    });
+}
+
 </script>
 @endsection

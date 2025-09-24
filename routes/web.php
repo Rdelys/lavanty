@@ -6,6 +6,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AutoBidController;
+
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -51,3 +53,8 @@ Route::middleware('auth')->group(function() {
 });
 
 Route::get('/products/{product}/bids', [BidController::class, 'index'])->name('bids.index');
+
+
+Route::middleware('auth')->group(function() {
+    Route::post('/products/{product}/auto-bid', [AutoBidController::class, 'store'])->name('auto-bids.store');
+});
