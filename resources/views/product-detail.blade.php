@@ -3,6 +3,264 @@
 @section('title', $product->title . ' - Détails du Produit | Lavanty.mg')
 
 @section('content')
+<style>
+/* 🌟 --- LAVANTY PREMIUM THEME --- */
+/* Couleurs principales : Bleu #002f6c | Or #ffd700 */
+
+body {
+  background-color: #f8f9fc;
+  font-family: 'Poppins', 'Inter', sans-serif;
+  color: #1a1a1a;
+  overflow-x: hidden;
+}
+
+section.container {
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 10px 40px rgba(0, 47, 108, 0.08);
+  padding: 4rem 2rem;
+  transition: all .3s ease;
+}
+
+/* --- Titres --- */
+h1, h2, h3 {
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: -0.03em;
+}
+h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #002f6c;
+  position: relative;
+}
+h1::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: #ffd700;
+  margin-top: 10px;
+  border-radius: 2px;
+}
+h2 {
+  color: #002f6c;
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+/* --- Galerie d’images --- */
+#zoomContainer {
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 47, 108, 0.15);
+}
+#zoomContainer img {
+  transition: transform .4s ease, filter .4s ease;
+}
+#zoomContainer:hover img {
+  transform: scale(1.03);
+  filter: brightness(1.05);
+}
+.flex.gap-3 img {
+  border: 2px solid transparent;
+  border-radius: 14px;
+  transition: all .3s ease;
+}
+.flex.gap-3 img:hover {
+  border-color: #ffd700;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+/* --- Texte & Description --- */
+p.text-lg {
+  line-height: 1.8;
+  color: #555;
+  font-weight: 400;
+}
+
+/* --- Prix --- */
+.text-blue-700 {
+  color: #002f6c !important;
+}
+.text-yellow-600 {
+  color: #ffd700 !important;
+}
+.text-green-600 {
+  color: #00a86b !important;
+}
+
+/* --- Compteur d’enchère (countdown) --- */
+.countdown {
+  background: linear-gradient(135deg, #ffffff, #f3f6fb);
+  border: 1px solid rgba(0,47,108,0.1);
+  border-radius: 16px;
+  box-shadow: 0 6px 25px rgba(0, 47, 108, 0.08);
+  padding: 1.2rem 2rem;
+  display: flex;
+  gap: 2rem;
+}
+.countdown div {
+  text-align: center;
+}
+.countdown p {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #002f6c;
+}
+.countdown span {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* --- Inputs --- */
+input[type="number"] {
+  border: 1.5px solid #ccc;
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  transition: all .3s ease;
+  background: #fff;
+}
+input[type="number"]:focus {
+  border-color: #002f6c;
+  box-shadow: 0 0 0 3px rgba(0,47,108,0.1);
+}
+
+/* --- Boutons --- */
+button {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  transition: all .3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+#placeBidBtn {
+  background: linear-gradient(to right, #ffd700, #d6b400);
+  color: #002f6c;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+#placeBidBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+}
+
+#setAutoBidBtn {
+  background: linear-gradient(to right, #002f6c, #001f4d);
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,47,108,0.3);
+}
+#setAutoBidBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,47,108,0.5);
+}
+
+/* --- Tableau des enchères --- */
+#bidsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+#bidsTable th {
+  background: #002f6c;
+  color: #fff;
+  padding: 1rem;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+#bidsTable td {
+  padding: 0.9rem 1rem;
+  border-top: 1px solid #e5e9f0;
+}
+#bidsTable tr:nth-child(even) {
+  background: #f7f9fc;
+}
+#bidsTable tr:hover {
+  background-color: rgba(255, 215, 0, 0.08);
+  transition: all .3s ease;
+}
+
+/* --- Modale --- */
+#messageModal .bg-white {
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid #eee;
+  box-shadow: 0 20px 60px rgba(0, 47, 108, 0.25);
+  transition: all .3s ease;
+}
+#closeModal:hover {
+  color: #002f6c;
+}
+
+/* --- Scrollbars (premium look) --- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #002f6c;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #001f4d;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 1024px) {
+  section.container {
+    padding: 2.5rem 1.5rem;
+  }
+  h1 {
+    font-size: 2.2rem;
+  }
+  .grid {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.9rem;
+    text-align: center;
+  }
+  p.text-lg {
+    font-size: 1rem;
+    text-align: justify;
+  }
+  .countdown {
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+  .flex.gap-3 img {
+    width: 60px;
+    height: 60px;
+  }
+  #placeBidBtn, #setAutoBidBtn {
+    width: 100%;
+  }
+  .grid.grid-cols-1 {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  section.container {
+    padding: 1.5rem 1rem;
+  }
+  h1 {
+    font-size: 1.6rem;
+  }
+  #bidsTable th, #bidsTable td {
+    font-size: 0.8rem;
+    padding: 0.6rem;
+  }
+}
+</style>
+
 <section class="container mx-auto px-6 py-16">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
