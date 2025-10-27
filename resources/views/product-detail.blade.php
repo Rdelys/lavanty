@@ -90,7 +90,7 @@
                 <thead class="bg-blue-100 sticky top-0">
                     <tr>
                         <th class="border px-4 py-2">#</th>
-                        <th class="border px-4 py-2">Nom du participant</th>
+                        <th class="border px-4 py-2">Enchérisseur</th>
                         <th class="border px-4 py-2">Montant (Ar)</th>
                         <th class="border px-4 py-2">Date / Heure</th>
                     </tr>
@@ -198,7 +198,7 @@ async function loadBids(){
             if(index===0) tr.classList.add('bg-yellow-100');
             tr.innerHTML = `
                 <td class="border px-4 py-2">${index+1}</td>
-                <td class="border px-4 py-2">${bid.user.nom} ${bid.user.prenoms}</td>
+                <td class="border px-4 py-2">${bid.user.pseudo}</td>
                 <td class="border px-4 py-2 font-bold text-blue-700">${Number(bid.amount).toLocaleString('fr-FR')}</td>
                 <td class="border px-4 py-2">${new Date(bid.created_at).toLocaleString('fr-FR')}</td>
             `;

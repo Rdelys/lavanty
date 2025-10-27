@@ -91,7 +91,7 @@
                 <a href="{{ url('/contact') }}" class="hover:text-yellow-400 transition font-medium">Contact</a>
 
                 @auth
-                    <span class="text-yellow-200 font-semibold">{{ auth()->user()->nom }} {{ auth()->user()->prenoms }}</span>
+                    <span class="text-yellow-200 font-semibold">{{ auth()->user()->pseudo }}</span>
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="btn-yellow px-4 py-2 rounded-full shadow">
