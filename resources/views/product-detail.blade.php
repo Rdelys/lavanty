@@ -367,7 +367,30 @@ button {
         <p id="modalMessage" class="text-gray-800 text-lg"></p>
     </div>
 </div>
+<!-- Modale de confirmation d'enchère -->
+<div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center relative border border-gray-100">
+        <button id="closeConfirmModal" class="absolute top-3 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
+        
+        <div class="mb-6">
+            <h3 class="text-2xl font-bold text-[#002f6c] mb-2">Confirmation de votre enchère</h3>
+            <p class="text-gray-600">Une commission de <span class="font-semibold text-[#ffd700]">10 %</span> et une TVA de <span class="font-semibold text-[#ffd700]">20 %</span> seront ajoutées au montant.</p>
+        </div>
 
+        <div class="bg-gray-50 rounded-xl p-4 mb-6 shadow-inner text-left">
+            <p class="text-gray-800 mb-1">Montant de votre enchère : <span id="confirmBaseAmount" class="font-bold text-[#002f6c]"></span> Ar</p>
+            <p class="text-gray-800 mb-1">+ Commission (10 %) : <span id="confirmCommission" class="font-bold text-[#ffd700]"></span> Ar</p>
+            <p class="text-gray-800 mb-1">+ TVA (20 %) : <span id="confirmTVA" class="font-bold text-[#ffd700]"></span> Ar</p>
+            <hr class="my-2 border-gray-300">
+            <p class="text-lg font-extrabold text-[#002f6c]">Total final : <span id="confirmTotal" class="text-[#ffd700]"></span> Ar</p>
+        </div>
+
+        <div class="flex justify-center gap-4">
+            <button id="cancelConfirm" class="px-6 py-2 rounded-xl font-semibold bg-gray-200 hover:bg-gray-300 transition">Annuler</button>
+            <button id="confirmBidBtn" class="px-6 py-2 rounded-xl font-semibold text-[#002f6c] bg-[#ffd700] hover:bg-[#ffce00] shadow-lg transition">Confirmer</button>
+        </div>
+    </div>
+</div>
 <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
 <script>
 const element = document.getElementById('zoomContainer');
@@ -475,30 +498,73 @@ loadBids();
 setInterval(loadBids, 2000);
 
 @auth
-document.getElementById('placeBidBtn').addEventListener('click', async ()=>{
+const confirmModal = document.getElementById('confirmModal');
+const confirmBaseAmount = document.getElementById('confirmBaseAmount');
+const confirmCommission = document.getElementById('confirmCommission');
+const confirmTVA = document.getElementById('confirmTVA');
+const confirmTotal = document.getElementById('confirmTotal');
+const confirmBidBtn = document.getElementById('confirmBidBtn');
+const cancelConfirm = document.getElementById('cancelConfirm');
+const closeConfirmModal = document.getElementById('closeConfirmModal');
+
+let pendingBidAmount = 0;
+
+// 🔸 Quand on clique sur "Placer"
+document.getElementById('placeBidBtn').addEventListener('click', () => {
     const amount = parseFloat(bidInput.value);
-    if(!amount || amount<=0) return showModal('Veuillez saisir un montant valide.');
-    try{
+    if (!amount || amount <= 0) return showModal('Veuillez saisir un montant valide.');
+
+    // Calcul des frais
+    const commission = amount * 0.10;
+    const tva = (amount + commission) * 0.20;
+    const total = amount + commission + tva;
+
+    // Affiche dans la modale
+    confirmBaseAmount.textContent = amount.toLocaleString('fr-FR');
+    confirmCommission.textContent = commission.toLocaleString('fr-FR');
+    confirmTVA.textContent = tva.toLocaleString('fr-FR');
+    confirmTotal.textContent = total.toLocaleString('fr-FR');
+
+    pendingBidAmount = total;
+    confirmModal.classList.remove('hidden');
+});
+
+// 🔸 Annuler ou fermer
+cancelConfirm.addEventListener('click', () => confirmModal.classList.add('hidden'));
+closeConfirmModal.addEventListener('click', () => confirmModal.classList.add('hidden'));
+confirmModal.addEventListener('click', e => {
+    if (e.target.id === 'confirmModal') confirmModal.classList.add('hidden');
+});
+
+// 🔸 Confirmer l’enchère
+confirmBidBtn.addEventListener('click', async () => {
+    confirmModal.classList.add('hidden');
+
+    try {
         const res = await fetch(`/products/${productId}/bid`, {
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json',
-                'X-CSRF-TOKEN':'{{ csrf_token() }}',
-                'Accept':'application/json'
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
             },
-            body: JSON.stringify({amount})
+            body: JSON.stringify({ amount: pendingBidAmount })
         });
-        if(res.ok){
-            bidInput.value='';
+
+        if (res.ok) {
+            bidInput.value = '';
             loadBids();
             showModal('✅ Enchère placée avec succès !');
         } else {
             const data = await res.json();
-            showModal(data.message || 'Erreur lors de l\'enchère.');
+            showModal(data.message || "Erreur lors de l'enchère.");
         }
-    } catch(err){ showModal('Erreur lors de l\'enchère.'); }
+    } catch (err) {
+        showModal("Erreur lors de l'enchère.");
+    }
 });
 @endauth
+
 
 const autoBidInput = document.getElementById('autoBidAmount');
 const setAutoBidBtn = document.getElementById('setAutoBidBtn');
