@@ -75,6 +75,7 @@
         }
 
         
+/* --- Animation entrée/sortie --- */
 @keyframes fadeInRight {
   from { opacity: 0; transform: translateX(60px); }
   to { opacity: 1; transform: translateX(0); }
@@ -84,7 +85,7 @@
   to { opacity: 0; transform: translateX(60px); }
 }
 
-/* Container notifications (en bas à droite) */
+/* --- Container notifications (en bas à droite) --- */
 #bidNotifications {
   position: fixed;
   bottom: 20px;
@@ -93,9 +94,10 @@
   flex-direction: column;
   gap: 12px;
   z-index: 9999;
+  pointer-events: none; /* ne bloque pas les clics sur le site */
 }
 
-/* Carte notification */
+/* --- Carte notification --- */
 .bid-toast {
   background: #ffffff;
   border-left: 6px solid #ffd700;
@@ -106,6 +108,8 @@
   max-width: 340px;
   animation: fadeInRight 0.4s ease forwards;
   transition: all 0.3s ease;
+  pointer-events: auto; /* clics autorisés sur la notif */
+  position: relative;
 }
 .bid-toast.hide {
   animation: fadeOutRight 0.5s ease forwards;
@@ -288,12 +292,11 @@
     <script>
 let lastHighestBid = 0;
 
-// 🔔 Crée et affiche la notification
+/* --- Crée et affiche la notification --- */
 function showBidToast(data) {
   const container = document.getElementById("bidNotifications");
-
   const toast = document.createElement("div");
-  toast.className = "bid-toast relative";
+  toast.className = "bid-toast";
   toast.innerHTML = `
       <button title="Fermer">&times;</button>
       <h4>💰 Nouvelle enchère placée !</h4>
@@ -305,31 +308,35 @@ function showBidToast(data) {
   // Fermeture manuelle
   toast.querySelector("button").addEventListener("click", () => hideToast(toast));
 
-  // Auto-fermeture après 5 secondes
+  // Disparaît automatiquement après 5 secondes
   setTimeout(() => hideToast(toast), 5000);
 }
 
-// 🔕 Animation de disparition
+/* --- Animation de disparition --- */
 function hideToast(toast) {
   toast.classList.add("hide");
-  setTimeout(() => toast.remove(), 400);
+  setTimeout(() => toast.remove(), 500);
 }
 
-// 🔁 Vérifie toutes les 5 secondes
+/* --- Vérifie toutes les 5 secondes --- */
 async function checkNewBids() {
   try {
     const res = await fetch('/api/latest-bid');
     if (!res.ok) return;
     const data = await res.json();
+
+    // Si une nouvelle enchère plus haute est détectée
     if (data.amount > lastHighestBid) {
       lastHighestBid = data.amount;
       showBidToast(data);
     }
   } catch (err) {
-    console.error(err);
+    console.error("Erreur lors du check d'enchère :", err);
   }
 }
 
+// 🕐 Démarrage immédiat puis vérification toutes les 5s
+checkNewBids();
 setInterval(checkNewBids, 5000);
 </script>
 </body>
