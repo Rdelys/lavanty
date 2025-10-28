@@ -73,6 +73,70 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+
+        
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeOutRight {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(60px); }
+}
+
+/* Container notifications (en bas à droite) */
+#bidNotifications {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999;
+}
+
+/* Carte notification */
+.bid-toast {
+  background: #ffffff;
+  border-left: 6px solid #ffd700;
+  box-shadow: 0 5px 25px rgba(0, 47, 108, 0.2);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  min-width: 260px;
+  max-width: 340px;
+  animation: fadeInRight 0.4s ease forwards;
+  transition: all 0.3s ease;
+}
+.bid-toast.hide {
+  animation: fadeOutRight 0.5s ease forwards;
+}
+.bid-toast h4 {
+  color: #002f6c;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+.bid-toast p {
+  color: #333;
+  font-size: 0.9rem;
+}
+.bid-toast .amount {
+  color: #ffd700;
+  font-weight: 700;
+}
+.bid-toast button {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.2rem;
+  font-weight: bold;
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.bid-toast button:hover { color: #002f6c; }
     </style>
 </head>
 <body class="bg-white flex flex-col min-h-screen font-[Inter] text-gray-800">
@@ -186,6 +250,7 @@
             </form>
         </div>
     </div>
+<div id="bidNotifications"></div>
 
     <!-- Script -->
     <script>
@@ -217,6 +282,55 @@
         const mobileMenuBtn = document.getElementById('mobileMenuButton');
         const mobileMenu = document.getElementById('mobileMenu');
         mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+        
     </script>
+    <script>
+let lastHighestBid = 0;
+
+// 🔔 Crée et affiche la notification
+function showBidToast(data) {
+  const container = document.getElementById("bidNotifications");
+
+  const toast = document.createElement("div");
+  toast.className = "bid-toast relative";
+  toast.innerHTML = `
+      <button title="Fermer">&times;</button>
+      <h4>💰 Nouvelle enchère placée !</h4>
+      <p><strong>${data.product}</strong></p>
+      <p>Montant : <span class="amount">${Number(data.amount).toLocaleString('fr-FR')} Ar</span></p>
+  `;
+  container.appendChild(toast);
+
+  // Fermeture manuelle
+  toast.querySelector("button").addEventListener("click", () => hideToast(toast));
+
+  // Auto-fermeture après 5 secondes
+  setTimeout(() => hideToast(toast), 5000);
+}
+
+// 🔕 Animation de disparition
+function hideToast(toast) {
+  toast.classList.add("hide");
+  setTimeout(() => toast.remove(), 400);
+}
+
+// 🔁 Vérifie toutes les 5 secondes
+async function checkNewBids() {
+  try {
+    const res = await fetch('/api/latest-bid');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.amount > lastHighestBid) {
+      lastHighestBid = data.amount;
+      showBidToast(data);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+setInterval(checkNewBids, 5000);
+</script>
 </body>
 </html>
