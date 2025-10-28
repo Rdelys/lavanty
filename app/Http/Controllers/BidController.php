@@ -6,6 +6,7 @@ use App\Models\Bid;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AutoBidController;
+use App\Notifications\NewBidNotification;
 
 
 class BidController extends Controller
@@ -38,6 +39,18 @@ class BidController extends Controller
             'product_id'=>$product->id,
             'amount'=>$request->amount
         ]);
+
+        // ✅ notifier tous les anciens enchérisseurs sauf celui qui vient d'enchérir
+        $previousBidders = \App\Models\User::whereIn('id',
+            \App\Models\Bid::where('product_id', $product->id)
+                ->where('user_id', '!=', $userId)
+                ->pluck('user_id')
+                ->unique()
+        )->get();
+
+        foreach ($previousBidders as $user) {
+            $user->notify(new NewBidNotification($product, $request->amount, auth()->user()->pseudo));
+        }
         
         // ✅ mise à jour du dernier enchérisseur
         $product->update(['last_bid_user_id' => $userId]);
