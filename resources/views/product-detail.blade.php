@@ -259,6 +259,24 @@ button {
     padding: 0.6rem;
   }
 }
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes pulsePrice {
+  0% { transform: scale(1); color: #ffd700; }
+  50% { transform: scale(1.1); color: #ffea80; }
+  100% { transform: scale(1); color: #ffd700; }
+}
+.pulse {
+  animation: pulsePrice 0.6s ease;
+}
+
 </style>
 
 <section class="container mx-auto px-6 py-16">
@@ -289,19 +307,42 @@ button {
         <div class="flex flex-col justify-center">
             <h1 class="text-4xl font-extrabold text-gray-900 mb-4">{{ $product->title }}</h1>
             <p class="text-lg text-gray-600 mb-6">{{ $product->description }}</p>
-            <p class="text-2xl font-bold text-blue-700 mb-4">
-                Prix de départ : {{ number_format($product->starting_price, 0, ',', ' ') }} Ar
-                @auth
-                    @php
-                        $autoBid = \App\Models\AutoBid::where('user_id', auth()->id())
-                                    ->where('product_id', $product->id)
-                                    ->first();
-                    @endphp
-                    @if($autoBid)
-                        <span class="ml-4 text-sm text-green-600">(Votre max : {{ number_format($autoBid->max_price, 0, ',', ' ') }} Ar)</span>
-                    @endif
-                @endauth
-            </p>
+            <!-- 🔥 Section Prix -->
+<div class="mb-6">
+    @php
+        $latestBid = \App\Models\Bid::where('product_id', $product->id)
+                    ->orderByDesc('amount')
+                    ->first();
+    @endphp
+
+    @if($latestBid)
+        <p class="text-4xl font-extrabold text-yellow-600 mb-1">
+            {{ number_format($latestBid->amount, 0, ',', ' ') }} Ar
+        </p>
+        <p class="text-sm text-gray-500 mb-4">💰 Dernier prix proposé</p>
+    @else
+        <p class="text-4xl font-extrabold text-blue-700 mb-1">
+            {{ number_format($product->starting_price, 0, ',', ' ') }} Ar
+        </p>
+        <p class="text-sm text-gray-500 mb-4">💰 Prix de départ</p>
+    @endif
+
+    <p class="text-sm text-gray-500">
+        Prix de départ : <span class="font-semibold text-blue-700">{{ number_format($product->starting_price, 0, ',', ' ') }} Ar</span>
+    </p>
+
+    @auth
+        @php
+            $autoBid = \App\Models\AutoBid::where('user_id', auth()->id())
+                        ->where('product_id', $product->id)
+                        ->first();
+        @endphp
+        @if($autoBid)
+            <p class="text-sm text-green-600 mt-1">(Votre enchère auto max : {{ number_format($autoBid->max_price, 0, ',', ' ') }} Ar)</p>
+        @endif
+    @endauth
+</div>
+
             <!-- Countdown -->
             <div class="mb-6">
                 <span class="block text-sm text-gray-500 mb-2">⏳ Temps restant :</span>
@@ -368,26 +409,68 @@ button {
     </div>
 </div>
 <!-- Modale de confirmation d'enchère -->
-<div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center relative border border-gray-100">
-        <button id="closeConfirmModal" class="absolute top-3 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
-        
-        <div class="mb-6">
-            <h3 class="text-2xl font-bold text-[#002f6c] mb-2">Confirmation de votre enchère</h3>
-            <p class="text-gray-600">Une commission de <span class="font-semibold text-[#ffd700]">10 %</span> et une TVA de <span class="font-semibold text-[#ffd700]">20 %</span> seront ajoutées au montant.</p>
+<!-- 🔥 MODALE PREMIUM RESPONSIVE -->
+<div id="confirmModal"
+     class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center hidden z-50 transition-all duration-300">
+
+    <div class="relative w-[90%] max-w-md bg-white/90 backdrop-blur-xl border border-gray-200 
+                shadow-[0_20px_60px_rgba(0,47,108,0.25)] rounded-3xl p-8 animate-fadeIn scale-95 sm:scale-100">
+
+        <!-- ✖ Bouton de fermeture -->
+        <button id="closeConfirmModal"
+                class="absolute top-3 right-4 text-gray-400 hover:text-[#002f6c] text-3xl font-bold transition">
+            &times;
+        </button>
+
+        <!-- 💬 En-tête -->
+        <div class="mb-6 text-center">
+            <div class="mx-auto mb-4 w-16 h-16 flex items-center justify-center rounded-full 
+                        bg-gradient-to-r from-[#002f6c] to-[#0047a3] shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-[#ffd700]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 8v4l3 3m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h3 class="text-2xl font-extrabold text-[#002f6c]">Confirmation de votre enchère</h3>
+            <p class="text-gray-600 mt-1 text-sm">
+                Une commission de <span class="text-[#ffd700] font-semibold">10%</span> et une TVA de 
+                <span class="text-[#ffd700] font-semibold">20%</span> (sur la commission) seront appliquées.
+            </p>
         </div>
 
-        <div class="bg-gray-50 rounded-xl p-4 mb-6 shadow-inner text-left">
-            <p class="text-gray-800 mb-1">Montant de votre enchère : <span id="confirmBaseAmount" class="font-bold text-[#002f6c]"></span> Ar</p>
-            <p class="text-gray-800 mb-1">+ Commission (10 %) : <span id="confirmCommission" class="font-bold text-[#ffd700]"></span> Ar</p>
-            <p class="text-gray-800 mb-1">+ TVA (20 %) : <span id="confirmTVA" class="font-bold text-[#ffd700]"></span> Ar</p>
-            <hr class="my-2 border-gray-300">
-            <p class="text-lg font-extrabold text-[#002f6c]">Total final : <span id="confirmTotal" class="text-[#ffd700]"></span> Ar</p>
+        <!-- 💰 Détails du calcul -->
+        <div class="bg-white rounded-2xl shadow-inner border border-gray-100 px-5 py-4 mb-6 text-left space-y-1.5">
+            <p class="text-gray-800">Montant de votre enchère :
+                <span id="confirmBaseAmount" class="font-bold text-[#002f6c]"></span> Ar
+            </p>
+            <p class="text-gray-800">+ Commission (10 %) :
+                <span id="confirmCommission" class="font-bold text-[#ffd700]"></span> Ar
+            </p>
+            <p class="text-gray-800">+ TVA (20 % de la commission) :
+                <span id="confirmTVA" class="font-bold text-[#ffd700]"></span> Ar
+            </p>
+
+            <div class="border-t border-gray-200 my-3"></div>
+
+            <p class="text-lg font-extrabold text-[#002f6c] flex justify-between items-center">
+                Total à payer :
+                <span id="confirmTotal" class="text-[#ffd700] text-xl"></span> Ar
+            </p>
         </div>
 
-        <div class="flex justify-center gap-4">
-            <button id="cancelConfirm" class="px-6 py-2 rounded-xl font-semibold bg-gray-200 hover:bg-gray-300 transition">Annuler</button>
-            <button id="confirmBidBtn" class="px-6 py-2 rounded-xl font-semibold text-[#002f6c] bg-[#ffd700] hover:bg-[#ffce00] shadow-lg transition">Confirmer</button>
+        <!-- 🔘 Boutons d’action -->
+        <div class="flex flex-col sm:flex-row justify-center gap-3">
+            <button id="cancelConfirm"
+                    class="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold bg-gray-200 hover:bg-gray-300 
+                           text-gray-700 transition-all">
+                Annuler
+            </button>
+            <button id="confirmBidBtn"
+                    class="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold 
+                           bg-gradient-to-r from-[#ffd700] to-[#e0c200] text-[#002f6c] 
+                           hover:scale-105 shadow-lg transition-all">
+                ✅ Confirmer
+            </button>
         </div>
     </div>
 </div>
@@ -494,6 +577,28 @@ async function loadBids(){
             bidsTableBody.appendChild(tr);
         });
 
+        // --- 🟡 Met à jour automatiquement le prix affiché ---
+const latestPriceElement = document.querySelector('.text-4xl.font-extrabold.text-yellow-600');
+const priceLabel = document.querySelector('.text-sm.text-gray-500.mb-4');
+
+if (latestPriceElement && bids.length > 0) {
+    const lastBid = bids[0];
+    const newPrice = `${Number(lastBid.amount).toLocaleString('fr-FR')} Ar`;
+
+    if (latestPriceElement.textContent.trim() !== newPrice) {
+        latestPriceElement.textContent = newPrice;
+        latestPriceElement.classList.add('pulse');
+        setTimeout(() => latestPriceElement.classList.remove('pulse'), 600);
+    }
+
+    priceLabel.textContent = '💰 Dernier prix proposé';
+}
+ else if (latestPriceElement && bids.length === 0) {
+    latestPriceElement.textContent = `${Number({{ $product->starting_price }}).toLocaleString('fr-FR')} Ar`;
+    priceLabel.textContent = '💰 Prix de départ';
+}
+
+
         @auth
         const lastUserBid = bids.find(b=>b.user.id=== {{ auth()->id() }});
         if(lastUserBid) bidInput.value = lastUserBid.amount;
@@ -523,9 +628,11 @@ document.getElementById('placeBidBtn').addEventListener('click', () => {
     if (!amount || amount <= 0) return showModal('Veuillez saisir un montant valide.');
 
     // Calcul des frais
+    // Calcul des frais
     const commission = amount * 0.10;
-    const tva = (amount + commission) * 0.20;
+    const tva = commission * 0.20; // TVA sur la commission uniquement
     const total = amount + commission + tva;
+
 
     // Affiche dans la modale
     confirmBaseAmount.textContent = amount.toLocaleString('fr-FR');
@@ -533,7 +640,7 @@ document.getElementById('placeBidBtn').addEventListener('click', () => {
     confirmTVA.textContent = tva.toLocaleString('fr-FR');
     confirmTotal.textContent = total.toLocaleString('fr-FR');
 
-    pendingBidAmount = total;
+    pendingBidAmount = amount;
     confirmModal.classList.remove('hidden');
 });
 
