@@ -406,41 +406,49 @@ document.querySelectorAll('.countdown').forEach(card => {
     const minutesEl = card.querySelector(".minutes");
     const secondsEl = card.querySelector(".seconds");
 
+    // Appliquer le style directement avec !important via setProperty
+    function setCountdownColor(color) {
+        card.querySelectorAll("p").forEach(el => {
+            el.style.setProperty("color", color, "important");
+        });
+    }
+
     function updateCountdown() {
         const now = new Date().getTime();
         const diff = endTime - now;
+
         if (diff <= 0) {
-            daysEl.textContent = "0"; 
-            hoursEl.textContent = "0"; 
-            minutesEl.textContent = "0"; 
+            daysEl.textContent = "0";
+            hoursEl.textContent = "0";
+            minutesEl.textContent = "0";
             secondsEl.textContent = "0";
 
-            // 🔴 Masquer la section enchère manuelle si le chrono est fini
-            const bidSection = document.getElementById("bidSection");
-            if (bidSection) {
-                bidSection.classList.add("hidden");
-            }
-
-            // 🔴 Masquer la section enchère automatique aussi
-            const autoBidSection = document.getElementById("autoBidSection");
-            if (autoBidSection) {
-                autoBidSection.classList.add("hidden");
-            }
-
+            document.getElementById("bidSection")?.classList.add("hidden");
+            document.getElementById("autoBidSection")?.classList.add("hidden");
             return;
         }
 
-        const d = Math.floor(diff / (1000*60*60*24));
-        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-        const s = Math.floor((diff % (1000*60)) / 1000);
-        daysEl.textContent = d; 
-        hoursEl.textContent = h; 
-        minutesEl.textContent = m; 
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        daysEl.textContent = d;
+        hoursEl.textContent = h;
+        minutesEl.textContent = m;
         secondsEl.textContent = s;
+
+        // 🔥 Condition de couleur :
+        // Moins de 24h => rouge ; sinon => noir
+        if (diff < 24 * 60 * 60 * 1000) {
+            setCountdownColor("red");
+        } else {
+            setCountdownColor("black");
+        }
 
         requestAnimationFrame(updateCountdown);
     }
+
     updateCountdown();
 });
 

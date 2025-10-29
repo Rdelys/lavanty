@@ -37,7 +37,7 @@ class NewBidNotification extends Notification implements ShouldQueue
             ->line("📦 **{$this->product->title}**")
             ->line("💸 Montant : **" . number_format($this->amount, 0, ',', ' ') . " Ar**")
             ->line("👤 Enchérisseur : {$this->bidderName}")
-            ->action('Voir le produit', url('/products/' . $this->product->id))
+            ->action('Voir le produit', url('/product/' . $this->product->id))
             ->line("Bonne chance pour la suite de l’enchère !");
     }
 }

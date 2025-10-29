@@ -199,24 +199,56 @@
   });
 
   // Countdown
+    // ✅ Countdown avec couleur dynamique (rouge si <24h, noir sinon)
   document.querySelectorAll('.countdown').forEach(card => {
     const endTime = new Date(card.dataset.end).getTime();
     const daysEl = card.querySelector(".days");
     const hoursEl = card.querySelector(".hours");
     const minutesEl = card.querySelector(".minutes");
     const secondsEl = card.querySelector(".seconds");
+
+    // fonction utilitaire pour appliquer la couleur à tous les <p>
+    function setCountdownColor(color) {
+      card.querySelectorAll("p").forEach(el => {
+        el.style.setProperty("color", color, "important");
+      });
+    }
+
     function updateCountdown() {
       const now = new Date().getTime();
       const diff = endTime - now;
-      if (diff <= 0) return;
-      const d = Math.floor(diff / (1000*60*60*24));
-      const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-      const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-      const s = Math.floor((diff % (1000*60)) / 1000);
-      daysEl.textContent = d; hoursEl.textContent = h; minutesEl.textContent = m; secondsEl.textContent = s;
+      if (diff <= 0) {
+        daysEl.textContent = "0";
+        hoursEl.textContent = "0";
+        minutesEl.textContent = "0";
+        secondsEl.textContent = "0";
+        return;
+      }
+
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+      daysEl.textContent = d;
+      hoursEl.textContent = h;
+      minutesEl.textContent = m;
+      secondsEl.textContent = s;
+
+      // 🔥 Couleur dynamique :
+      // moins de 24 heures → rouge
+      // plus de 24 heures → noir
+      if (diff < 24 * 60 * 60 * 1000) {
+        setCountdownColor("red");
+      } else {
+        setCountdownColor("black");
+      }
+
       requestAnimationFrame(updateCountdown);
     }
+
     updateCountdown();
   });
+
 </script>
 @endsection

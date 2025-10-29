@@ -102,23 +102,38 @@ document.querySelectorAll('.countdown').forEach(card => {
     function updateCountdown() {
         const now = new Date().getTime();
         const diff = endTime - now;
+
         if (diff <= 0) {
             daysEl.textContent = "0";
             hoursEl.textContent = "0";
             minutesEl.textContent = "0";
             secondsEl.textContent = "0";
+            card.style.color = "black"; // neutre à la fin
             return;
         }
-        const d = Math.floor(diff / (1000*60*60*24));
-        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-        const s = Math.floor((diff % (1000*60)) / 1000);
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
         daysEl.textContent = d;
         hoursEl.textContent = h;
         minutesEl.textContent = m;
         secondsEl.textContent = s;
+
+        // ✅ Si moins de 24h restantes → rouge
+        if (diff < 24 * 60 * 60 * 1000) {
+            card.querySelectorAll("p").forEach(el => el.style.color = "red");
+        } 
+        // ✅ Sinon → noir
+        else {
+            card.querySelectorAll("p").forEach(el => el.style.color = "black");
+        }
+
         requestAnimationFrame(updateCountdown);
     }
+
     updateCountdown();
 });
 </script>
