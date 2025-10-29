@@ -50,26 +50,44 @@ class AuthController extends Controller
     }
 
     // Traiter l'inscription
-    public function register(Request $request)
-    {
-        $data = $request->validate([
-            'nom' => 'required|string|max:255',
-            'prenoms' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'telephone' => 'required|string|max:20',
-            'password' => 'required|string|confirmed|min:6',
-        ]);
+    // Traiter l'inscription
+public function register(Request $request)
+{
+    $data = $request->validate([
+        'nom' => 'required|string|max:255',
+        'prenoms' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'telephone' => 'required|string|max:20',
+        'password' => 'required|string|confirmed|min:6',
+    ]);
 
-        $user = User::create([
-            'nom' => $data['nom'],
-            'prenoms' => $data['prenoms'],
-            'email' => $data['email'],
-            'telephone' => $data['telephone'],
-            'password' => Hash::make($data['password']),
-        ]);
+    // 🧮 Générer un pseudo automatique
+    // Cherche le dernier pseudo existant
+    $lastUser = User::where('pseudo', 'like', '#101%')
+                    ->orderByDesc('id')
+                    ->first();
 
-        Auth::login($user);
-
-        return redirect('/');
+    if ($lastUser && preg_match('/#(\d+)/', $lastUser->pseudo, $matches)) {
+        $nextNumber = intval($matches[1]) + 1;
+    } else {
+        $nextNumber = 101000;
     }
+
+    $pseudo = '#' . $nextNumber;
+
+    // 🔐 Crée l'utilisateur avec le pseudo auto
+    $user = User::create([
+        'nom' => $data['nom'],
+        'prenoms' => $data['prenoms'],
+        'email' => $data['email'],
+        'telephone' => $data['telephone'],
+        'pseudo' => $pseudo,
+        'password' => Hash::make($data['password']),
+    ]);
+
+    Auth::login($user);
+
+    return redirect('/');
+}
+
 }
