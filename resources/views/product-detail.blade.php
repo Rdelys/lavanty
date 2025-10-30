@@ -277,6 +277,33 @@ button {
   animation: pulsePrice 0.6s ease;
 }
 
+/* 🌿 Style texte simple et élégant pour l’état d’enchère */
+.bid-status {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  letter-spacing: -0.01em;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.bid-status.success {
+  color: #16a34a; /* vert premium */
+}
+
+.bid-status.danger {
+  color: #dc2626; /* rouge sobre */
+}
+
+/* ✨ Apparition douce */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
 </style>
 
 <section class="container mx-auto px-6 py-16">
@@ -342,6 +369,26 @@ button {
         @endif
     @endauth
 </div>
+<!-- 🟢🔴 Message d’état d’enchère -->
+@auth
+    @php
+        $latestBid = \App\Models\Bid::where('product_id', $product->id)
+                    ->orderByDesc('amount')
+                    ->first();
+    @endphp
+
+    @if($latestBid && $latestBid->user_id === auth()->id())
+        <div id="bidStatus" class="bid-status success mt-3">
+            🏆 <span>Vous êtes le meilleur enchérisseur !</span>
+        </div>
+    @elseif($latestBid)
+        <div id="bidStatus" class="bid-status danger mt-3">
+            ⚠️ <span>Vous avez été surenchéri.</span>
+        </div>
+    @endif
+@endauth
+
+
 
             <!-- Countdown -->
             <div class="mb-6">
@@ -620,22 +667,24 @@ const bidsTableBody = document.querySelector('#bidsTable tbody');
 const bidInput = document.getElementById('bidAmount');
 let lastDisplayedAmount = 0;
 
-async function loadBids(){
-    try{
-        const res = await fetch(`/products/${productId}/bids`, { headers:{'Accept':'application/json'} });
-        if(!res.ok) return;
+async function loadBids() {
+    try {
+        const res = await fetch(`/products/${productId}/bids`, { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) return;
+
         const bids = await res.json();
-        const highestAmount = bids.length ? Math.max(...bids.map(b=>b.amount)) : 0;
-        if(highestAmount <= lastDisplayedAmount) return;
+        const highestAmount = bids.length ? Math.max(...bids.map(b => b.amount)) : 0;
+        if (highestAmount <= lastDisplayedAmount) return;
         lastDisplayedAmount = highestAmount;
 
+        // 🧾 Rafraîchir le tableau des enchères
         bidsTableBody.innerHTML = '';
-        bids.forEach((bid, index)=>{
+        bids.forEach((bid, index) => {
             const tr = document.createElement('tr');
-            if(index%2===1) tr.classList.add('bg-gray-50');
-            if(index===0) tr.classList.add('bg-yellow-100');
+            if (index % 2 === 1) tr.classList.add('bg-gray-50');
+            if (index === 0) tr.classList.add('bg-yellow-100');
             tr.innerHTML = `
-                <td class="border px-4 py-2">${index+1}</td>
+                <td class="border px-4 py-2">${index + 1}</td>
                 <td class="border px-4 py-2">${bid.user.pseudo}</td>
                 <td class="border px-4 py-2 font-bold text-blue-700">${Number(bid.amount).toLocaleString('fr-FR')}</td>
                 <td class="border px-4 py-2">${new Date(bid.created_at).toLocaleString('fr-FR')}</td>
@@ -643,35 +692,56 @@ async function loadBids(){
             bidsTableBody.appendChild(tr);
         });
 
-        // --- 🟡 Met à jour automatiquement le prix affiché ---
-const latestPriceElement = document.querySelector('.text-4xl.font-extrabold.text-yellow-600');
-const priceLabel = document.querySelector('.text-sm.text-gray-500.mb-4');
+        // 🟡 Met à jour automatiquement le prix affiché
+        const latestPriceElement = document.querySelector('.text-4xl.font-extrabold.text-yellow-600');
+        const priceLabel = document.querySelector('.text-sm.text-gray-500.mb-4');
 
-if (latestPriceElement && bids.length > 0) {
-    const lastBid = bids[0];
-    const newPrice = `${Number(lastBid.amount).toLocaleString('fr-FR')} Ar`;
+        if (latestPriceElement && bids.length > 0) {
+            const lastBid = bids[0];
+            const newPrice = `${Number(lastBid.amount).toLocaleString('fr-FR')} Ar`;
 
-    if (latestPriceElement.textContent.trim() !== newPrice) {
-        latestPriceElement.textContent = newPrice;
-        latestPriceElement.classList.add('pulse');
-        setTimeout(() => latestPriceElement.classList.remove('pulse'), 600);
-    }
+            if (latestPriceElement.textContent.trim() !== newPrice) {
+                latestPriceElement.textContent = newPrice;
+                latestPriceElement.classList.add('pulse');
+                setTimeout(() => latestPriceElement.classList.remove('pulse'), 600);
+            }
 
-    priceLabel.textContent = '💰 Dernier prix proposé';
-}
- else if (latestPriceElement && bids.length === 0) {
-    latestPriceElement.textContent = `${Number({{ $product->starting_price }}).toLocaleString('fr-FR')} Ar`;
-    priceLabel.textContent = '💰 Prix de départ';
-}
+            priceLabel.textContent = '💰 Dernier prix proposé';
+        } else if (latestPriceElement && bids.length === 0) {
+            latestPriceElement.textContent = `${Number({{ $product->starting_price }}).toLocaleString('fr-FR')} Ar`;
+            priceLabel.textContent = '💰 Prix de départ';
+        }
 
-
+        // ✅ 🟢🔴 Mise à jour du message d’état (en dehors de la boucle)
         @auth
-        const lastUserBid = bids.find(b=>b.user.id=== {{ auth()->id() }});
-        if(lastUserBid) bidInput.value = lastUserBid.amount;
+        const bidStatus = document.getElementById('bidStatus');
+        if (bidStatus && bids.length > 0) {
+            const topBid = bids[0];
+            if (topBid.user.id === {{ auth()->id() }}) {
+                bidStatus.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>🏆 Vous êtes le meilleur enchérisseur !</span>
+                `;
+                bidStatus.className = "bid-status bg-green-50 border border-green-400 text-green-700 font-semibold mt-4 p-3 rounded-xl flex items-center gap-2 animate-status";
+            } else {
+                bidStatus.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span>⚠️ Vous avez été surenchéri.</span>
+                `;
+                bidStatus.className = "bid-status bg-red-50 border border-red-400 text-red-700 font-semibold mt-4 p-3 rounded-xl flex items-center gap-2 animate-status";
+            }
+        }
         @endauth
 
-    } catch(err){ console.error(err); }
+    } catch (err) {
+        console.error(err);
+    }
 }
+
 
 loadBids();
 setInterval(loadBids, 2000);

@@ -260,24 +260,6 @@
             </form>
         </div>
     </div>
-    <!-- Popup Résumé des enchères (non bloquant en bas à gauche) -->
-<div id="auctionSummaryPopup" 
-     class="fixed bottom-5 left-5 z-50 hidden glass border border-yellow-400 rounded-2xl p-5 shadow-2xl w-80 fade-in pointer-events-auto">
-    <button id="closeSummaryPopup" 
-        class="absolute top-2 right-3 text-gray-500 hover:text-blue-900 font-bold text-lg">
-        ✕
-    </button>
-    <div class="text-center">
-        <h3 class="text-xl font-extrabold text-blue-900 mb-2">📊 Vos Enchères</h3>
-        <div id="auctionSummaryContent" class="text-center space-y-2">
-            <p class="text-yellow-600 font-semibold">Chargement...</p>
-        </div>
-        <button id="goProfilePopup" 
-            class="mt-4 btn-yellow px-5 py-2 rounded-full text-sm font-semibold shadow-md hover:scale-105 transition">
-            Voir mon profil
-        </button>
-    </div>
-</div>
 
 <div id="bidNotifications"></div>
 
@@ -365,60 +347,6 @@ checkNewBids();
 setInterval(checkNewBids, 5000);
 
 
-</script>
-<script>
-const auctionPopup = document.getElementById('auctionSummaryPopup');
-const closePopupBtn = document.getElementById('closeSummaryPopup');
-const goProfilePopup = document.getElementById('goProfilePopup');
-const contentBox = document.getElementById('auctionSummaryContent');
-let popupTimeout; // pour gérer la fermeture automatique
-
-function showAuctionSummaryPopup() {
-    // Appel API (si connecté)
-    fetch('/api/auction-summary')
-        .then(res => res.json())
-        .then(data => {
-            // contenu dynamique
-            contentBox.innerHTML = `
-                <p class="text-green-700 font-semibold text-sm">
-                    🟢 Vous êtes le meilleur enchérisseur sur 
-                    <span class="text-yellow-500 text-lg">${data.leading}</span> produit(s)
-                </p>
-                <p class="text-red-700 font-semibold text-sm">
-                    🔴 Vous avez été surenchéri sur 
-                    <span class="text-yellow-500 text-lg">${data.lost}</span> produit(s)
-                </p>
-            `;
-            // Afficher popup
-            auctionPopup.classList.remove('hidden');
-            
-            // ⏳ Le fermer automatiquement après 20 secondes
-            popupTimeout = setTimeout(() => {
-                auctionPopup.classList.add('hidden');
-            }, 20000);
-        })
-        .catch(() => {
-            contentBox.innerHTML = `<p class="text-red-600 font-semibold">Erreur de chargement</p>`;
-        });
-}
-
-// 🔹 Fermer manuellement
-closePopupBtn.addEventListener('click', () => {
-    auctionPopup.classList.add('hidden');
-    clearTimeout(popupTimeout);
-});
-
-// 🔹 Rediriger vers la page profil
-goProfilePopup.addEventListener('click', () => {
-    window.location.href = "{{ route('profile.index') }}";
-});
-
-// 🕐 Afficher automatiquement 3 secondes après le premier chargement
-document.addEventListener('DOMContentLoaded', () => {
-    @auth
-        setTimeout(showAuctionSummaryPopup, 3000);
-    @endauth
-});
 </script>
 
 </body>
