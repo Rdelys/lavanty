@@ -66,3 +66,34 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profil', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
 });
+
+Route::get('/api/auction-summary', function () {
+    $user = auth()->user();
+    if (!$user) {
+        return response()->json(['leading' => 0, 'lost' => 0]);
+    }
+
+    $userProducts = \App\Models\Bid::where('user_id', $user->id)
+        ->pluck('product_id')
+        ->unique();
+
+    $leading = 0;
+    $lost = 0;
+
+    foreach ($userProducts as $productId) {
+        $highest = \App\Models\Bid::where('product_id', $productId)
+            ->orderByDesc('amount')
+            ->first();
+
+        if ($highest && $highest->user_id === $user->id) {
+            $leading++;
+        } else {
+            $lost++;
+        }
+    }
+
+    return response()->json([
+        'leading' => $leading,
+        'lost' => $lost,
+    ]);
+});
