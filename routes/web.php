@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AutoBidController;
+use App\Http\Controllers\ProfileController;
+
 
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -59,3 +61,8 @@ Route::middleware('auth')->group(function() {
     Route::post('/products/{product}/auto-bid', [AutoBidController::class, 'store'])->name('auto-bids.store');
 });
 Route::get('/admin/bids/filter', [\App\Http\Controllers\BidController::class, 'filter'])->name('admin.bids.filter');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profil', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
+});

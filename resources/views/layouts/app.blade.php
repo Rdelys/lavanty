@@ -159,7 +159,10 @@
                 <a href="{{ url('/contact') }}" class="hover:text-yellow-400 transition font-medium">Contact</a>
 
                 @auth
-                    <span class="text-yellow-200 font-semibold">{{ auth()->user()->pseudo }}</span>
+                    <a href="{{ route('profile.index') }}" 
+                    class="text-yellow-200 font-semibold hover:text-yellow-400 transition">
+                        {{ auth()->user()->pseudo }}
+                    </a>
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="btn-yellow px-4 py-2 rounded-full shadow">
@@ -189,7 +192,10 @@
             <a href="{{ url('/contact') }}" class="block py-2 text-gray-800 hover:text-blue-700">Contact</a>
 
             @auth
-                <span class="block py-2 text-blue-900 font-semibold">{{ auth()->user()->nom }} {{ auth()->user()->prenoms }}</span>
+                <a href="{{ route('profile.index') }}" 
+                class="block py-2 text-blue-900 font-semibold hover:text-yellow-500 transition">
+                    {{ auth()->user()->pseudo }}
+                </a>
                 <form action="{{ route('logout') }}" method="POST" class="block">
                     @csrf
                     <button type="submit" class="w-full text-left py-2 text-red-600 font-bold">Déconnexion</button>
