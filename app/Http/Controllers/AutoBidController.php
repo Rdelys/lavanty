@@ -36,7 +36,7 @@ class AutoBidController extends Controller
         foreach ($autoBids as $auto) {
             if ($lastBid && $lastBid->user_id === $auto->user_id) continue;
 
-            $newAmount = $currentAmount + 1000;
+            $newAmount = $currentAmount + 50000;
 
             if ($newAmount <= $auto->max_price) {
                 // Après chaque création d’enchère automatique :

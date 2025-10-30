@@ -474,6 +474,72 @@ button {
         </div>
     </div>
 </div>
+<!-- 🔁 Modale de confirmation pour enchère automatique -->
+<div id="autoConfirmModal"
+     class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center hidden z-50 transition-all duration-300">
+
+    <div class="relative w-[90%] max-w-md bg-white/90 backdrop-blur-xl border border-gray-200 
+                shadow-[0_20px_60px_rgba(0,47,108,0.25)] rounded-3xl p-8 animate-fadeIn scale-95 sm:scale-100">
+
+        <!-- ✖ Bouton de fermeture -->
+        <button id="closeAutoConfirmModal"
+                class="absolute top-3 right-4 text-gray-400 hover:text-[#002f6c] text-3xl font-bold transition">
+            &times;
+        </button>
+
+        <!-- 💬 En-tête -->
+        <div class="mb-6 text-center">
+            <div class="mx-auto mb-4 w-16 h-16 flex items-center justify-center rounded-full 
+                        bg-gradient-to-r from-green-600 to-green-800 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-[#ffd700]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 8v4l3 3m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h3 class="text-2xl font-extrabold text-[#002f6c]">Activer l’enchère automatique</h3>
+            <p class="text-gray-600 mt-1 text-sm">
+                Une enchère automatique placera <span class="text-[#ffd700] font-semibold">+50 000 Ar</span> à chaque surenchère,
+                jusqu’à atteindre votre montant maximum.
+            </p>
+            <p class="text-gray-600 mt-1 text-sm">
+                💰 Une commission de <span class="text-[#ffd700] font-semibold">10 %</span> et une TVA de 
+                <span class="text-[#ffd700] font-semibold">20 %</span> (sur la commission) seront appliquées sur chaque enchère automatique placée.
+            </p>
+        </div>
+
+        <!-- 💰 Détails du calcul simplifié -->
+        <div class="bg-white rounded-2xl shadow-inner border border-gray-100 px-5 py-4 mb-6 text-left space-y-1.5">
+            <p class="text-gray-800">Montant maximum :
+                <span id="autoConfirmMax" class="font-bold text-[#002f6c]"></span> Ar
+            </p>
+            <p class="text-gray-800">Incrément automatique :
+                <span class="font-bold text-[#ffd700]">50 000</span> Ar
+            </p>
+
+            <div class="border-t border-gray-200 my-3"></div>
+
+            <p class="text-sm text-gray-600 italic">
+                ⚙️ Le système enchérira automatiquement pour vous jusqu’à ce plafond.
+            </p>
+        </div>
+
+        <!-- 🔘 Boutons -->
+        <div class="flex flex-col sm:flex-row justify-center gap-3">
+            <button id="cancelAutoConfirm"
+                    class="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold bg-gray-200 hover:bg-gray-300 
+                           text-gray-700 transition-all">
+                Annuler
+            </button>
+            <button id="confirmAutoBidBtn"
+                    class="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold 
+                           bg-gradient-to-r from-green-600 to-green-800 text-white 
+                           hover:scale-105 shadow-lg transition-all">
+                🤖 Confirmer
+            </button>
+        </div>
+    </div>
+</div>
+
 <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
 <script>
 const element = document.getElementById('zoomContainer');
@@ -684,31 +750,64 @@ confirmBidBtn.addEventListener('click', async () => {
 const autoBidInput = document.getElementById('autoBidAmount');
 const setAutoBidBtn = document.getElementById('setAutoBidBtn');
 
-if(setAutoBidBtn){
-    setAutoBidBtn.addEventListener('click', async ()=>{
-        const max_price = parseFloat(autoBidInput.value);
-        if(!max_price || max_price<=0) return showModal('Veuillez saisir un montant valide.');
+if (setAutoBidBtn) {
+    const autoConfirmModal = document.getElementById('autoConfirmModal');
+    const closeAutoConfirmModal = document.getElementById('closeAutoConfirmModal');
+    const cancelAutoConfirm = document.getElementById('cancelAutoConfirm');
+    const confirmAutoBidBtn = document.getElementById('confirmAutoBidBtn');
+    const autoConfirmMax = document.getElementById('autoConfirmMax');
 
-        try{
+    let pendingAutoMax = 0;
+
+    // 🔸 Quand on clique sur "Enchère automatique"
+    setAutoBidBtn.addEventListener('click', () => {
+        const max_price = parseFloat(autoBidInput.value);
+        if (!max_price || max_price <= 0)
+            return showModal('Veuillez saisir un montant valide.');
+
+        // Affichage des données
+        pendingAutoMax = max_price;
+        autoConfirmMax.textContent = max_price.toLocaleString('fr-FR');
+
+        // Ouvre la modale
+        autoConfirmModal.classList.remove('hidden');
+    });
+
+    // 🔸 Fermer / annuler la modale
+    cancelAutoConfirm.addEventListener('click', () => autoConfirmModal.classList.add('hidden'));
+    closeAutoConfirmModal.addEventListener('click', () => autoConfirmModal.classList.add('hidden'));
+    autoConfirmModal.addEventListener('click', e => {
+        if (e.target.id === 'autoConfirmModal') autoConfirmModal.classList.add('hidden');
+    });
+
+    // 🔸 Confirmer l’enchère automatique
+    confirmAutoBidBtn.addEventListener('click', async () => {
+        autoConfirmModal.classList.add('hidden');
+
+        try {
             const res = await fetch(`/products/${productId}/auto-bid`, {
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json',
-                    'X-CSRF-TOKEN':'{{ csrf_token() }}',
-                    'Accept':'application/json'
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify({max_price})
+                body: JSON.stringify({ max_price: pendingAutoMax })
             });
-            if(res.ok){
-                autoBidInput.value='';
-                showModal('✅ Enchère automatique définie avec succès !');
+
+            if (res.ok) {
+                autoBidInput.value = '';
+                showModal('✅ Enchère automatique activée avec succès !');
             } else {
                 const data = await res.json();
                 showModal(data.message || 'Erreur.');
             }
-        } catch(err){ showModal('Erreur.'); }
+        } catch (err) {
+            showModal('Erreur.');
+        }
     });
 }
+
 
 </script>
 @endsection
