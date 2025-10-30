@@ -381,10 +381,12 @@ function showAuctionSummaryPopup() {
             // contenu dynamique
             contentBox.innerHTML = `
                 <p class="text-green-700 font-semibold text-sm">
-                    🟢 Vous êtes leader sur <span class="text-yellow-500 text-lg">${data.leading}</span> produit(s)
+                    🟢 Vous êtes le meilleur enchérisseur sur 
+                    <span class="text-yellow-500 text-lg">${data.leading}</span> produit(s)
                 </p>
                 <p class="text-red-700 font-semibold text-sm">
-                    🔴 Vous avez perdu sur <span class="text-yellow-500 text-lg">${data.lost}</span> produit(s)
+                    🔴 Vous avez été surenchéri sur 
+                    <span class="text-yellow-500 text-lg">${data.lost}</span> produit(s)
                 </p>
             `;
             // Afficher popup
