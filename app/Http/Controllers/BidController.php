@@ -54,14 +54,23 @@ class BidController extends Controller
         
         // ✅ mise à jour du dernier enchérisseur
         $product->update(['last_bid_user_id' => $userId]);
+        // ✅ Ajoute ceci dans BidController@store, juste après AutoBidController::processAutoBids($product);
         AutoBidController::processAutoBids($product);
 
-$bids = $product->bids()->with('user')->orderByDesc('amount')->get();
+        // 🔥 Extension automatique du temps d’enchère
+        $remainingSeconds = $product->end_time->diffInSeconds(now(), false) * -1;
 
-return response()->json([
-    'message' => '✅ Enchère placée avec succès !',
-    'bids' => $bids
-]);
+        if ($remainingSeconds <= 300 && $remainingSeconds > 0) { // 5 minutes = 300s
+            $product->end_time = $product->end_time->addMinutes(5);
+            $product->save();
+        }
+        
+        $bids = $product->bids()->with('user')->orderByDesc('amount')->get();
+
+        return response()->json([
+            'message' => '✅ Enchère placée avec succès !',
+            'bids' => $bids
+        ]);
 
     }
 

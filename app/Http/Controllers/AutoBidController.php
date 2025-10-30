@@ -39,6 +39,7 @@ class AutoBidController extends Controller
             $newAmount = $currentAmount + 1000;
 
             if ($newAmount <= $auto->max_price) {
+                // Après chaque création d’enchère automatique :
                 $bid = Bid::create([
                     'user_id' => $auto->user_id,
                     'product_id' => $product->id,
@@ -46,6 +47,13 @@ class AutoBidController extends Controller
                 ]);
 
                 $product->update(['last_bid_user_id' => $auto->user_id]);
+
+                // 🔥 Vérifier si on est dans les 5 dernières minutes
+                if ($product->end_time->diffInSeconds(now(), false) * -1 <= 300) {
+                    $product->end_time = $product->end_time->addMinutes(5);
+                    $product->save();
+                }
+
                 $currentAmount = $newAmount;
 
                 // relancer récursivement pour traiter la compétition
