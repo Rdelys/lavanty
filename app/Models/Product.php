@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+// ✅ Ces deux lignes sont indispensables :
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AuctionWonMail;
 
 class Product extends Model
 {
