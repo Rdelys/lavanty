@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use App\Jobs\ProcessAutoBidJob;
 
 class AutoBidController extends Controller
 {
@@ -70,83 +71,66 @@ class AutoBidController extends Controller
     }
 
     // Logique pour vérifier et appliquer les auto-bids (améliorée)
-    public static function processAutoBids(Product $product)
-    {
-        // Boucle itérative (évite récursivité profonde)
-        $increment = 50000;
 
-        while (true) {
-            $lastBid = $product->bids()->orderByDesc('amount')->first();
-            $currentAmount = $lastBid ? $lastBid->amount : $product->starting_price;
-            $lastBidUserId = $lastBid ? $lastBid->user_id : null;
+public static function processAutoBids(Product $product)
+{
+    $increment = 50000;
 
-            // Chercher les auto-bids valides (max_price > currentAmount) et pas du même utilisateur que lastBid
-            $autoBids = AutoBid::where('product_id', $product->id)
-                        ->where('max_price', '>', $currentAmount)
-                        ->orderByDesc('max_price') // optional: prioriser le plus haut max
-                        ->get();
+    while (true) {
+        $lastBid = $product->bids()->orderByDesc('amount')->first();
+        $currentAmount = $lastBid ? $lastBid->amount : $product->starting_price;
+        $lastBidUserId = $lastBid ? $lastBid->user_id : null;
 
-            if ($autoBids->isEmpty()) {
-                break;
+        $autoBids = \App\Models\AutoBid::where('product_id', $product->id)
+                    ->where('max_price', '>', $currentAmount)
+                    ->orderByDesc('max_price')
+                    ->get();
+
+        if ($autoBids->isEmpty()) {
+            break;
+        }
+
+        $placedAny = false;
+
+        foreach ($autoBids as $auto) {
+            if ($lastBidUserId && $lastBidUserId === $auto->user_id) {
+                continue;
             }
 
-            $placedAny = false;
+            $proposed = $currentAmount + $increment;
+            if ($proposed > $auto->max_price) {
+                $proposed = $auto->max_price;
+            }
 
-            foreach ($autoBids as $auto) {
-                // Si le propriétaire de l'auto-bid est déjà le dernier enchérisseur, on skip
-                if ($lastBidUserId && $lastBidUserId === $auto->user_id) {
-                    continue;
-                }
-
-                // Calcul montant proposé
-                $proposed = $currentAmount + $increment;
-                if ($proposed > $auto->max_price) {
-                    $proposed = $auto->max_price;
-                }
-
-                // Si le proposé ne dépasse pas le montant courant (sécurité), skip
-                if ($proposed <= $currentAmount) {
-                    // si son max est <= currentAmount, supprimer son auto-bid (max atteint)
-                    if ($auto->max_price <= $currentAmount) {
-                        $auto->delete();
-                    }
-                    continue;
-                }
-
-                // Créer l'enchère
-                Bid::create([
-                    'user_id' => $auto->user_id,
-                    'product_id' => $product->id,
-                    'amount' => $proposed
-                ]);
-
-                // Mettre à jour le produit
-                $product->last_bid_user_id = $auto->user_id;
-                $remaining = $product->end_time->diffInSeconds(now());
-                if ($remaining <= 300) {
-                    $product->end_time = $product->end_time->addMinutes(5);
-                }
-                $product->save();
-
-                // Mettre à jour currentAmount et lastBidUserId pour la prochaine itération
-                $currentAmount = $proposed;
-                $lastBidUserId = $auto->user_id;
-
-                $placedAny = true;
-
-                // Si l'auto-bid a atteint son max (=> égal au proposé), on peut le supprimer
-                if ($auto->max_price <= $proposed) {
+            if ($proposed <= $currentAmount) {
+                if ($auto->max_price <= $currentAmount) {
                     $auto->delete();
                 }
-
-                // On continue la boucle while pour vérifier s'il existe un autre auto-bid capable de surenchérir
-                break; // sortir foreach pour re-calculer la liste avec le nouveau currentAmount
+                continue;
             }
 
-            if (! $placedAny) {
-                // Aucun auto-bid n'a placé d'enchère => sortir
-                break;
+            /**
+             * 🕒 Planifier l’enchère automatique après 3 secondes
+             */
+            ProcessAutoBidJob::dispatch($auto, $product->id, $proposed)
+                ->delay(now()->addSeconds(3));
+
+            // Mettre à jour le produit immédiatement pour que le système suive l’état
+            $product->last_bid_user_id = $auto->user_id;
+            $product->save();
+
+            if ($auto->max_price <= $proposed) {
+                $auto->delete();
             }
+
+            $placedAny = true;
+            break;
+        }
+
+        if (! $placedAny) {
+            break;
         }
     }
+}
+
 }
