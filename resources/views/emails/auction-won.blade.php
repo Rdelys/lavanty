@@ -8,10 +8,6 @@ Vous avez remporté l'enchère pour le produit **{{ $product->title }}**.
 
 Veuillez nous contacter rapidement pour finaliser le paiement et récupérer votre produit.
 
-@component('mail::button', ['url' => url('/')])
-Voir le site
-@endcomponent
-
 Merci,  
 L’équipe {{ config('app.name') }}
 @endcomponent

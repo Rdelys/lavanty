@@ -303,6 +303,14 @@ button {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes fadeInAdj {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+#adjResult {
+  animation: fadeInAdj 0.6s ease forwards;
+}
+
 
 </style>
 
@@ -614,15 +622,34 @@ document.querySelectorAll('.countdown').forEach(card => {
         const diff = endTime - now;
 
         if (diff <= 0) {
-            daysEl.textContent = "0";
-            hoursEl.textContent = "0";
-            minutesEl.textContent = "0";
-            secondsEl.textContent = "0";
+    // ⏱️ Mettre le chrono à 0
+    daysEl.textContent = "0";
+    hoursEl.textContent = "0";
+    minutesEl.textContent = "0";
+    secondsEl.textContent = "0";
 
-            document.getElementById("bidSection")?.classList.add("hidden");
-            document.getElementById("autoBidSection")?.classList.add("hidden");
-            return;
-        }
+    // 🔹 Masquer complètement le chrono
+    card.style.display = "none";
+
+    // 🔹 Masquer les sections d’enchère
+    document.getElementById("bidSection")?.classList.add("hidden");
+    document.getElementById("autoBidSection")?.classList.add("hidden");
+
+    // 🔹 Créer le message "Lot attribué"
+    const adjElement = document.createElement('div');
+    adjElement.id = "adjResult";
+    adjElement.className = "text-center mt-4 text-3xl font-extrabold text-green-700 animate-fadeIn";
+    adjElement.innerHTML = "🏁 <span class='text-yellow-600'>Lot attribué</span>";
+
+    // Vérifie qu'on ne l’ajoute qu’une seule fois
+    if (!document.getElementById("adjResult")) {
+        card.parentElement.appendChild(adjElement);
+    }
+
+    return;
+}
+
+
 
         const d = Math.floor(diff / (1000 * 60 * 60 * 24));
         const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
