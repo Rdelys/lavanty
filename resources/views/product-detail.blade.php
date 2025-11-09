@@ -127,7 +127,7 @@ input[type="number"]:focus {
   box-shadow: 0 0 0 3px rgba(0,47,108,0.1);
 }
 
-/* --- Boutons --- */
+/* --- Boutons principaux --- */
 button {
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
@@ -136,26 +136,57 @@ button {
   cursor: pointer;
 }
 
+/* ✅ Correction complète de disposition et style */
+#bidSection,
+#autoBidSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+#bidSection input,
+#autoBidSection input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Boutons harmonisés */
+#placeBidBtn,
+#setAutoBidBtn {
+  flex-shrink: 0;
+  min-width: 170px;
+  padding: 0.9rem 1.5rem;
+  font-weight: 700;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+/* Styles individuels */
 #placeBidBtn {
-  background: linear-gradient(to right, #ffd700, #d6b400);
+  background: linear-gradient(90deg, #ffd700, #e6c300);
   color: #002f6c;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
 }
 #placeBidBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.45);
 }
 
 #setAutoBidBtn {
-  background: linear-gradient(to right, #002f6c, #001f4d);
-  color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,47,108,0.3);
+  background: linear-gradient(90deg, #002f6c, #001f4d);
+  color: #ffffff;
 }
 #setAutoBidBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,47,108,0.5);
+  box-shadow: 0 6px 20px rgba(0, 47, 108, 0.45);
+}
+
+/* Petit effet au clic */
+#placeBidBtn:active,
+#setAutoBidBtn:active {
+  transform: scale(0.97);
 }
 
 /* --- Tableau des enchères --- */
@@ -184,7 +215,7 @@ button {
   transition: all .3s ease;
 }
 
-/* --- Modale --- */
+/* --- Modales --- */
 #messageModal .bg-white {
   background: #fff;
   border-radius: 18px;
@@ -196,7 +227,7 @@ button {
   color: #002f6c;
 }
 
-/* --- Scrollbars (premium look) --- */
+/* --- Scrollbar Premium --- */
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -206,6 +237,42 @@ button {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #001f4d;
+}
+
+/* --- État des enchères (messages dynamiques) --- */
+.bid-status {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  letter-spacing: -0.01em;
+  animation: fadeIn 0.4s ease forwards;
+}
+.bid-status.success {
+  color: #16a34a;
+}
+.bid-status.danger {
+  color: #dc2626;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes pulsePrice {
+  0% { transform: scale(1); color: #ffd700; }
+  50% { transform: scale(1.1); color: #ffea80; }
+  100% { transform: scale(1); color: #ffd700; }
+}
+.pulse {
+  animation: pulsePrice 0.6s ease;
 }
 
 /* --- Responsive Design --- */
@@ -239,9 +306,27 @@ button {
     width: 60px;
     height: 60px;
   }
-  #placeBidBtn, #setAutoBidBtn {
+
+  /* 🧠 Empilement vertical propre des boutons */
+  #bidSection,
+  #autoBidSection {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
+  }
+
+  #placeBidBtn,
+  #setAutoBidBtn {
+    width: 100%;
+    min-width: unset;
+    font-size: 1rem;
+  }
+
+  #bidSection input,
+  #autoBidSection input {
     width: 100%;
   }
+
   .grid.grid-cols-1 {
     gap: 2rem;
   }
@@ -258,57 +343,6 @@ button {
     font-size: 0.8rem;
     padding: 0.6rem;
   }
-}
-
-@keyframes fadeIn {
-  0% { opacity: 0; transform: scale(0.95) translateY(20px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-.animate-fadeIn {
-  animation: fadeIn 0.4s ease forwards;
-}
-
-@keyframes pulsePrice {
-  0% { transform: scale(1); color: #ffd700; }
-  50% { transform: scale(1.1); color: #ffea80; }
-  100% { transform: scale(1); color: #ffd700; }
-}
-.pulse {
-  animation: pulsePrice 0.6s ease;
-}
-
-/* 🌿 Style texte simple et élégant pour l’état d’enchère */
-.bid-status {
-  font-family: 'Poppins', 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 1.05rem;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  letter-spacing: -0.01em;
-  animation: fadeIn 0.4s ease forwards;
-}
-
-.bid-status.success {
-  color: #16a34a; /* vert premium */
-}
-
-.bid-status.danger {
-  color: #dc2626; /* rouge sobre */
-}
-
-/* ✨ Apparition douce */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeInAdj {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-#adjResult {
-  animation: fadeInAdj 0.6s ease forwards;
 }
 
 
