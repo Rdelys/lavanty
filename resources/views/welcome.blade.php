@@ -416,39 +416,44 @@ body {
   </p>
 
   <div class="category-grid">
-    <div class="category-card">
+    <!-- 🛋️ Mobilier -->
+    <a href="{{ url('/products') }}?category=Mobilier" class="category-card">
       <div class="category-icon">
         <i class="fa-solid fa-couch"></i>
       </div>
       <h3>Mobilier</h3>
       <p>Enchères de meubles et décorations d’intérieur</p>
-    </div>
+    </a>
 
-    <div class="category-card">
+    <!-- 🚗 Voitures -->
+    <a href="{{ url('/products') }}?category=Voitures" class="category-card">
       <div class="category-icon">
         <i class="fa-solid fa-car"></i>
       </div>
       <h3>Voitures</h3>
       <p>Véhicules de prestige et collection</p>
-    </div>
+    </a>
 
-    <div class="category-card">
+    <!-- 🧰 Équipements -->
+    <a href="{{ url('/products') }}?category=Equipements" class="category-card">
       <div class="category-icon">
         <i class="fa-solid fa-toolbox"></i>
       </div>
       <h3>Équipements</h3>
       <p>Matériels professionnels et industriels</p>
-    </div>
+    </a>
 
-    <div class="category-card">
+    <!-- 💻 High-Tech -->
+    <a href="{{ url('/products') }}?category=High tech" class="category-card">
       <div class="category-icon">
         <i class="fa-solid fa-microchip"></i>
       </div>
       <h3>High-Tech</h3>
       <p>Technologie, multimédia et gadgets</p>
-    </div>
+    </a>
   </div>
 </section>
+
 
 <!-- 🟩 PRODUITS ADJUGÉS -->
 <section id="produits-adjuge" class="section light">

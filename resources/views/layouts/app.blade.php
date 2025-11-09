@@ -99,13 +99,39 @@
             </a>
 
             <!-- Menu principal -->
-            <nav class="hidden lg:flex items-center gap-6 font-medium">
+            <nav class="hidden lg:flex items-center gap-6 font-medium relative">
                 <a href="{{ url('/') }}" class="text-blue-900 hover:text-yellow-500">Accueil</a>
-                <a href="{{ url('/products') }}" class="text-blue-900 hover:text-yellow-500">Produits</a>
+
+                <!-- 🔽 Dropdown Produits -->
+                <div class="relative" id="productDropdown">
+                    <button 
+                        id="dropdownButton" 
+                        class="text-blue-900 hover:text-yellow-500 flex items-center gap-1 focus:outline-none"
+                    >
+                        Produits
+                        <i class="fa-solid fa-chevron-down text-xs mt-0.5"></i>
+                    </button>
+
+                    <!-- Sous-menu -->
+                    <div 
+                        id="dropdownMenu"
+                        class="absolute hidden bg-white shadow-lg rounded-lg mt-2 py-2 w-48 border border-gray-100 z-50"
+                    >
+                        <a href="{{ url('/products') }}" class="block px-4 py-2 hover:bg-yellow-50 text-blue-900 font-medium">Tous les produits</a>
+                        <hr class="my-1 border-gray-200">
+                        <a href="{{ url('/products') }}?category=Mobilier" class="block px-4 py-2 hover:bg-yellow-50 text-blue-900">Mobilier</a>
+                        <a href="{{ url('/products') }}?category=Voitures" class="block px-4 py-2 hover:bg-yellow-50 text-blue-900">Voitures</a>
+                        <a href="{{ url('/products') }}?category=Equipements" class="block px-4 py-2 hover:bg-yellow-50 text-blue-900">Équipements</a>
+                        <a href="{{ url('/products') }}?category=High tech" class="block px-4 py-2 hover:bg-yellow-50 text-blue-900">High tech</a>
+                    </div>
+                </div>
+
+
                 <a href="{{ url('/blog') }}" class="text-blue-900 hover:text-yellow-500">Blog</a>
                 <a href="{{ url('/about') }}" class="text-blue-900 hover:text-yellow-500">À propos</a>
                 <a href="{{ url('/contact') }}" class="text-blue-900 hover:text-yellow-500">Contact</a>
             </nav>
+
 
             <!-- Recherche + compte -->
             <div class="hidden lg:flex items-center gap-3">
@@ -137,7 +163,20 @@
         <!-- 🔸 Menu mobile -->
         <div id="mobileMenu" class="hidden flex-col bg-blue-50 border-t border-gray-200 px-6 py-3 fade-in">
             <a href="{{ url('/') }}" class="block py-2 text-blue-900 hover:text-yellow-500">Accueil</a>
-            <a href="{{ url('/products') }}" class="block py-2 text-blue-900 hover:text-yellow-500">Produits</a>
+            <!-- Dropdown mobile Produits -->
+            <div x-data="{ open: false }" class="relative">
+                <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full text-left flex items-center justify-between py-2 text-blue-900 hover:text-yellow-500">
+                    Produits
+                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                </button>
+                <div class="hidden pl-4">
+                    <a href="{{ url('/products') }}" class="block py-1 text-blue-900 hover:text-yellow-500">Tous les produits</a>
+                    <a href="{{ url('/products') }}?category=Mobilier" class="block py-1 text-blue-900 hover:text-yellow-500">Mobilier</a>
+                    <a href="{{ url('/products') }}?category=Voitures" class="block py-1 text-blue-900 hover:text-yellow-500">Voitures</a>
+                    <a href="{{ url('/products') }}?category=Equipements" class="block py-1 text-blue-900 hover:text-yellow-500">Équipements</a>
+                    <a href="{{ url('/products') }}?category=High tech" class="block py-1 text-blue-900 hover:text-yellow-500">High tech</a>
+                </div>
+            </div>
             <a href="{{ url('/blog') }}" class="block py-2 text-blue-900 hover:text-yellow-500">Blog</a>
             <a href="{{ url('/about') }}" class="block py-2 text-blue-900 hover:text-yellow-500">À propos</a>
             <a href="{{ url('/contact') }}" class="block py-2 text-blue-900 hover:text-yellow-500">Contact</a>
@@ -401,5 +440,31 @@ footer a {
         }
         checkNewBids();setInterval(checkNewBids,5000);
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const button = document.getElementById('dropdownButton');
+    const menu = document.getElementById('dropdownMenu');
+    const dropdown = document.getElementById('productDropdown');
+    let hideTimeout;
+
+    // Afficher quand on survole
+    dropdown.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimeout);
+        menu.classList.remove('hidden');
+    });
+
+    // Cacher quand on quitte le menu après petit délai
+    dropdown.addEventListener('mouseleave', () => {
+        hideTimeout = setTimeout(() => menu.classList.add('hidden'), 150);
+    });
+
+    // Permet d’ouvrir/fermer au clic sur mobile
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        menu.classList.toggle('hidden');
+    });
+});
+</script>
+
 </body>
 </html>

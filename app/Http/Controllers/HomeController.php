@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Product;
 
 class HomeController extends Controller
@@ -16,25 +17,38 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        $productsAdjug = Product::latest()
-        ->get();
+        $productsAdjug = Product::latest()->get();
 
         return view('welcome', compact('products', 'productsAdjug'));
     }
 
-
-    public function products()
+    public function products(Request $request)
     {
         Product::checkExpiredAuctions(); // ✅
 
-        $products = Product::where('mise_en_vente', 1)
+        // Liste autorisée des catégories (à garder synchronisée avec celles utilisées ailleurs)
+        $allowedCategories = ['Mobilier', 'Voitures', 'Equipements', 'High tech'];
+
+        // Récupère et nettoie le paramètre category
+        $category = $request->query('category');
+        if ($category && !in_array($category, $allowedCategories)) {
+            // Si catégorie non reconnue, on ignore (ou tu peux retourner 404)
+            $category = null;
+        }
+
+        // Query : si category présent, on filtre
+        $products = Product::query()
+            ->when($category, fn($q) => $q->where('category', $category))
+            ->where('mise_en_vente', 1)
             ->where('end_time', '>', now())
             ->latest()
             ->get();
 
-        return view('products', compact('products'));
-    }
+        // transmet aussi la liste des catégories pour le select
+        $categories = $allowedCategories;
 
+        return view('products', compact('products', 'category', 'categories'));
+    }
 
     public function productDetail($id)
     {
@@ -48,5 +62,4 @@ class HomeController extends Controller
 
         return view('product-detail', compact('product', 'images'));
     }
-
 }
