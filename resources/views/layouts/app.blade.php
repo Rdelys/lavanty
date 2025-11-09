@@ -26,14 +26,7 @@
         .royal-blue { color: #003c9e; }
         .gold { color: #ffd700; }
 
-        /* Navbar de luxe */
-        .navbar-premium {
-            background: linear-gradient(90deg, #002f6c, #004aad);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            border-bottom: 2px solid #ffd700;
-        }
-
-        /* Boutons premium */
+        /* Boutons */
         .btn-premium {
             background: linear-gradient(135deg, #004aad, #0077ff);
             color: #ffd700;
@@ -44,10 +37,8 @@
         .btn-premium:hover {
             transform: scale(1.07);
             background: linear-gradient(135deg, #0058d4, #003c9e);
-            box-shadow: 0 4px 15px rgba(0, 74, 173, 0.5);
         }
 
-        /* Bouton jaune royal */
         .btn-yellow {
             background: linear-gradient(135deg, #ffd700, #ffcc00);
             color: #003c9e;
@@ -57,162 +48,116 @@
         .btn-yellow:hover {
             transform: scale(1.07);
             background: linear-gradient(135deg, #ffde59, #ffcb00);
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
         }
 
-        /* Menu droit arrondi */
-        .nav-right {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            padding: 8px 16px;
+        /* Notifications enchères */
+        @keyframes fadeInRight { from {opacity:0;transform:translateX(60px);} to {opacity:1;transform:translateX(0);} }
+        @keyframes fadeOutRight { from {opacity:1;transform:translateX(0);} to {opacity:0;transform:translateX(60px);} }
+        #bidNotifications {
+            position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px;
+            z-index: 9999; pointer-events: none;
         }
-
-        /* Modal titre */
-        .modal-title {
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .bid-toast {
+            background: #ffffff; border-left: 6px solid #ffd700; box-shadow: 0 5px 25px rgba(0,47,108,0.2);
+            border-radius: 14px; padding: 1rem 1.2rem; min-width: 260px; max-width: 340px;
+            animation: fadeInRight 0.4s ease forwards; position: relative; pointer-events: auto;
         }
-
-        
-/* --- Animation entrée/sortie --- */
-@keyframes fadeInRight {
-  from { opacity: 0; transform: translateX(60px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-@keyframes fadeOutRight {
-  from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(60px); }
-}
-
-/* --- Container notifications (en bas à droite) --- */
-#bidNotifications {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 9999;
-  pointer-events: none; /* ne bloque pas les clics sur le site */
-}
-
-/* --- Carte notification --- */
-.bid-toast {
-  background: #ffffff;
-  border-left: 6px solid #ffd700;
-  box-shadow: 0 5px 25px rgba(0, 47, 108, 0.2);
-  border-radius: 14px;
-  padding: 1rem 1.2rem;
-  min-width: 260px;
-  max-width: 340px;
-  animation: fadeInRight 0.4s ease forwards;
-  transition: all 0.3s ease;
-  pointer-events: auto; /* clics autorisés sur la notif */
-  position: relative;
-}
-.bid-toast.hide {
-  animation: fadeOutRight 0.5s ease forwards;
-}
-.bid-toast h4 {
-  color: #002f6c;
-  font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-}
-.bid-toast p {
-  color: #333;
-  font-size: 0.9rem;
-}
-.bid-toast .amount {
-  color: #ffd700;
-  font-weight: 700;
-}
-.bid-toast button {
-  background: none;
-  border: none;
-  color: #888;
-  font-size: 1.2rem;
-  font-weight: bold;
-  position: absolute;
-  top: 6px;
-  right: 10px;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.bid-toast button:hover { color: #002f6c; }
+        .bid-toast.hide { animation: fadeOutRight 0.5s ease forwards; }
+        .bid-toast h4 { color:#002f6c; font-weight:700; font-size:1rem; margin-bottom:0.25rem; }
+        .bid-toast .amount { color:#ffd700; font-weight:700; }
+        .bid-toast button {
+            background:none; border:none; color:#888; font-size:1.2rem; position:absolute; top:6px; right:10px; cursor:pointer;
+        }
+        .bid-toast button:hover { color:#002f6c; }
     </style>
 </head>
+
 <body class="bg-white flex flex-col min-h-screen font-[Inter] text-gray-800">
 
-    <!-- Header -->
-    <header class="navbar-premium sticky top-0 z-50 fade-in">
-        <div class="container mx-auto flex items-center justify-between px-6 py-4 text-white">
-            <a href="{{ url('/') }}" class="text-2xl font-bold flex items-center gap-2 hover:scale-105 transition">
-                <i class="fas fa-gavel gold"></i> <span class="text-yellow-400">Lavanty</span>.mg
+    <!-- 🔹 Barre supérieure -->
+    <div class="w-full bg-blue-950 text-gray-100 text-sm py-2 px-6 flex flex-wrap justify-between items-center">
+        <div class="flex items-center gap-4">
+            <span><i class="fa-regular fa-envelope text-yellow-400 mr-1"></i> info@lavanty.mg</span>
+            <span class="hidden sm:inline-block border-l border-gray-400 h-4"></span>
+            <span class="flex items-center gap-1"><i class="fa-solid fa-headset text-yellow-400"></i> Support client</span>
+        </div>
+        <div class="flex items-center gap-3 mt-1 sm:mt-0">
+            <a href="#" class="border border-gray-400 text-xs px-3 py-1 rounded-full hover:bg-yellow-400 hover:text-blue-900 transition">COMMENT ENCHÉRIR</a>
+            <a href="#" class="border border-gray-400 text-xs px-3 py-1 rounded-full hover:bg-yellow-400 hover:text-blue-900 transition">VENDRE UN ARTICLE</a>
+            <a href="#" class="flex items-center gap-1 hover:text-yellow-400"><i class="fa-solid fa-language"></i> Langue</a>
+        </div>
+    </div>
+
+    <!-- 🔹 Header principal -->
+    <header class="bg-white shadow-md border-b border-gray-200 sticky top-0 z-50 fade-in">
+        <div class="container mx-auto flex items-center justify-between px-6 py-4">
+
+            <!-- Logo -->
+            <a href="{{ url('/') }}" class="flex items-center gap-2 text-2xl font-bold text-blue-900">
+                <i class="fas fa-gavel text-yellow-400"></i>
+                <span><span class="text-blue-900">Lavanty</span><span class="text-yellow-500">.mg</span></span>
             </a>
 
-            <!-- Desktop Nav -->
-            <nav class="hidden md:flex items-center gap-6 nav-right">
-                <a href="{{ url('/') }}" class="hover:text-yellow-400 transition font-medium">Accueil</a>
-                <a href="{{ url('/products') }}" class="hover:text-yellow-400 transition font-medium">Produits</a>
-                <a href="{{ url('/contact') }}" class="hover:text-yellow-400 transition font-medium">Contact</a>
+            <!-- Menu principal -->
+            <nav class="hidden lg:flex items-center gap-6 font-medium">
+                <a href="{{ url('/') }}" class="text-blue-900 hover:text-yellow-500">Accueil</a>
+                <a href="{{ url('/products') }}" class="text-blue-900 hover:text-yellow-500">Produits</a>
+                <a href="{{ url('/blog') }}" class="text-blue-900 hover:text-yellow-500">Blog</a>
+                <a href="{{ url('/about') }}" class="text-blue-900 hover:text-yellow-500">À propos</a>
+                <a href="{{ url('/contact') }}" class="text-blue-900 hover:text-yellow-500">Contact</a>
+            </nav>
+
+            <!-- Recherche + compte -->
+            <div class="hidden lg:flex items-center gap-3">
+                <div class="flex items-center border rounded-full overflow-hidden shadow-sm">
+                    <input type="text" placeholder="Recherchez un produit..." class="px-4 py-2 outline-none w-64 text-sm">
+                    <button class="bg-yellow-400 px-4 py-2"><i class="fa-solid fa-magnifying-glass text-blue-900"></i></button>
+                </div>
 
                 @auth
-                    <a href="{{ route('profile.index') }}" 
-                    class="text-yellow-200 font-semibold hover:text-yellow-400 transition">
-                        {{ auth()->user()->pseudo }}
+                    <a href="{{ route('profile.index') }}" class="bg-blue-900 text-yellow-400 px-4 py-2 rounded-full font-semibold">
+                        <i class="fa-regular fa-user mr-1"></i> {{ auth()->user()->pseudo }}
                     </a>
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
-                        <button type="submit" class="btn-yellow px-4 py-2 rounded-full shadow">
-                            Déconnexion
-                        </button>
+                        <button type="submit" class="btn-yellow px-4 py-2 rounded-full text-sm">Déconnexion</button>
                     </form>
                 @else
-                    <button id="openLogin" class="hover:text-yellow-400 font-medium transition">Connexion</button>
-                    <button id="openRegister" class="btn-premium px-5 py-2 rounded-full shadow">
-                        Inscription
-                    </button>
+                    <button id="openLogin" class="text-blue-900 hover:text-yellow-500 font-semibold">Connexion</button>
+                    <button id="openRegister" class="btn-premium px-5 py-2 rounded-full">Inscription</button>
                 @endauth
-            </nav>
-
-            <!-- Mobile Nav Toggle -->
-            <div class="md:hidden">
-                <button id="mobileMenuButton" class="text-yellow-400 text-2xl focus:outline-none">
-                    <i class="fas fa-bars"></i>
-                </button>
             </div>
+
+            <!-- Bouton mobile -->
+            <button id="mobileMenuButton" class="lg:hidden text-blue-900 text-2xl focus:outline-none">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
 
-        <!-- Mobile Dropdown Menu -->
-        <div id="mobileMenu" class="md:hidden hidden flex-col gap-2 px-6 pb-4 bg-blue-50 rounded-b-2xl border-t border-blue-100 fade-in">
-            <a href="{{ url('/') }}" class="block py-2 text-gray-800 hover:text-blue-700">Accueil</a>
-            <a href="{{ url('/products') }}" class="block py-2 text-gray-800 hover:text-blue-700">Produits</a>
-            <a href="{{ url('/contact') }}" class="block py-2 text-gray-800 hover:text-blue-700">Contact</a>
+        <!-- 🔸 Menu mobile -->
+        <div id="mobileMenu" class="hidden flex-col bg-blue-50 border-t border-gray-200 px-6 py-3 fade-in">
+            <a href="{{ url('/') }}" class="block py-2 text-blue-900 hover:text-yellow-500">Accueil</a>
+            <a href="{{ url('/products') }}" class="block py-2 text-blue-900 hover:text-yellow-500">Produits</a>
+            <a href="{{ url('/blog') }}" class="block py-2 text-blue-900 hover:text-yellow-500">Blog</a>
+            <a href="{{ url('/about') }}" class="block py-2 text-blue-900 hover:text-yellow-500">À propos</a>
+            <a href="{{ url('/contact') }}" class="block py-2 text-blue-900 hover:text-yellow-500">Contact</a>
+            <div class="border-t border-gray-300 my-2"></div>
 
             @auth
-                <a href="{{ route('profile.index') }}" 
-                class="block py-2 text-blue-900 font-semibold hover:text-yellow-500 transition">
-                    {{ auth()->user()->pseudo }}
-                </a>
-                <form action="{{ route('logout') }}" method="POST" class="block">
+                <a href="{{ route('profile.index') }}" class="block py-2 font-semibold text-blue-900">Mon profil</a>
+                <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="w-full text-left py-2 text-red-600 font-bold">Déconnexion</button>
+                    <button class="w-full text-left text-red-600 font-bold py-2">Déconnexion</button>
                 </form>
             @else
-                <button id="openLoginMobile" class="block w-full text-left py-2 text-blue-800 hover:text-yellow-500">Connexion</button>
-                <button id="openRegisterMobile" class="w-full btn-premium py-2 rounded-full shadow mt-2">
-                    Inscription
-                </button>
+                <button id="openLoginMobile" class="block py-2 text-blue-900 hover:text-yellow-500">Connexion</button>
+                <button id="openRegisterMobile" class="btn-premium py-2 rounded-full mt-2 w-full">Inscription</button>
             @endauth
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-1 fade-in">
-        @yield('content')
-    </main>
+    <!-- Contenu principal -->
+    <main class="flex-1 fade-in">@yield('content')</main>
 
     <!-- Footer -->
     <footer class="bg-blue-950 text-gray-200 py-6 mt-10 border-t-4 border-yellow-400">
@@ -222,15 +167,12 @@
         </div>
     </footer>
 
-    <!-- Overlay -->
+    <!-- ✅ Modals inchangés -->
     <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-40 hidden z-40 backdrop-blur-sm"></div>
 
-    <!-- Modal Inscription -->
     <div id="registerModal" class="fixed inset-0 flex items-center justify-center z-50 hidden transform transition-all scale-95 opacity-0">
         <div class="glass rounded-2xl w-96 p-6 relative fade-in">
-            <button id="closeRegister" class="absolute top-3 right-3 text-gray-500 hover:text-blue-800">
-                <i class="fas fa-times"></i>
-            </button>
+            <button id="closeRegister" class="absolute top-3 right-3 text-gray-500 hover:text-blue-800"><i class="fas fa-times"></i></button>
             <h2 class="text-2xl modal-title mb-4 text-center text-blue-800">Créer un compte</h2>
             <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-4">
                 @csrf
@@ -245,12 +187,9 @@
         </div>
     </div>
 
-    <!-- Modal Connexion -->
     <div id="loginModal" class="fixed inset-0 flex items-center justify-center z-50 hidden transform transition-all scale-95 opacity-0">
         <div class="glass rounded-2xl w-96 p-6 relative fade-in">
-            <button id="closeLogin" class="absolute top-3 right-3 text-gray-500 hover:text-blue-800">
-                <i class="fas fa-times"></i>
-            </button>
+            <button id="closeLogin" class="absolute top-3 right-3 text-gray-500 hover:text-blue-800"><i class="fas fa-times"></i></button>
             <h2 class="text-2xl modal-title mb-4 text-center text-yellow-600">Connexion</h2>
             <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-4">
                 @csrf
@@ -261,93 +200,46 @@
         </div>
     </div>
 
-<div id="bidNotifications"></div>
+    <div id="bidNotifications"></div>
 
-    <!-- Script -->
+    <!-- Scripts d’origine -->
     <script>
-        const overlay = document.getElementById('modalOverlay');
-        const registerModal = document.getElementById('registerModal');
-        const loginModal = document.getElementById('loginModal');
-
-        const openRegisterButtons = [document.getElementById('openRegister'), document.getElementById('openRegisterMobile')];
-        const openLoginButtons = [document.getElementById('openLogin'), document.getElementById('openLoginMobile')];
-
-        openRegisterButtons.forEach(btn => btn?.addEventListener('click', () => openModal(registerModal)));
-        openLoginButtons.forEach(btn => btn?.addEventListener('click', () => openModal(loginModal)));
-
-        document.getElementById('closeRegister').addEventListener('click', () => closeModal(registerModal));
-        document.getElementById('closeLogin').addEventListener('click', () => closeModal(loginModal));
-        overlay.addEventListener('click', () => { closeModal(registerModal); closeModal(loginModal); });
-
-        function openModal(modal) {
-            overlay.classList.remove('hidden');
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('scale-95', 'opacity-0'), 50);
-        }
-        function closeModal(modal) {
-            modal.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => { modal.classList.add('hidden'); overlay.classList.add('hidden'); }, 200);
-        }
-
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuButton');
-        const mobileMenu = document.getElementById('mobileMenu');
-        mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-
-        
+        const overlay=document.getElementById('modalOverlay');
+        const registerModal=document.getElementById('registerModal');
+        const loginModal=document.getElementById('loginModal');
+        const openRegisterButtons=[document.getElementById('openRegister'),document.getElementById('openRegisterMobile')];
+        const openLoginButtons=[document.getElementById('openLogin'),document.getElementById('openLoginMobile')];
+        openRegisterButtons.forEach(btn=>btn?.addEventListener('click',()=>openModal(registerModal)));
+        openLoginButtons.forEach(btn=>btn?.addEventListener('click',()=>openModal(loginModal)));
+        document.getElementById('closeRegister').addEventListener('click',()=>closeModal(registerModal));
+        document.getElementById('closeLogin').addEventListener('click',()=>closeModal(loginModal));
+        overlay.addEventListener('click',()=>{closeModal(registerModal);closeModal(loginModal);});
+        function openModal(modal){overlay.classList.remove('hidden');modal.classList.remove('hidden');setTimeout(()=>modal.classList.remove('scale-95','opacity-0'),50);}
+        function closeModal(modal){modal.classList.add('scale-95','opacity-0');setTimeout(()=>{modal.classList.add('hidden');overlay.classList.add('hidden');},200);}
+        document.getElementById('mobileMenuButton').addEventListener('click',()=>document.getElementById('mobileMenu').classList.toggle('hidden'));
     </script>
+
     <script>
-let lastHighestBid = 0;
-
-/* --- Crée et affiche la notification --- */
-function showBidToast(data) {
-  const container = document.getElementById("bidNotifications");
-  const toast = document.createElement("div");
-  toast.className = "bid-toast";
-  toast.innerHTML = `
-      <button title="Fermer">&times;</button>
-      <h4>💰 Nouvelle enchère placée !</h4>
-      <p><strong>${data.product}</strong></p>
-      <p>Montant : <span class="amount">${Number(data.amount).toLocaleString('fr-FR')} Ar</span></p>
-  `;
-  container.appendChild(toast);
-
-  // Fermeture manuelle
-  toast.querySelector("button").addEventListener("click", () => hideToast(toast));
-
-  // Disparaît automatiquement après 5 secondes
-  setTimeout(() => hideToast(toast), 5000);
-}
-
-/* --- Animation de disparition --- */
-function hideToast(toast) {
-  toast.classList.add("hide");
-  setTimeout(() => toast.remove(), 500);
-}
-
-/* --- Vérifie toutes les 5 secondes --- */
-async function checkNewBids() {
-  try {
-    const res = await fetch('/api/latest-bid');
-    if (!res.ok) return;
-    const data = await res.json();
-
-    // Si une nouvelle enchère plus haute est détectée
-    if (data.amount > lastHighestBid) {
-      lastHighestBid = data.amount;
-      showBidToast(data);
-    }
-  } catch (err) {
-    console.error("Erreur lors du check d'enchère :", err);
-  }
-}
-
-// 🕐 Démarrage immédiat puis vérification toutes les 5s
-checkNewBids();
-setInterval(checkNewBids, 5000);
-
-
-</script>
-
+        let lastHighestBid=0;
+        function showBidToast(data){
+            const c=document.getElementById("bidNotifications");
+            const t=document.createElement("div");
+            t.className="bid-toast";
+            t.innerHTML=`<button>&times;</button><h4>💰 Nouvelle enchère placée !</h4><p><strong>${data.product}</strong></p><p>Montant : <span class="amount">${Number(data.amount).toLocaleString('fr-FR')} Ar</span></p>`;
+            c.appendChild(t);
+            t.querySelector("button").addEventListener("click",()=>hideToast(t));
+            setTimeout(()=>hideToast(t),5000);
+        }
+        function hideToast(t){t.classList.add("hide");setTimeout(()=>t.remove(),500);}
+        async function checkNewBids(){
+            try{
+                const r=await fetch('/api/latest-bid');
+                if(!r.ok)return;
+                const d=await r.json();
+                if(d.amount>lastHighestBid){lastHighestBid=d.amount;showBidToast(d);}
+            }catch(e){console.error("Erreur lors du check d'enchère :",e);}
+        }
+        checkNewBids();setInterval(checkNewBids,5000);
+    </script>
 </body>
 </html>
