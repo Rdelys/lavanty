@@ -160,12 +160,172 @@
     <main class="flex-1 fade-in">@yield('content')</main>
 
     <!-- Footer -->
-    <footer class="bg-blue-950 text-gray-200 py-6 mt-10 border-t-4 border-yellow-400">
-        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm">
-            <p>&copy; {{ date('Y') }} Lavanty.mg - Tous droits réservés.</p>
-            <p class="mt-2 md:mt-0">Développé par <span class="text-yellow-400 font-semibold">Dev Art Agency</span></p>
+    <!-- 🌙 FOOTER PREMIUM LAVANTY -->
+<footer class="bg-blue-950 text-gray-300 pt-14 pb-8 border-t-4 border-yellow-400">
+  <div class="container mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+    <!-- 🔹 Colonne 1 : Logo + présentation -->
+    <div>
+      <a href="{{ url('/') }}" class="flex items-center gap-2 mb-4 text-2xl font-bold text-yellow-400">
+        <i class="fa-solid fa-gavel"></i>
+        <span>Lavanty<span class="text-white">.mg</span></span>
+      </a>
+      <p class="text-sm leading-relaxed text-gray-400">
+        Votre plateforme d’enchères en ligne à Madagascar.  
+        Découvrez, enchérissez et remportez des articles rares et exclusifs en toute sécurité.
+      </p>
+
+      <!-- Réseaux sociaux -->
+      <div class="flex gap-4 mt-5 text-lg">
+        <a href="#" class="hover:text-yellow-400"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="hover:text-yellow-400"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="hover:text-yellow-400"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="hover:text-yellow-400"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+
+    <!-- 🔹 Colonne 2 : Catégories -->
+    <div>
+      <h3 class="text-yellow-400 font-semibold text-lg mb-4 uppercase">Catégories</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:text-yellow-400 transition">Automobile</a></li>
+        <li><a href="#" class="hover:text-yellow-400 transition">Antiquités</a></li>
+        <li><a href="#" class="hover:text-yellow-400 transition">Art & Design</a></li>
+        <li><a href="#" class="hover:text-yellow-400 transition">High-Tech</a></li>
+        <li><a href="#" class="hover:text-yellow-400 transition">Mobilier</a></li>
+      </ul>
+    </div>
+
+    <!-- 🔹 Colonne 3 : Informations -->
+    <div>
+      <h3 class="text-yellow-400 font-semibold text-lg mb-4 uppercase">Informations</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:text-yellow-400 transition">À propos de nous</a></li>
+        <li><a href="#" class="hover:text-yellow-400 transition">FAQ</a></li>
+        <li><a href="#" class="hover:text-yellow-400 transition">Contact</a></li>
+        <li><a href="#" class="hover:text-yellow-400 transition">Conditions d’utilisation</a></li>
+        <li><a href="#" class="hover:text-yellow-400 transition">Politique de confidentialité</a></li>
+      </ul>
+    </div>
+
+    <!-- 🔹 Colonne 4 : Newsletter + Paiement sécurisé -->
+    <div>
+      <h3 class="text-yellow-400 font-semibold text-lg mb-4 uppercase">Newsletter</h3>
+      <p class="text-sm text-gray-400 mb-4">
+        Abonnez-vous pour recevoir nos ventes exclusives et actualités en avant-première.
+      </p>
+
+      <!-- Formulaire newsletter -->
+      <form class="flex flex-col sm:flex-row items-center gap-2">
+        <input
+          type="email"
+          placeholder="Votre adresse email"
+          class="w-full px-4 py-2 rounded-md text-gray-800 focus:ring-2 focus:ring-yellow-400 outline-none"
+        />
+        <button
+          type="submit"
+          class="bg-yellow-400 text-blue-950 font-semibold px-4 py-2 rounded-md hover:bg-yellow-500 transition"
+        >
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </form>
+
+      <!-- 💳 Paiement sécurisé -->
+      <div class="mt-6">
+        <p class="text-sm text-gray-300 mb-2 font-medium">
+          <i class="fa-solid fa-lock text-yellow-400 mr-2"></i>Paiement sécurisé :
+        </p>
+
+        <div class="flex flex-wrap items-center gap-5 text-4xl">
+          <!-- Cartes bancaires -->
+          <div class="flex flex-col items-center gap-1">
+            <i class="fab fa-cc-visa text-blue-400 hover:text-blue-500 transition"></i>
+            <span class="text-xs text-gray-400">Visa</span>
+          </div>
+          <div class="flex flex-col items-center gap-1">
+            <i class="fab fa-cc-mastercard text-red-500 hover:text-red-600 transition"></i>
+            <span class="text-xs text-gray-400">Mastercard</span>
+          </div>
+          <div class="flex flex-col items-center gap-1">
+            <i class="fab fa-cc-amex text-blue-300 hover:text-blue-400 transition"></i>
+            <span class="text-xs text-gray-400">Amex</span>
+          </div>
+          <div class="flex flex-col items-center gap-1">
+            <i class="fab fa-cc-discover text-orange-400 hover:text-orange-500 transition"></i>
+            <span class="text-xs text-gray-400">Maestro</span>
+          </div>
+
+          <!-- Paiements locaux -->
+          <div class="flex flex-col items-center gap-1">
+            <div
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-yellow-400 hover:bg-yellow-500 transition"
+              title="MVola"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-5 h-5 fill-blue-950">
+                <path d="M6 22v20h8V26h4v16h8V22H6zm28 0v20h8V26h4v16h8V22H34z" />
+              </svg>
+            </div>
+            <span class="text-xs text-gray-400">MVola</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-1">
+            <div
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-orange-500 hover:bg-orange-600 transition"
+              title="Orange Money"
+            >
+              <i class="fa-solid fa-coins text-white text-lg"></i>
+            </div>
+            <span class="text-xs text-gray-400">Orange</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-1">
+            <div
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-red-600 hover:bg-red-700 transition"
+              title="Airtel Money"
+            >
+              <i class="fa-solid fa-wave-square text-white text-lg"></i>
+            </div>
+            <span class="text-xs text-gray-400">Airtel</span>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bas du footer -->
+  <div class="border-t border-gray-700 mt-10 pt-4 text-center text-sm text-gray-400">
+    <p>
+      &copy; {{ date('Y') }}
+      <span class="text-yellow-400 font-semibold">Lavanty.mg</span> — Tous droits réservés.
+    </p>
+    <p class="text-xs mt-1">
+      Développé avec ❤️ par
+      <span class="text-yellow-400">Dev Art Agency</span>
+    </p>
+  </div>
+</footer>
+
+<!-- 💅 Styles & Font Awesome -->
+<style>
+footer i,
+footer svg {
+  transition: transform 0.3s ease;
+}
+footer i:hover,
+footer svg:hover {
+  transform: scale(1.12);
+}
+footer a {
+  transition: color 0.3s ease;
+}
+</style>
+
+<!-- 📦 Font Awesome CDN -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+
 
     <!-- ✅ Modals inchangés -->
     <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-40 hidden z-40 backdrop-blur-sm"></div>

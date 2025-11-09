@@ -824,28 +824,20 @@ document.addEventListener("DOMContentLoaded", () => {
           @endif
         @endforeach
 
+        <!-- ✅ Aucun produit à venir -->
         @if($count === 0)
-          @for($i = 0; $i < 6; $i++)
-            <div class="auction-card placeholder" data-aos="fade-up">
-              <div class="auction-image">
-                <img src="https://via.placeholder.com/400x300?text=Bientôt+disponible" alt="À venir">
-                <span class="status upcoming">Prochainement</span>
-              </div>
-              <div class="auction-info">
-                <h4>Produit exclusif</h4>
-                <p class="price"><i class="fa-solid fa-coins"></i> — Ar</p>
-                <p class="lot">Lot #—</p>
-                <button class="notify-btn" disabled>À venir</button>
-              </div>
-            </div>
-          @endfor
+          <div class="no-upcoming" data-aos="zoom-in">
+            <div class="emoji">😴</div>
+            <h4>Aucune enchère à venir pour le moment</h4>
+            <p>De nouvelles ventes exclusives seront bientôt disponibles. Restez connectés !</p>
+          </div>
         @endif
       </div>
     </div>
   </div>
 </section>
 
-<!-- 💅 STYLE ÉLÉGANT COMPACT -->
+<!-- 💅 STYLE -->
 <style>
 .section.light {
   background: #f9f9f6;
@@ -1008,6 +1000,35 @@ document.addEventListener("DOMContentLoaded", () => {
   cursor: not-allowed;
 }
 
+/* 💤 Aucune enchère à venir */
+.no-upcoming {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #333;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.no-upcoming .emoji {
+  font-size: 3rem;
+  animation: float 2s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.no-upcoming h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #001a3f;
+}
+.no-upcoming p {
+  font-size: 0.9rem;
+  color: #666;
+}
+
 /* Responsive */
 @media (max-width: 992px) {
   .upcoming-layout { grid-template-columns: 1fr; }
@@ -1024,6 +1045,7 @@ document.addEventListener("DOMContentLoaded", () => {
   AOS.init({ duration: 700, once: true });
 });
 </script>
+
 
 <!-- 🟦 SECTION FAQ (EN FRANÇAIS) -->
 <section id="faq" class="section light">
