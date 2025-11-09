@@ -81,11 +81,11 @@
             <span class="hidden sm:inline-block border-l border-gray-400 h-4"></span>
             <span class="flex items-center gap-1"><i class="fa-solid fa-headset text-yellow-400"></i> Support client</span>
         </div>
-        <div class="flex items-center gap-3 mt-1 sm:mt-0">
+        <!-- <div class="flex items-center gap-3 mt-1 sm:mt-0">
             <a href="#" class="border border-gray-400 text-xs px-3 py-1 rounded-full hover:bg-yellow-400 hover:text-blue-900 transition">COMMENT ENCHÉRIR</a>
             <a href="#" class="border border-gray-400 text-xs px-3 py-1 rounded-full hover:bg-yellow-400 hover:text-blue-900 transition">VENDRE UN ARTICLE</a>
             <a href="#" class="flex items-center gap-1 hover:text-yellow-400"><i class="fa-solid fa-language"></i> Langue</a>
-        </div>
+        </div> -->
     </div>
 
     <!-- 🔹 Header principal -->

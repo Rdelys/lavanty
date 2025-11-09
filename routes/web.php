@@ -97,3 +97,15 @@ Route::get('/api/auction-summary', function () {
         'lost' => $lost,
     ]);
 });
+
+Route::get('/blog', function () {
+    return view('blog');
+})->name('blog');
+
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
