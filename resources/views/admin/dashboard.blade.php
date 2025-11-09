@@ -222,6 +222,7 @@
             <tr class="border-b">
               <th class="p-3 text-left text-xs text-gray-500 uppercase tracking-wider">ID</th>
               <th class="p-3 text-left text-xs text-gray-500 uppercase tracking-wider">Titre</th>
+              <th class="p-3 text-left text-xs text-gray-500 uppercase tracking-wider">Catégorie</th>
               <th class="p-3 text-left text-xs text-gray-500 uppercase tracking-wider">Photos</th>
               <th class="p-3 text-right text-xs text-gray-500 uppercase tracking-wider">Prix</th>
               <th class="p-3 text-left text-xs text-gray-500 uppercase tracking-wider">Début</th>
@@ -240,6 +241,7 @@
                 <div class="font-medium text-gray-800 truncate-2">{{ $product->title }}</div>
                 <div class="text-xs text-gray-400">ID: {{ $product->id }} • {{ $product->created_at->diffForHumans() }}</div>
               </td>
+                <td class="p-3 align-middle text-sm text-gray-600">{{ $product->category }}</td>
 
               <td class="p-3 align-middle">
                 <div class="flex items-center gap-2">
@@ -312,6 +314,16 @@
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">Titre</label>
             <input type="text" name="title" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Ex: Sac vintage" required>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Catégorie</label>
+            <select name="category" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200" required>
+              <option value="Mobilier">Mobilier</option>
+              <option value="Voitures">Voitures</option>
+              <option value="Equipements">Équipements</option>
+              <option value="High tech">High tech</option>
+            </select>
           </div>
 
           <div>
@@ -562,6 +574,16 @@
           </div>
 
           <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Catégorie</label>
+            <select id="editCategory" name="category" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+              <option value="Mobilier">Mobilier</option>
+              <option value="Voitures">Voitures</option>
+              <option value="Equipements">Équipements</option>
+              <option value="High tech">High tech</option>
+            </select>
+          </div>
+
+          <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">Statut</label>
             <select name="status" id="editStatus" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200">
               <option value="a_venir">À venir</option>
@@ -642,6 +664,7 @@
 
         document.getElementById('editProductId').value = data.id;
         document.getElementById('editTitle').value = data.title || '';
+        document.getElementById('editCategory').value = data.category || 'Mobilier';
         document.getElementById('editDescription').value = data.description || '';
         document.getElementById('editPrice').value = data.starting_price ?? '';
         document.getElementById('editStart').value = data.start_time || '';

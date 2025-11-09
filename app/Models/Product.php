@@ -15,6 +15,7 @@ class Product extends Model
     protected $fillable = [
         'title',
         'description',
+            'category', // ✅ ajouté
         'images',
         'starting_price',
         'start_time',

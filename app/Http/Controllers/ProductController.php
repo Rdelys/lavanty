@@ -49,6 +49,7 @@ class ProductController extends Controller
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
+            'category' => 'required|in:Mobilier,Voitures,Equipements,High tech',
             'description' => 'required',
             'starting_price' => 'required|numeric|min:0',
             'start_time' => 'required|date',
@@ -57,6 +58,7 @@ class ProductController extends Controller
             'mise_en_vente' => 'nullable|boolean',
             'images.*' => 'image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
 
         $data['mise_en_vente'] = $request->has('mise_en_vente');
 
@@ -81,6 +83,7 @@ class ProductController extends Controller
         'id' => $product->id,
         'title' => $product->title,
         'description' => $product->description,
+        'category' => $product->category,
         'starting_price' => $product->starting_price,
         'start_time' => $product->start_time ? $product->start_time->format('Y-m-d\TH:i') : null,
         'end_time' => $product->end_time ? $product->end_time->format('Y-m-d\TH:i') : null,
@@ -97,6 +100,7 @@ class ProductController extends Controller
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
+            'category' => 'required|in:Mobilier,Voitures,Equipements,High tech',
             'description' => 'required',
             'starting_price' => 'required|numeric|min:0',
             'start_time' => 'required|date',
@@ -105,6 +109,7 @@ class ProductController extends Controller
             'mise_en_vente' => 'nullable|boolean',
             'images.*' => 'image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
 
         $data['mise_en_vente'] = $request->has('mise_en_vente');
 
