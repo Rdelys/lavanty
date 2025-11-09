@@ -4,191 +4,296 @@
 
 @section('content')
 
-<!-- HERO SECTION -->
-<section id="top" class="relative bg-cover bg-center h-[90vh]" 
-    style="background-image: url('https://c0.wallpaperflare.com/preview/450/707/805/gavel-auction-hammer-justice.jpg');">
-    <div class="absolute inset-0 bg-[#002f6c]/80 backdrop-blur-sm"></div>
-    <div class="relative z-10 flex flex-col items-center justify-center text-center text-white h-full px-6">
-        <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6 tracking-wider drop-shadow-lg">
-            Enchères de <span class="text-[#ffd700]">Prestige</span> à Madagascar
-        </h1>
-        <p class="text-lg md:text-2xl mb-8 max-w-3xl text-gray-200 font-light">
-            Participez à des ventes exclusives de biens rares et d’exception.  
-            <span class="text-[#ffd700] font-semibold">Lavanty.mg</span> — l’élégance et la confiance dans chaque mise.
-        </p>
-        <a href="#produits" 
-           class="bg-[#ffd700] text-[#002f6c] font-semibold px-10 py-4 rounded-full shadow-2xl hover:bg-yellow-500 hover:scale-110 transition-all duration-300">
-            🔥 Découvrir les enchères
-        </a>
-    </div>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* 🎨 Palette : bleu #001a3f | or #ffd700 | vert #00b853 | gris clair #f5f5f5 */
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: #001a3f;
+  background: #fff;
+}
+
+/* HERO SECTION */
+.hero-section {
+  position: relative;
+  height: 95vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(to bottom, #000, #001a3f, #002f6c);
+  color: white;
+  overflow: hidden;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: url('https://c0.wallpaperflare.com/preview/450/707/805/gavel-auction-hammer-justice.jpg') center/cover;
+  opacity: 0.25;
+}
+.hero-content { position: relative; z-index: 10; max-width: 800px; padding: 20px; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 20px;
+  border-radius: 30px;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+.hero-badge i { color: #ffd700; margin-right: 6px; }
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 15px;
+}
+.gold-text { color: #ffd700; }
+.hero-desc { color: #eaeaea; font-size: 1.1rem; margin-bottom: 30px; }
+
+.hero-buttons a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 35px;
+  border-radius: 50px;
+  font-weight: bold;
+  transition: all .3s ease;
+  text-decoration: none;
+}
+.btn-primary { background: #ffd700; color: #001a3f; }
+.btn-primary:hover { background: #ffcd00; transform: scale(1.05); }
+.btn-secondary { border: 2px solid white; color: white; }
+.btn-secondary:hover { background: rgba(255,255,255,0.1); }
+
+/* SECTION */
+.section { padding: 100px 8%; text-align: left; background: white; }
+.section.light { background: #f9fafb; }
+.section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  margin-bottom: 60px;
+  text-transform: uppercase;
+  text-align: left;
+}
+.section h2 i { color: #ffd700; margin-right: 10px; }
+
+/* PRODUITS */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 25px;
+  justify-items: start;
+}
+.product-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform .3s, box-shadow .3s;
+  max-width: 300px;
+  margin: 0; /* ❌ supprime le centrage auto */
+}
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+.product-image {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+}
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s;
+}
+.product-card:hover img { transform: scale(1.08); }
+
+.product-status {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: linear-gradient(to right, #e11d48, #b91c1c);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+.product-status.sold { background: linear-gradient(to right, #001a3f, #00397a); color: #ffd700; }
+
+.countdown {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0;
+  background: #fafafa;
+  border-top: 1px solid #eee;
+  font-size: 13px;
+}
+.countdown p { font-weight: bold; font-size: 16px; margin: 0; }
+.countdown span { color: #666; font-size: 10px; }
+
+.product-info { padding: 15px; text-align: left; }
+.product-info h3 { font-size: 1rem; margin-bottom: 5px; color: #001a3f; }
+.product-info .desc { color: #666; font-size: 0.85rem; margin-bottom: 8px; }
+.product-info .price {
+  color: #00b853;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.lot {
+  background: #e8f5e9;
+  color: #00b853;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 11px;
+}
+.btn-bid {
+  background: linear-gradient(to right, #001a3f, #00397a);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 13px;
+}
+.btn-bid:hover { transform: scale(1.05); }
+
+.no-product {
+  text-align: center;
+  color: #666;
+  padding: 50px 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-content h1 { font-size: 2.2rem; }
+  .section { padding: 70px 5%; }
+}
+</style>
+
+<!-- 🟦 HERO SECTION -->
+<section class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+      <p class="hero-badge">
+          <i class="fa-solid fa-crown"></i> LAVANTY.MG — L’EXCELLENCE DES ENCHÈRES DE LUXE
+      </p>
+      <h1><span class="gold-text">L’Art</span> de l’Enchère d’Exception</h1>
+      <p class="hero-desc">Découvrez des trésors uniques, mis en valeur par l’élégance et la précision du luxe.</p>
+
+      <div class="hero-buttons">
+          <a href="#produits" class="btn-primary"><i class="fa-solid fa-gavel"></i> Commencer à Miser</a>
+          <a href="{{ url('/products') }}" class="btn-secondary"><i class="fa-solid fa-box-open"></i> Voir Toutes les Enchères</a>
+      </div>
+  </div>
 </section>
 
-<!-- PRODUITS EN VEDETTE -->
-<section id="produits" class="container mx-auto px-6 py-24">
-    <h2 class="text-4xl md:text-5xl font-extrabold text-center text-[#002f6c] mb-16 tracking-wide uppercase">
-        Nouveaux Produits en Enchère
-    </h2>
+<!-- 🟨 PRODUITS EN COURS -->
+<section id="produits" class="section">
+  <h2><i class="fa-solid fa-hourglass-half"></i> Enchères en Cours</h2>
+  <div class="product-grid">
+      @forelse($products as $product)
+          @php
+              $image = $product->images 
+                  ? (is_array($product->images) ? $product->images[0] : json_decode($product->images, true)[0] ?? null)
+                  : null;
+          @endphp
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-        @forelse($products as $product)
-            <a href="{{ route('product.detail', ['id' => $product->id]) }}" 
-               class="group block relative bg-white/80 backdrop-blur-lg rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.15)] 
-                      border border-[#ffd700]/20 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
+          <div class="product-card">
+              <div class="product-image">
+                  <img src="{{ $image ? asset('storage/'.$image) : 'https://via.placeholder.com/400x300?text=Produit' }}" alt="{{ $product->title }}">
+                  <span class="product-status"><i class="fa-solid fa-fire"></i> En cours</span>
+              </div>
 
-                <!-- Image produit -->
-                <div class="relative overflow-hidden">
-                    @php
-                        $image = $product->images 
-                            ? (is_array($product->images) ? $product->images[0] : json_decode($product->images, true)[0] ?? null)
-                            : null;
-                    @endphp
-                    <img src="{{ $image ? asset('storage/'.$image) : 'https://via.placeholder.com/400x300?text=Image+non+disponible' }}" 
-                         alt="{{ $product->title }}" 
-                         class="w-full h-72 object-cover transition-transform duration-700 group-hover:scale-110">
+              <div class="countdown" data-end="{{ $product->end_time }}">
+                  <div><p class="days">00</p><span>Jours</span></div>
+                  <div><p class="hours">00</p><span>Heures</span></div>
+                  <div><p class="minutes">00</p><span>Minutes</span></div>
+                  <div><p class="seconds">00</p><span>Secondes</span></div>
+              </div>
 
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#002f6c]/70 via-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-
-                    <!-- Statut -->
-                    @if($product->status == 'en_cours')
-                        <span class="absolute top-4 left-4 bg-[#ffd700] text-[#002f6c] text-xs font-semibold px-3 py-1 rounded-full shadow">
-                            🔥 Enchère en cours
-                        </span>
-                    @elseif($product->status == 'a_venir')
-                        <span class="absolute top-4 left-4 bg-gray-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
-                            ⏳ À venir
-                        </span>
-                    @else
-                        <span class="absolute top-4 left-4 bg-[#002f6c] text-[#ffd700] text-xs font-semibold px-3 py-1 rounded-full shadow">
-                            ✅ Terminé
-                        </span>
-                    @endif
-                </div>
-
-                <!-- Infos produit -->
-                <div class="p-8 text-center">
-                    <h3 class="text-2xl font-bold text-[#002f6c] mb-3">{{ $product->title }}</h3>
-                    <p class="text-gray-600 mb-3 text-sm leading-relaxed">
-                        {{ Str::limit($product->description, 90) }}
-                    </p>
-                    <p class="text-lg font-semibold text-[#ffd700] mb-6">
-                        Misez dès {{ number_format($product->starting_price, 0, ',', ' ') }} Ar
-                    </p>
-
-                    <!-- Countdown -->
-                    <div class="countdown flex justify-center gap-5 bg-[#002f6c]/5 backdrop-blur-sm px-4 py-3 rounded-2xl" 
-                         data-end="{{ $product->end_time->format('Y-m-d\TH:i:s') }}">
-                        <div>
-                            <p class="text-xl font-bold text-[#002f6c] days">00</p>
-                            <span class="text-xs text-gray-500">Jours</span>
-                        </div>
-                        <div>
-                            <p class="text-xl font-bold text-[#ffd700] hours">00</p>
-                            <span class="text-xs text-gray-500">Heures</span>
-                        </div>
-                        <div>
-                            <p class="text-xl font-bold text-[#002f6c] minutes">00</p>
-                            <span class="text-xs text-gray-500">Minutes</span>
-                        </div>
-                        <div>
-                            <p class="text-xl font-bold text-[#ffd700] seconds">00</p>
-                            <span class="text-xs text-gray-500">Secondes</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        @empty
-            <div class="col-span-3 text-center py-16">
-                <p class="text-gray-600 text-lg">
-                    😢 Aucun produit disponible pour le moment.  
-                    <br>
-                    <span class="text-[#002f6c] font-semibold">Revenez bientôt pour découvrir de nouvelles enchères d’exception.</span>
-                </p>
-            </div>
-        @endforelse
-    </div>
+              <div class="product-info">
+                  <h3>{{ $product->title }}</h3>
+                  <p class="desc">{{ Str::limit($product->description, 80) }}</p>
+<p class="price"><i class="fa-solid fa-coins"></i> Prix de départ : {{ number_format($product->starting_price, 0, ',', ' ') }} Ar</p>
+                  <div class="product-footer">
+                      <span class="lot">Lot #{{ $product->id }}</span>
+                      <a href="{{ route('product.detail', ['id' => $product->id]) }}" class="btn-bid"><i class="fa-solid fa-hammer"></i> Miser</a>
+                  </div>
+              </div>
+          </div>
+      @empty
+          <p class="no-product">Aucun produit en cours.</p>
+      @endforelse
+  </div>
 </section>
 
-<!-- PRODUITS ADJUGÉS -->
-<section id="produits-adjuge" class="bg-[#f9fafb] py-24">
-    <div class="container mx-auto px-6">
-        <h2 class="text-4xl md:text-5xl font-extrabold text-center text-[#002f6c] mb-16 uppercase tracking-wide">
-            Produits Adjugés
-        </h2>
+<!-- 🟩 PRODUITS ADJUGÉS -->
+<section id="produits-adjuge" class="section light">
+  <h2><i class="fa-solid fa-trophy"></i> Produits Adjugés</h2>
 
-        <div class="swiper mySwiper">
-            <div class="swiper-wrapper">
-                @php $hasAdjuges = false; @endphp
-                @foreach($productsAdjug as $product)
-                    @if($product->status === 'adjugé')
-                        @php $hasAdjuges = true; @endphp
-                        <div class="swiper-slide">
-                            <div class="bg-white/90 backdrop-blur-md rounded-3xl overflow-hidden border border-[#ffd700]/30 shadow-lg 
-                                        hover:-translate-y-2 hover:shadow-2xl transition-all duration-500">
-                                <div class="relative">
-                                    @php
-                                        $images = $product->images 
-                                            ? (is_array($product->images) ? $product->images : json_decode($product->images, true)) 
-                                            : [];
-                                    @endphp
+  @php $countAdjuges = $productsAdjug->where('status', 'adjugé')->count(); @endphp
 
-                                    <img src="{{ count($images) > 0 ? asset('storage/'.$images[0]) : 'https://via.placeholder.com/400x300' }}" 
-                                         alt="{{ $product->title }}" 
-                                         class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
-                                    <span class="absolute top-4 left-4 bg-[#002f6c] text-[#ffd700] text-xs font-bold px-3 py-1 rounded-full shadow">
-                                        ✅ Adjugé
-                                    </span>
-                                </div>
+  <div class="{{ $countAdjuges > 5 ? 'swiper mySwiper' : '' }}">
+      <div class="{{ $countAdjuges > 5 ? 'swiper-wrapper' : 'flex flex-wrap gap-6 justify-start' }}">
+          @php $hasAdjuges = false; @endphp
+          @foreach($productsAdjug as $product)
+              @if($product->status === 'adjugé')
+                  @php $hasAdjuges = true; @endphp
+                  <div class="{{ $countAdjuges > 5 ? 'swiper-slide' : '' }}">
+                      <div class="product-card sold">
+                          <div class="product-image">
+                              @php
+                                  $images = $product->images 
+                                      ? (is_array($product->images) ? $product->images : json_decode($product->images, true)) 
+                                      : [];
+                              @endphp
+                              <img src="{{ count($images) > 0 ? asset('storage/'.$images[0]) : 'https://via.placeholder.com/400x300' }}" alt="{{ $product->title }}">
+                              <span class="product-status sold"><i class="fa-solid fa-medal"></i> Adjugé</span>
+                          </div>
 
-                                <div class="p-6 text-center">
-                                    <h3 class="text-xl font-bold text-[#002f6c] mb-2">{{ $product->title }}</h3>
-                                    @php $lastBid = $product->bids()->orderByDesc('amount')->first(); @endphp
-                                    <p class="text-gray-600">
-                                        Adjugé à <span class="font-semibold text-[#ffd700]">
-                                            {{ $lastBid ? number_format($lastBid->amount, 0, ',', ' ') : number_format($product->starting_price, 0, ',', ' ') }} Ar
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
+                          <div class="product-info center">
+                              <h3>{{ $product->title }}</h3>
+                              @php $lastBid = $product->bids()->orderByDesc('amount')->first(); @endphp
+                              <p>Adjugé à <span class="price">{{ $lastBid ? number_format($lastBid->amount, 0, ',', ' ') : number_format($product->starting_price, 0, ',', ' ') }} Ar</span></p>
+                          </div>
+                      </div>
+                  </div>
+              @endif
+          @endforeach
 
-                @if(!$hasAdjuges)
-                    <div class="text-center py-16 w-full">
-                        <p class="text-gray-600 text-lg">
-                            😢 Aucun produit adjugé pour le moment.  
-                            <br>
-                            <span class="text-[#002f6c] font-semibold">Revenez bientôt pour voir les ventes prestigieuses.</span>
-                        </p>
-                    </div>
-                @endif
-            </div>
+          @if(!$hasAdjuges)
+              <div class="no-product">
+                  <i class="fa-regular fa-face-frown"></i> Aucun produit adjugé pour le moment.
+              </div>
+          @endif
+      </div>
 
-            <div class="swiper-pagination mt-6"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-        </div>
-    </div>
-</section>
-
-<!-- CTA -->
-<section class="bg-gradient-to-r from-[#002f6c] to-[#001b3f] py-24 text-center text-white">
-    <h2 class="text-3xl md:text-4xl font-extrabold mb-6">🚀 Rejoignez Lavanty.mg</h2>
-    <p class="text-lg mb-8 max-w-2xl mx-auto text-gray-200">
-        Devenez membre de la plateforme d’enchères la plus <span class="text-[#ffd700] font-semibold">prestigieuse</span> de Madagascar.  
-        Une expérience de <span class="text-[#ffd700] font-semibold">confiance</span> et d’<span class="text-[#ffd700] font-semibold">excellence</span>.
-    </p>
-    <a href="#top" 
-       class="bg-[#ffd700] text-[#002f6c] font-bold px-10 py-4 rounded-full shadow-2xl hover:bg-yellow-500 hover:scale-110 transition">
-       Créez un compte gratuit
-    </a>
+      @if($countAdjuges > 5)
+          <div class="swiper-pagination mt-6"></div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+      @endif
+  </div>
 </section>
 
 <!-- SwiperJS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+@if($countAdjuges > 5)
 <script>
-  var swiper = new Swiper(".mySwiper", {
+  new Swiper(".mySwiper", {
     slidesPerView: 1,
     spaceBetween: 30,
     loop: true,
@@ -197,58 +302,30 @@
     navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
     breakpoints: { 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } },
   });
+</script>
+@endif
 
-  // Countdown
-    // ✅ Countdown avec couleur dynamique (rouge si <24h, noir sinon)
-  document.querySelectorAll('.countdown').forEach(card => {
-    const endTime = new Date(card.dataset.end).getTime();
-    const daysEl = card.querySelector(".days");
-    const hoursEl = card.querySelector(".hours");
-    const minutesEl = card.querySelector(".minutes");
-    const secondsEl = card.querySelector(".seconds");
-
-    // fonction utilitaire pour appliquer la couleur à tous les <p>
-    function setCountdownColor(color) {
-      card.querySelectorAll("p").forEach(el => {
-        el.style.setProperty("color", color, "important");
-      });
+<script>
+document.querySelectorAll('.countdown').forEach(card => {
+  const endTime = new Date(card.dataset.end).getTime();
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const diff = endTime - now;
+    if (diff <= 0) {
+      card.querySelectorAll("p").forEach(p => p.textContent = "00");
+      return;
     }
-
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const diff = endTime - now;
-      if (diff <= 0) {
-        daysEl.textContent = "0";
-        hoursEl.textContent = "0";
-        minutesEl.textContent = "0";
-        secondsEl.textContent = "0";
-        return;
-      }
-
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-      daysEl.textContent = d;
-      hoursEl.textContent = h;
-      minutesEl.textContent = m;
-      secondsEl.textContent = s;
-
-      // 🔥 Couleur dynamique :
-      // moins de 24 heures → rouge
-      // plus de 24 heures → noir
-      if (diff < 24 * 60 * 60 * 1000) {
-        setCountdownColor("red");
-      } else {
-        setCountdownColor("black");
-      }
-
-      requestAnimationFrame(updateCountdown);
-    }
-
-    updateCountdown();
-  });
-
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((diff % (1000 * 60)) / 1000);
+    card.querySelector(".days").textContent = d;
+    card.querySelector(".hours").textContent = h;
+    card.querySelector(".minutes").textContent = m;
+    card.querySelector(".seconds").textContent = s;
+    requestAnimationFrame(updateCountdown);
+  }
+  updateCountdown();
+});
 </script>
 @endsection
