@@ -264,6 +264,8 @@
                   <span class="px-3 py-1 text-sm rounded-full bg-green-50 text-green-600">En cours</span>
                 @elseif($product->status == 'adjugé')
                   <span class="px-3 py-1 text-sm rounded-full bg-red-50 text-green-600">Adjugé</span>
+                @elseif($product->status == 'à_venir')
+                  <span class="px-3 py-1 text-sm rounded-full bg-red-50 text-green-600">A venir</span>
                 @else
                   <span class="px-3 py-1 text-sm rounded-full bg-red-50 text-red-600">Terminé</span>
                 @endif

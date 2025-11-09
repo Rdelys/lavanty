@@ -182,7 +182,7 @@ body {
 
 /* 🟪 SECTION CATÉGORIE */
 #categories {
-  background: #f0f6ff;
+  background: #fff;
   padding: 100px 8%;
   text-align: center;
 }
@@ -776,7 +776,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <p>Découvrez les ventes exclusives à venir sur Lavanty.mg</p>
     </div>
 
-    <!-- Catégories (affichées sans actions pour le moment) -->
+    <!-- Catégories -->
     <div class="categories">
       <button class="cat-btn active">Tout</button>
       <button class="cat-btn">Automobile</button>
@@ -788,19 +788,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="upcoming-layout">
       <!-- Bannière gauche -->
-      <div class="banner">
+      <aside class="banner">
         <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=900&q=80" alt="Vintage car">
+        <div class="banner-overlay"></div>
         <div class="banner-text">
-          <h3>Véhicules <span>de Collection</span></h3>
-          <p>Découvrez les voitures classiques et iconiques qui ont marqué l’histoire.</p>
+          <h3><span>Véhicules</span> de Collection</h3>
+          <p>Des voitures classiques et iconiques à découvrir bientôt.</p>
         </div>
-      </div>
+      </aside>
 
       <!-- Grille des enchères -->
       <div class="upcoming-grid">
+        @php $count = 0; @endphp
         @foreach($products as $product)
           @if($product->status === 'à_venir')
             @php
+              $count++;
               $image = $product->images 
                   ? (is_array($product->images) ? $product->images[0] : json_decode($product->images, true)[0] ?? null)
                   : null;
@@ -808,131 +811,152 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <div class="auction-card" data-aos="fade-up">
               <div class="auction-image">
-                <img src="{{ $image ? asset('storage/'.$image) : 'https://via.placeholder.com/648x463?text=Produit+à+venir' }}" alt="{{ $product->title }}">
+                <img src="{{ $image ? asset('storage/'.$image) : 'https://via.placeholder.com/400x300?text=Produit+à+venir' }}" alt="{{ $product->title }}">
                 <span class="status upcoming">À venir</span>
               </div>
               <div class="auction-info">
-                <h4>{{ $product->title }}</h4>
-                <p class="price"><i class="fa-solid fa-coins"></i> Prix de départ : {{ number_format($product->starting_price, 0, ',', ' ') }} Ar</p>
+                <h4>{{ Str::limit($product->title, 30) }}</h4>
+                <p class="price"><i class="fa-solid fa-coins"></i> {{ number_format($product->starting_price, 0, ',', ' ') }} Ar</p>
                 <p class="lot">Lot #{{ $product->id }}</p>
-                <div class="actions">
-                  <button class="notify-btn" disabled>Notifier-moi</button>
-                </div>
+                <button class="notify-btn" disabled>Notifier-moi</button>
               </div>
             </div>
           @endif
         @endforeach
+
+        @if($count === 0)
+          @for($i = 0; $i < 6; $i++)
+            <div class="auction-card placeholder" data-aos="fade-up">
+              <div class="auction-image">
+                <img src="https://via.placeholder.com/400x300?text=Bientôt+disponible" alt="À venir">
+                <span class="status upcoming">Prochainement</span>
+              </div>
+              <div class="auction-info">
+                <h4>Produit exclusif</h4>
+                <p class="price"><i class="fa-solid fa-coins"></i> — Ar</p>
+                <p class="lot">Lot #—</p>
+                <button class="notify-btn" disabled>À venir</button>
+              </div>
+            </div>
+          @endfor
+        @endif
       </div>
     </div>
   </div>
 </section>
 
-<!-- 💅 STYLES -->
+<!-- 💅 STYLE ÉLÉGANT COMPACT -->
 <style>
 .section.light {
-  background: #fdfcf9;
-  padding: 100px 8%;
+  background: #f9f9f6;
+  padding: 80px 7%;
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 40px;
-}
+/* Header */
+.header { text-align: center; margin-bottom: 35px; }
 .header h2 {
   font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   color: #001a3f;
 }
 .header h2 i { color: #ffd700; margin-right: 10px; }
-.header h2 em { font-style: italic; color: #666; }
-.header p { color: #777; margin-top: 10px; }
+.header em { font-style: italic; color: #777; }
+.header p { color: #666; margin-top: 8px; }
 
 /* Catégories */
 .categories {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 50px;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 35px;
 }
 .cat-btn {
   border: 1px solid #ddd;
-  padding: 10px 20px;
-  border-radius: 25px;
   background: #fff;
+  color: #555;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: 20px;
   cursor: not-allowed;
-  color: #888;
-  font-weight: 500;
-  transition: all .3s;
+  transition: .3s;
 }
 .cat-btn.active {
   background: #ffd700;
   color: #001a3f;
-  cursor: default;
 }
 
-/* Layout principal */
+/* Layout */
 .upcoming-layout {
   display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 40px;
+  grid-template-columns: 250px 1fr;
+  gap: 30px;
+  align-items: start;
 }
 
 /* Bannière */
 .banner {
   position: relative;
+  border-radius: 15px;
   overflow: hidden;
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  height: 100%;
+  min-height: 380px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 .banner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.75);
   transition: transform .5s;
 }
 .banner:hover img { transform: scale(1.05); }
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.1));
+}
 .banner-text {
   position: absolute;
   bottom: 20px;
   left: 20px;
   color: white;
-  max-width: 80%;
 }
 .banner-text h3 {
   font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+  font-size: 1.4rem;
+  line-height: 1.3;
 }
-.banner-text span {
-  color: #ffd700;
-}
+.banner-text span { color: #ffd700; }
 .banner-text p {
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  color: #f3f3f3;
 }
 
 /* Grille produits */
 .upcoming-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 18px;
+  justify-items: center;
 }
 .auction-card {
-  background: white;
-  border-radius: 16px;
+  background: #fff;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-  transition: transform .3s ease, box-shadow .3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: all .3s;
+  width: 180px;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
 }
 .auction-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
 }
 .auction-image {
   position: relative;
-  height: 180px;
+  height: 120px;
   overflow: hidden;
 }
 .auction-image img {
@@ -942,65 +966,482 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 .status.upcoming {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #3b82f6;
+  top: 8px;
+  left: 8px;
+  background: #2563eb;
   color: white;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 10px;
   font-weight: 600;
 }
 .auction-info {
-  padding: 20px;
+  padding: 8px 10px;
   text-align: left;
+  flex-grow: 1;
 }
 .auction-info h4 {
-  font-size: 1.1rem;
+  font-size: 0.85rem;
   color: #001a3f;
-  margin-bottom: 10px;
   font-weight: 600;
+  margin-bottom: 4px;
 }
 .auction-info .price {
   color: #00b853;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 3px;
 }
 .auction-info .lot {
-  color: #777;
-  font-size: 0.85rem;
-  margin-bottom: 15px;
+  color: #888;
+  font-size: 0.75rem;
+  margin-bottom: 8px;
 }
 .notify-btn {
   background: #001a3f;
-  color: white;
-  padding: 8px 18px;
-  border-radius: 8px;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
   border: none;
+  opacity: 0.8;
   cursor: not-allowed;
-  opacity: 0.7;
-  font-size: 0.9rem;
 }
 
 /* Responsive */
 @media (max-width: 992px) {
-  .upcoming-layout {
-    grid-template-columns: 1fr;
-  }
-  .banner {
-    height: 260px;
-  }
+  .upcoming-layout { grid-template-columns: 1fr; }
+  .banner { height: 220px; min-height: unset; }
+  .upcoming-grid { justify-content: center; }
 }
 </style>
+
+<!-- 🎬 Animation -->
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  AOS.init({
-    duration: 800,
-    once: true,
-    offset: 100
+  AOS.init({ duration: 700, once: true });
+});
+</script>
+
+<!-- 🟦 SECTION FAQ (EN FRANÇAIS) -->
+<section id="faq" class="section light">
+  <div class="container">
+    <div class="faq-header" data-aos="fade-down">
+      <h2><strong>Foire aux</strong> <em>Questions</em></h2>
+      <p>Trouvez ici les réponses aux questions les plus fréquentes concernant nos enchères sur Lavanty.mg</p>
+    </div>
+
+    <div class="faq-layout">
+      <!-- Bloc gauche - Formulaire d'aide -->
+      <aside class="faq-contact" data-aos="fade-right">
+        <h3>Besoin d’aide ?<br><span>Écrivez-nous !</span></h3>
+        <div class="icon">
+          <i class="fa-solid fa-envelope-circle-check"></i>
+        </div>
+        <p class="mail-text">Pour nous contacter :</p>
+        <a href="mailto:info@lavanty.mg" class="email">info@lavanty.mg</a>
+
+        <form class="faq-form">
+          <label>Une question ?</label>
+          <input type="email" placeholder="Entrez votre adresse e-mail" required>
+          <textarea placeholder="Rédigez votre question..." required></textarea>
+          <button type="submit">Envoyer</button>
+        </form>
+      </aside>
+
+      <!-- Bloc droit - Liste FAQ -->
+      <div class="faq-list" data-aos="fade-left">
+        <div class="faq-item">
+          <button class="faq-question">Qu’est-ce qu’une enchère ? <span class="icon">+</span></button>
+          <div class="faq-answer">Une enchère est une vente dans laquelle les acheteurs proposent des offres successives pour acquérir un bien. L’objet est attribué à la personne ayant fait la plus haute offre à la fin de la vente.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">Comment fonctionnent les enchères ? <span class="icon">+</span></button>
+          <div class="faq-answer">Chaque produit mis en vente possède un prix de départ et une durée déterminée. Les utilisateurs peuvent placer des offres supérieures à la précédente jusqu’à la fin du compte à rebours.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">Quels types d’enchères propose Lavanty ? <span class="icon">+</span></button>
+          <div class="faq-answer">Lavanty propose divers types d’enchères : automobiles, antiquités, œuvres d’art, objets de collection, produits high-tech et bien d’autres encore.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">Qui peut participer à une enchère ? <span class="icon">+</span></button>
+          <div class="faq-answer">Toute personne inscrite sur Lavanty.mg peut participer, à condition d’avoir un compte vérifié et d’accepter nos conditions d’utilisation.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">Que se passe-t-il si je remporte une enchère ? <span class="icon">+</span></button>
+          <div class="faq-answer">Si vous remportez une enchère, vous serez notifié immédiatement et invité à finaliser votre paiement. Une fois le règlement effectué, la livraison ou le retrait du bien sera organisé selon les conditions précisées.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 💅 STYLE ÉLÉGANT -->
+<style>
+.section.light {
+  background: #fdfcf9;
+  padding: 90px 6%;
+}
+
+/* HEADER */
+.faq-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.faq-header h2 {
+  font-size: 2.3rem;
+  font-family: 'Playfair Display', serif;
+  color: #001a3f;
+}
+.faq-header h2 strong { font-weight: 800; }
+.faq-header h2 em {
+  font-style: italic;
+  color: #6b7280;
+  font-weight: 400;
+}
+.faq-header p {
+  color: #666;
+  font-size: 0.95rem;
+  margin-top: 10px;
+}
+
+/* LAYOUT PRINCIPAL */
+.faq-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* BLOC GAUCHE */
+.faq-contact {
+  background: #fff5ed;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  text-align: center;
+}
+.faq-contact h3 {
+  font-size: 1.3rem;
+  color: #001a3f;
+  line-height: 1.4;
+}
+.faq-contact span { color: #2563eb; }
+.faq-contact .icon {
+  font-size: 2.5rem;
+  color: #2563eb;
+  margin: 15px 0;
+}
+.mail-text {
+  color: #888;
+  font-size: 0.9rem;
+}
+.email {
+  display: block;
+  color: #001a3f;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+.email:hover { text-decoration: underline; }
+.faq-form {
+  background: #f0f6ff;
+  padding: 15px;
+  border-radius: 12px;
+}
+.faq-form label {
+  display: block;
+  font-size: 0.85rem;
+  color: #001a3f;
+  text-align: left;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.faq-form input,
+.faq-form textarea {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+  outline: none;
+}
+.faq-form input { height: 35px; }
+.faq-form textarea { resize: none; height: 70px; }
+.faq-form button {
+  width: 100%;
+  background: #001a3f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 0;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background .3s;
+}
+.faq-form button:hover { background: #2563eb; }
+
+/* FAQ LIST */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.faq-item {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow: hidden;
+  transition: .3s;
+}
+.faq-item.open { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.faq-question {
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #001a3f;
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: .3s;
+}
+.faq-question:hover { background: #f7f8fa; }
+.faq-answer {
+  display: none;
+  padding: 0 20px 15px;
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.faq-item.open .faq-answer { display: block; }
+.faq-item.open .faq-question .icon { transform: rotate(45deg); }
+.icon {
+  transition: transform .3s;
+  color: #2563eb;
+  font-weight: bold;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+  .faq-layout {
+    grid-template-columns: 1fr;
+  }
+  .faq-contact { max-width: 400px; margin: 0 auto; }
+}
+</style>
+
+<!-- ⚙️ SCRIPT ACCORDÉON -->
+<script>
+document.querySelectorAll(".faq-question").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const item = btn.parentElement;
+    item.classList.toggle("open");
   });
 });
 </script>
+
+<!-- 🎬 Animation (AOS) -->
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 700, once: true });
+</script>
+
+<!-- 💬 SECTION AVIS CLIENTS (3 EN HAUT + 2 EN BAS CENTRÉS) -->
+<section id="testimonials" class="section light">
+  <div class="container">
+    <div class="testimonial-header" data-aos="fade-down">
+      <h2><strong>Ce que disent nos</strong> <em>clients</em></h2>
+      <p>Ils partagent leur expérience après avoir participé à nos enchères sur <strong>Lavanty.mg</strong></p>
+    </div>
+
+    <!-- Grille -->
+    <div class="testimonial-grid" data-aos="fade-up">
+      <!-- AVIS 1 -->
+      <div class="testimonial-card">
+        <div class="quote">“</div>
+        <h4>Expérience exceptionnelle !</h4>
+        <p>« Lavanty m’a permis de remporter une voiture rare à un prix imbattable. Les enchères sont passionnantes et bien encadrées. »</p>
+        <div class="client">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="client 1">
+          <div>
+            <h5>Jean Dupont</h5>
+            <span>Collectionneur Automobile</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AVIS 2 -->
+      <div class="testimonial-card">
+        <div class="quote">“</div>
+        <h4>Service impeccable</h4>
+        <p>« L’équipe Lavanty m’a accompagné du début à la fin. Interface fluide, résultats rapides et transparence totale. »</p>
+        <div class="client">
+          <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="client 2">
+          <div>
+            <h5>Sarah Rakoto</h5>
+            <span>Designer d’intérieur</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AVIS 3 -->
+      <div class="testimonial-card">
+        <div class="quote">“</div>
+        <h4>Simple et efficace</h4>
+        <p>« Le site est intuitif et les enchères bien organisées. J’ai adoré l’expérience, à refaire sans hésiter ! »</p>
+        <div class="client">
+          <img src="https://randomuser.me/api/portraits/men/68.jpg" alt="client 3">
+          <div>
+            <h5>Michel Andrianina</h5>
+            <span>Antiquaire</span>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 💅 STYLE PREMIUM CENTRÉ -->
+<style>
+.section.light {
+  background: #fff;
+  padding: 100px 8%;
+  text-align: center;
+}
+
+.testimonial-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.3rem;
+  color: #001a3f;
+  margin-bottom: 10px;
+}
+.testimonial-header strong { font-weight: 800; }
+.testimonial-header em { color: #6b7280; font-style: italic; }
+.testimonial-header p {
+  color: #666;
+  font-size: 1rem;
+  margin-top: 10px;
+  max-width: 650px;
+  margin-inline: auto;
+}
+
+/* --- GRILLE --- */
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  justify-items: center;
+  max-width: 1200px;
+  margin: 60px auto 0;
+}
+
+/* Ligne du bas centrée */
+.testimonial-card.bottom {
+  grid-column: span 1;
+}
+@media (min-width: 992px) {
+  .testimonial-card.bottom:first-of-type {
+    grid-column: 2 / 3; /* Centrer le 4e */
+  }
+  .testimonial-card.bottom:last-of-type {
+    grid-column: 3 / 4; /* Centrer le 5e juste à côté */
+  }
+}
+
+/* --- STYLE CARTE --- */
+.testimonial-card {
+  background: white;
+  border-radius: 18px;
+  padding: 30px 25px 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  text-align: left;
+  transition: all 0.3s ease;
+  position: relative;
+  max-width: 360px;
+}
+.testimonial-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* Citation */
+.quote {
+  font-size: 3.5rem;
+  color: #2563eb;
+  line-height: 0;
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  opacity: 0.2;
+}
+
+/* Contenu */
+.testimonial-card h4 {
+  color: #2563eb;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.testimonial-card p {
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+/* Client */
+.client {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.client img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.client h5 {
+  font-size: 1rem;
+  color: #001a3f;
+  margin: 0;
+}
+.client span {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .testimonial-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+  .testimonial-card { text-align: center; }
+  .client { justify-content: center; }
+}
+</style>
+
+<!-- 🎬 Animation -->
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ duration: 700, once: true });</script>
+
 
 
 <!-- SwiperJS -->
