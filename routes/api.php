@@ -20,9 +20,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/latest-bid', function() {
     $bid = Bid::with('product')->latest('created_at')->first();
-    if (!$bid) return response()->json(['amount'=>0]);
+
+    if (!$bid) {
+        return response()->json(['amount' => 0]);
+    }
+
     return response()->json([
-        'amount' => $bid->amount,
+        'amount'  => $bid->amount,
         'product' => $bid->product->title,
+        'status'  => $bid->product->status, // ✅ ajouté
     ]);
 });

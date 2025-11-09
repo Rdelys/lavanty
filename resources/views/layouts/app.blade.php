@@ -420,15 +420,29 @@ footer a {
 
     <script>
         let lastHighestBid=0;
-        function showBidToast(data){
-            const c=document.getElementById("bidNotifications");
-            const t=document.createElement("div");
-            t.className="bid-toast";
-            t.innerHTML=`<button>&times;</button><h4>💰 Nouvelle enchère placée !</h4><p><strong>${data.product}</strong></p><p>Montant : <span class="amount">${Number(data.amount).toLocaleString('fr-FR')} Ar</span></p>`;
-            c.appendChild(t);
-            t.querySelector("button").addEventListener("click",()=>hideToast(t));
-            setTimeout(()=>hideToast(t),5000);
+        function showBidToast(data) {
+            // 🛑 Ne rien afficher si le produit est à venir ou terminé
+            if (data.status === "à_venir" || data.status === "termine" || data.status === "terminé") {
+                return;
+            }
+
+            const container = document.getElementById("bidNotifications");
+            const toast = document.createElement("div");
+            toast.className = "bid-toast";
+
+            toast.innerHTML = `
+                <button>&times;</button>
+                <h4>💰 Nouvelle enchère placée !</h4>
+                <p><strong>${data.product}</strong></p>
+                <p>Montant : <span class="amount">${Number(data.amount).toLocaleString('fr-FR')} Ar</span></p>
+            `;
+
+            container.appendChild(toast);
+
+            toast.querySelector("button").addEventListener("click", () => hideToast(toast));
+            setTimeout(() => hideToast(toast), 5000);
         }
+
         function hideToast(t){t.classList.add("hide");setTimeout(()=>t.remove(),500);}
         async function checkNewBids(){
             try{
