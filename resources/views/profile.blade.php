@@ -4,89 +4,139 @@
 
 @section('content')
 <style>
-/* 🌟 Style Luxe Premium Profil */
+/* 🌟 STYLE PREMIUM ULTIME - Lavanty.mg */
 .profile-card {
-    background: linear-gradient(145deg, #ffffff, #f4f6fb);
+    background: linear-gradient(135deg, #ffffff, #f4f7fb);
     border-radius: 28px;
-    box-shadow: 0 15px 50px rgba(0, 47, 108, 0.15);
-    transition: all .3s ease;
-    border-top: 4px solid #ffd700;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+    transition: all .4s ease;
 }
-.profile-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(0, 47, 108, 0.25);
-}
+
+/* Sections */
 .info-section, .bids-section {
-    background: rgba(255,255,255,0.95);
-    border-radius: 20px;
-    box-shadow: inset 0 4px 20px rgba(0, 47, 108, 0.05);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.9);
+    border-radius: 22px;
+    border: 1px solid rgba(230, 233, 240, 0.6);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    transition: all 0.4s ease;
 }
 .info-section:hover, .bids-section:hover {
-    transform: scale(1.01);
+    transform: translateY(-4px);
 }
+
+/* Titres */
 .luxury-title {
-    background: linear-gradient(90deg, #002f6c, #004aad);
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(90deg, #001b44, #004aad);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 .gold-line {
-    width: 80px;
+    width: 90px;
     height: 4px;
-    border-radius: 2px;
-    background: linear-gradient(90deg, #ffd700, #ffdf50);
+    border-radius: 3px;
+    background: linear-gradient(90deg, #ffda44, #ffd700);
     margin: 0 auto;
 }
+
+/* Inputs */
 input, select {
-    border-radius: 12px;
-    border: 1.5px solid #ccc;
+    border-radius: 14px;
+    border: 1.5px solid #d8dee9;
     transition: all .3s ease;
+    background: #fff;
 }
 input:focus {
-    border-color: #002f6c;
-    box-shadow: 0 0 0 3px rgba(0,47,108,0.1);
+    border-color: #004aad;
+    box-shadow: 0 0 0 4px rgba(0,74,173,0.1);
 }
+
+/* 🌟 TABLE PREMIUM */
 .table-premium {
-    border-collapse: collapse;
     width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.table-premium thead {
+    background: linear-gradient(90deg, #001b44, #004aad);
+    color: #fff;
 }
 .table-premium th {
-    background: linear-gradient(90deg, #002f6c, #004aad);
-    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.85rem;
     font-weight: 700;
     padding: 1rem;
-    text-align: left;
-    font-size: 0.9rem;
+    letter-spacing: 0.6px;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+}
+.table-premium tbody {
+    background: rgba(255, 255, 255, 0.8);
 }
 .table-premium td {
     padding: 0.9rem 1rem;
-    border-bottom: 1px solid #e5e9f0;
+    border-bottom: 1px solid #edf0f6;
+    font-size: 0.95rem;
+    color: #1e293b;
+    transition: all 0.3s ease;
 }
-.table-premium tr {
-    transition: all .3s ease;
+.table-premium tr:last-child td {
+    border-bottom: none;
 }
+
+/* Survol de ligne */
 .table-premium tr:hover {
-    transform: scale(1.01);
-    background: rgba(255, 215, 0, 0.07);
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.08), rgba(255, 255, 255, 0.9));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.15);
 }
+
+/* Statuts */
 .status-good {
-    background: linear-gradient(90deg, #d9fcd9, #b6f7b6);
+    background: linear-gradient(90deg, #f2fff5, #e3ffe9);
 }
 .status-bad {
-    background: linear-gradient(90deg, #ffe2e2, #ffcccc);
+    background: linear-gradient(90deg, #fff4f4, #ffeaea);
 }
 .status-good span {
-    color: #087a08;
+    color: #0f9d58;
+    font-weight: 600;
 }
 .status-bad span {
-    color: #c92020;
+    color: #d93025;
+    font-weight: 600;
 }
+
+/* Badge effet glossy */
+.status-good span::before, .status-bad span::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+.status-good span::before { background-color: #0f9d58; }
+.status-bad span::before { background-color: #d93025; }
+
+/* Effet de focus sur la ligne active */
+.table-premium tr:active {
+    background: linear-gradient(90deg, #ffd7001a, #ffffff);
+    transform: scale(0.99);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
     .profile-card { padding: 2rem 1.5rem; }
-    .table-premium th, .table-premium td { font-size: 0.85rem; }
+    .table-premium th, .table-premium td { font-size: 0.85rem; padding: 0.7rem; }
 }
 </style>
+
 
 <section class="container mx-auto px-6 py-16 fade-in">
     <div class="profile-card p-8 md:p-10">
