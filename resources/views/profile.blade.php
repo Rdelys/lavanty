@@ -4,7 +4,16 @@
 
 @section('content')
 <style>
-/* 🌟 STYLE PREMIUM ULTIME - Lavanty.mg */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+/* 🌟 STYLE PREMIUM LAVANTY.MG */
+body {
+    font-family: "DM Sans", sans-serif;
+    background: #f8f9fc;
+    color: #1a1a1a;
+}
+
+/* --- Carte principale --- */
 .profile-card {
     background: linear-gradient(135deg, #ffffff, #f4f7fb);
     border-radius: 28px;
@@ -12,7 +21,7 @@
     transition: all .4s ease;
 }
 
-/* Sections */
+/* --- Sections --- */
 .info-section, .bids-section {
     background: rgba(255,255,255,0.9);
     border-radius: 22px;
@@ -25,13 +34,19 @@
     transform: translateY(-4px);
 }
 
-/* Titres */
+/* --- Titres --- */
+h1, h2 {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    color: #002f6c;
+}
+
 .luxury-title {
-    font-family: 'Poppins', sans-serif;
     background: linear-gradient(90deg, #001b44, #004aad);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
 .gold-line {
     width: 90px;
     height: 4px;
@@ -40,24 +55,37 @@
     margin: 0 auto;
 }
 
-/* Inputs */
+/* --- Inputs --- */
 input, select {
     border-radius: 14px;
     border: 1.5px solid #d8dee9;
     transition: all .3s ease;
     background: #fff;
+    font-family: "DM Sans", sans-serif;
 }
 input:focus {
-    border-color: #004aad;
-    box-shadow: 0 0 0 4px rgba(0,74,173,0.1);
+    border-color: #002f6c;
+    box-shadow: 0 0 0 4px rgba(0,47,108,0.1);
 }
 
-/* 🌟 TABLE PREMIUM */
+/* --- Bouton principal --- */
+.btn-yellow {
+    background: linear-gradient(90deg, #ffd700, #e6c300);
+    color: #002f6c;
+    transition: all .3s ease;
+    font-family: "DM Sans", sans-serif;
+}
+.btn-yellow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
+/* --- Tableau Premium --- */
 .table-premium {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: "DM Sans", sans-serif;
     overflow: hidden;
     border-radius: 16px;
 }
@@ -87,15 +115,13 @@ input:focus {
 .table-premium tr:last-child td {
     border-bottom: none;
 }
-
-/* Survol de ligne */
 .table-premium tr:hover {
     background: linear-gradient(90deg, rgba(255, 215, 0, 0.08), rgba(255, 255, 255, 0.9));
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(255, 215, 0, 0.15);
 }
 
-/* Statuts */
+/* --- Statuts --- */
 .status-good {
     background: linear-gradient(90deg, #f2fff5, #e3ffe9);
 }
@@ -110,8 +136,6 @@ input:focus {
     color: #d93025;
     font-weight: 600;
 }
-
-/* Badge effet glossy */
 .status-good span::before, .status-bad span::before {
     content: '';
     display: inline-block;
@@ -124,18 +148,19 @@ input:focus {
 .status-good span::before { background-color: #0f9d58; }
 .status-bad span::before { background-color: #d93025; }
 
-/* Effet de focus sur la ligne active */
+/* --- Focus actif --- */
 .table-premium tr:active {
     background: linear-gradient(90deg, #ffd7001a, #ffffff);
     transform: scale(0.99);
 }
 
-/* Responsive */
+/* --- Responsive --- */
 @media (max-width: 768px) {
     .profile-card { padding: 2rem 1.5rem; }
     .table-premium th, .table-premium td { font-size: 0.85rem; padding: 0.7rem; }
 }
 </style>
+
 
 
 <section class="container mx-auto px-6 py-16 fade-in">

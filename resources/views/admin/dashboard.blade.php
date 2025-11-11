@@ -8,25 +8,136 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <style>
-    /* Small custom tweaks to complement Tailwind */
-    .table-header-sticky thead th {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(4px);
-    }
-    .truncate-2 {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    /* subtle card glow on hover */
-    .card-hover:hover { box-shadow: 0 12px 30px rgba(79, 70, 229, 0.12); transform: translateY(-3px); }
+    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap");
 
-    .spin-slow {
-    animation: spin 3s linear infinite;
-  }
+/* 🌐 Polices globales */
+body {
+  font-family: "DM Sans", sans-serif;
+  background-color: #f8fafc;
+  color: #002f6c;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Playfair Display", serif;
+  color: #001a3f;
+  font-weight: 700;
+}
+
+/* 🔹 Sidebar royale */
+aside {
+  background: linear-gradient(180deg, #002f6c 0%, #1e1b4b 100%);
+  color: #fff;
+}
+aside a {
+  transition: all 0.25s ease;
+}
+aside a:hover {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+}
+aside button:hover {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+}
+
+/* ✨ En-tête du dashboard */
+h1 i, h2 i {
+  color: #ffd700 !important;
+}
+
+/* 🧊 Cartes statistiques */
+.card-hover {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 47, 108, 0.08);
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 47, 108, 0.15);
+}
+
+/* 🪶 Tableaux */
+table thead th {
+  background-color: #fefefe;
+  font-weight: 600;
+  color: #002f6c;
+  border-bottom: 2px solid #e5e7eb;
+}
+table tbody tr:hover {
+  background-color: #fdfaf2;
+}
+.table-header-sticky thead th {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 10;
+}
+
+/* 🧷 Boutons principaux */
+button,
+.btn-primary {
+  font-family: "DM Sans", sans-serif;
+  transition: all 0.25s ease;
+}
+.bg-gradient-to-r.from-indigo-600.to-purple-600 {
+  background: linear-gradient(135deg, #002f6c, #4f46e5);
+}
+.bg-gradient-to-r.from-indigo-600.to-purple-600:hover {
+  background: linear-gradient(135deg, #004aad, #5b21b6);
+  transform: translateY(-2px);
+}
+
+/* 🟡 Accent or (admin visuel premium) */
+.text-gold { color: #ffd700; }
+.bg-gold { background-color: #ffd700; }
+.border-gold { border-color: #ffd700; }
+
+/* 🔔 Badges de statut */
+.badge {
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.3rem 0.75rem;
+  display: inline-block;
+}
+.badge-gray { background: #f3f4f6; color: #374151; }
+.badge-green { background: #ecfdf5; color: #047857; }
+.badge-red { background: #fef2f2; color: #b91c1c; }
+.badge-yellow { background: #fef9c3; color: #92400e; }
+
+/* 🪟 Modale */
+#editModal {
+  backdrop-filter: blur(6px);
+}
+#editModal .bg-white {
+  border: 1px solid rgba(0, 47, 108, 0.1);
+}
+
+/* 🌀 Animation douce */
+.spin-slow {
+  animation: spin 3s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 🪄 Champs focus effet Lavanty */
+input:focus, select:focus, textarea:focus {
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+}
+
+/* ✨ Scrollbar premium */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #004aad, #ffd700);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
   </style>
 </head>
 <body class="flex bg-gray-100 min-h-screen text-gray-800">

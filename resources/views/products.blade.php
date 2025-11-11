@@ -3,6 +3,25 @@
 @section('title', 'Produits - Lavanty.mg | Enchères de Luxe à Madagascar')
 
 @section('content')
+<style>
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+/* 🌐 Police globale */
+body {
+  font-family: "DM Sans", sans-serif;
+  color: #001a3f;
+  background: #fff;
+  line-height: 1.6;
+}
+
+/* 📰 Titres */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  color: #001a3f;
+}
+</style>
+
 <section id="produits" class="container mx-auto px-6 py-16">
     <h1 class="text-4xl md:text-5xl font-extrabold text-[#002f6c] text-center mb-6 tracking-wide">
         🛒 Tous les Produits en Enchères

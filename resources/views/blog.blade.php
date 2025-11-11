@@ -4,14 +4,26 @@
 
 @section('content')
 <style>
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
 /* === GLOBAL === */
 .blog-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 3rem 1rem;
-    font-family: 'Poppins', sans-serif;
+    font-family: "DM Sans", sans-serif; /* ✅ Police globale */
     color: #333;
     background: #fafafa;
+    line-height: 1.7;
+}
+
+/* === TITRES === */
+.blog-header h1,
+.blog-content h2,
+.blog-seo h3 {
+    font-family: "Playfair Display", serif; /* ✅ Police des titres */
+    font-weight: 700;
+    color: #002f6c;
 }
 
 /* HEADER */
@@ -80,6 +92,7 @@
     font-size: 0.85rem;
     color: #777;
     margin-bottom: 0.6rem;
+    font-family: "DM Sans", sans-serif;
 }
 
 .blog-meta span {
@@ -88,7 +101,6 @@
 
 .blog-content h2 {
     font-size: 1.3rem;
-    color: #002f6c;
     font-weight: 700;
     margin-bottom: 0.7rem;
     transition: color 0.3s ease;
@@ -101,7 +113,7 @@
 .blog-content p {
     font-size: 0.95rem;
     color: #555;
-    line-height: 1.5;
+    line-height: 1.6;
     margin-bottom: 1rem;
 }
 
@@ -115,6 +127,7 @@
     font-weight: 600;
     font-size: 0.9rem;
     transition: all 0.3s ease;
+    font-family: "DM Sans", sans-serif;
 }
 
 .blog-btn:hover {
@@ -133,7 +146,6 @@
 
 .blog-seo h3 {
     font-size: 1.8rem;
-    color: #002f6c;
     margin-bottom: 1rem;
 }
 
@@ -141,6 +153,7 @@
     font-size: 1rem;
     color: #444;
     line-height: 1.8;
+    font-family: "DM Sans", sans-serif;
 }
 
 /* RESPONSIVE */
@@ -164,6 +177,7 @@
     }
 }
 </style>
+
 
 <section class="blog-container">
     <header class="blog-header">

@@ -4,14 +4,30 @@
 
 @section('content')
 <style>
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
 /* === GLOBAL === */
 .about-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 5rem 1rem;
-    font-family: 'Poppins', sans-serif;
+    font-family: "DM Sans", sans-serif; /* ✅ Police globale */
     color: #333;
-    background: #fff; /* ✅ fond blanc premium */
+    background: #fff; /* fond blanc premium */
+    line-height: 1.7;
+}
+
+/* === TITRES === */
+.about-header h1,
+.about-intro-text h2,
+.about-values h2,
+.value-card h3,
+.about-team h2,
+.team-member h4,
+.about-cta h3 {
+    font-family: "Playfair Display", serif; /* ✅ Police élégante */
+    font-weight: 700;
+    color: #002f6c;
 }
 
 /* HEADER */
@@ -22,8 +38,6 @@
 
 .about-header h1 {
     font-size: 3rem;
-    color: #002f6c;
-    font-weight: 800;
     margin-bottom: 1rem;
     letter-spacing: 1px;
 }
@@ -72,13 +86,6 @@
     min-width: 300px;
 }
 
-.about-intro-text h2 {
-    font-size: 2rem;
-    color: #002f6c;
-    margin-bottom: 1rem;
-    font-weight: 700;
-}
-
 .about-intro-text p {
     font-size: 1.05rem;
     color: #444;
@@ -96,9 +103,7 @@
 
 .about-values h2 {
     font-size: 2.2rem;
-    color: #002f6c;
     margin-bottom: 2rem;
-    font-weight: 700;
 }
 
 .values-grid {
@@ -121,10 +126,8 @@
 }
 
 .value-card h3 {
-    font-size: 1.4rem;
-    color: #d4af37;
+    color: #d4af37; /* accent doré */
     margin-bottom: 0.8rem;
-    font-weight: 700;
 }
 
 .value-card p {
@@ -141,8 +144,6 @@
 
 .about-team h2 {
     font-size: 2.2rem;
-    color: #002f6c;
-    font-weight: 700;
     margin-bottom: 2.5rem;
 }
 
@@ -173,16 +174,10 @@
     margin-bottom: 1rem;
 }
 
-.team-member h4 {
-    font-size: 1.25rem;
-    color: #002f6c;
-    margin-bottom: 0.4rem;
-    font-weight: 700;
-}
-
 .team-member p {
     color: #666;
     font-size: 0.95rem;
+    font-family: "DM Sans", sans-serif;
 }
 
 /* CTA */
@@ -192,7 +187,6 @@
 }
 
 .about-cta h3 {
-    color: #002f6c;
     font-size: 1.7rem;
     margin-bottom: 1rem;
 }
@@ -205,6 +199,7 @@
     border-radius: 10px;
     font-weight: 600;
     transition: all 0.3s ease;
+    font-family: "DM Sans", sans-serif;
 }
 
 .about-btn:hover {
@@ -231,6 +226,7 @@
     }
 }
 </style>
+
 
 <section class="about-container">
 

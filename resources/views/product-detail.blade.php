@@ -4,12 +4,14 @@
 
 @section('content')
 <style>
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
 /* 🌟 --- LAVANTY PREMIUM THEME --- */
 /* Couleurs principales : Bleu #002f6c | Or #ffd700 */
 
 body {
   background-color: #f8f9fc;
-  font-family: 'Poppins', 'Inter', sans-serif;
+  font-family: "DM Sans", sans-serif; /* ✅ Texte principal */
   color: #1a1a1a;
   overflow-x: hidden;
 }
@@ -24,7 +26,7 @@ section.container {
 
 /* --- Titres --- */
 h1, h2, h3 {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Playfair Display", serif; /* ✅ Titres élégants */
   letter-spacing: -0.03em;
 }
 h1 {
@@ -74,6 +76,9 @@ h2 {
 }
 
 /* --- Texte & Description --- */
+p, span, td, th, input, button {
+  font-family: "DM Sans", sans-serif;
+}
 p.text-lg {
   line-height: 1.8;
   color: #555;
@@ -81,17 +86,11 @@ p.text-lg {
 }
 
 /* --- Prix --- */
-.text-blue-700 {
-  color: #002f6c !important;
-}
-.text-yellow-600 {
-  color: #ffd700 !important;
-}
-.text-green-600 {
-  color: #00a86b !important;
-}
+.text-blue-700 { color: #002f6c !important; }
+.text-yellow-600 { color: #ffd700 !important; }
+.text-green-600 { color: #00a86b !important; }
 
-/* --- Compteur d’enchère (countdown) --- */
+/* --- Compteur d’enchère --- */
 .countdown {
   background: linear-gradient(135deg, #ffffff, #f3f6fb);
   border: 1px solid rgba(0,47,108,0.1);
@@ -101,9 +100,7 @@ p.text-lg {
   display: flex;
   gap: 2rem;
 }
-.countdown div {
-  text-align: center;
-}
+.countdown div { text-align: center; }
 .countdown p {
   font-size: 1.8rem;
   font-weight: 700;
@@ -127,31 +124,16 @@ input[type="number"]:focus {
   box-shadow: 0 0 0 3px rgba(0,47,108,0.1);
 }
 
-/* --- Boutons principaux --- */
+/* --- Boutons --- */
 button {
-  font-family: 'Poppins', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-weight: 600;
   transition: all .3s ease;
   border: none;
   cursor: pointer;
 }
 
-/* ✅ Correction complète de disposition et style */
-#bidSection,
-#autoBidSection {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-#bidSection input,
-#autoBidSection input {
-  flex: 1;
-  min-width: 0;
-}
-
-/* Boutons harmonisés */
+/* --- Boutons principaux harmonisés --- */
 #placeBidBtn,
 #setAutoBidBtn {
   flex-shrink: 0;
@@ -164,7 +146,6 @@ button {
   transition: all 0.3s ease;
 }
 
-/* Styles individuels */
 #placeBidBtn {
   background: linear-gradient(90deg, #ffd700, #e6c300);
   color: #002f6c;
@@ -173,7 +154,6 @@ button {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 215, 0, 0.45);
 }
-
 #setAutoBidBtn {
   background: linear-gradient(90deg, #002f6c, #001f4d);
   color: #ffffff;
@@ -181,12 +161,6 @@ button {
 #setAutoBidBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 47, 108, 0.45);
-}
-
-/* Petit effet au clic */
-#placeBidBtn:active,
-#setAutoBidBtn:active {
-  transform: scale(0.97);
 }
 
 /* --- Tableau des enchères --- */
@@ -207,13 +181,8 @@ button {
   padding: 0.9rem 1rem;
   border-top: 1px solid #e5e9f0;
 }
-#bidsTable tr:nth-child(even) {
-  background: #f7f9fc;
-}
-#bidsTable tr:hover {
-  background-color: rgba(255, 215, 0, 0.08);
-  transition: all .3s ease;
-}
+#bidsTable tr:nth-child(even) { background: #f7f9fc; }
+#bidsTable tr:hover { background-color: rgba(255, 215, 0, 0.08); transition: all .3s ease; }
 
 /* --- Modales --- */
 #messageModal .bg-white {
@@ -223,25 +192,19 @@ button {
   box-shadow: 0 20px 60px rgba(0, 47, 108, 0.25);
   transition: all .3s ease;
 }
-#closeModal:hover {
-  color: #002f6c;
-}
+#closeModal:hover { color: #002f6c; }
 
-/* --- Scrollbar Premium --- */
-::-webkit-scrollbar {
-  width: 10px;
-}
+/* --- Scrollbar --- */
+::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-thumb {
   background: #002f6c;
   border-radius: 10px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #001f4d;
-}
+::-webkit-scrollbar-thumb:hover { background: #001f4d; }
 
-/* --- État des enchères (messages dynamiques) --- */
+/* --- Messages d’état --- */
 .bid-status {
-  font-family: 'Poppins', 'Inter', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-weight: 600;
   font-size: 1.05rem;
   display: flex;
@@ -250,102 +213,38 @@ button {
   letter-spacing: -0.01em;
   animation: fadeIn 0.4s ease forwards;
 }
-.bid-status.success {
-  color: #16a34a;
-}
-.bid-status.danger {
-  color: #dc2626;
-}
+.bid-status.success { color: #16a34a; }
+.bid-status.danger { color: #dc2626; }
 
 /* --- Animations --- */
 @keyframes fadeIn {
   0% { opacity: 0; transform: scale(0.95) translateY(20px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
-.animate-fadeIn {
-  animation: fadeIn 0.4s ease forwards;
-}
-
 @keyframes pulsePrice {
   0% { transform: scale(1); color: #ffd700; }
   50% { transform: scale(1.1); color: #ffea80; }
   100% { transform: scale(1); color: #ffd700; }
 }
-.pulse {
-  animation: pulsePrice 0.6s ease;
-}
+.pulse { animation: pulsePrice 0.6s ease; }
 
-/* --- Responsive Design --- */
+/* --- Responsive --- */
 @media (max-width: 1024px) {
-  section.container {
-    padding: 2.5rem 1.5rem;
-  }
-  h1 {
-    font-size: 2.2rem;
-  }
-  .grid {
-    gap: 2rem;
-  }
+  section.container { padding: 2.5rem 1.5rem; }
+  h1 { font-size: 2.2rem; }
 }
-
 @media (max-width: 768px) {
-  h1 {
-    font-size: 1.9rem;
-    text-align: center;
-  }
-  p.text-lg {
-    font-size: 1rem;
-    text-align: justify;
-  }
-  .countdown {
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-  }
-  .flex.gap-3 img {
-    width: 60px;
-    height: 60px;
-  }
-
-  /* 🧠 Empilement vertical propre des boutons */
-  #bidSection,
-  #autoBidSection {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.8rem;
-  }
-
-  #placeBidBtn,
-  #setAutoBidBtn {
-    width: 100%;
-    min-width: unset;
-    font-size: 1rem;
-  }
-
-  #bidSection input,
-  #autoBidSection input {
-    width: 100%;
-  }
-
-  .grid.grid-cols-1 {
-    gap: 2rem;
-  }
+  h1 { font-size: 1.9rem; text-align: center; }
+  p.text-lg { font-size: 1rem; text-align: justify; }
+  .countdown { flex-wrap: wrap; justify-content: center; }
+  #bidSection, #autoBidSection { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+  #placeBidBtn, #setAutoBidBtn { width: 100%; font-size: 1rem; }
 }
-
 @media (max-width: 480px) {
-  section.container {
-    padding: 1.5rem 1rem;
-  }
-  h1 {
-    font-size: 1.6rem;
-  }
-  #bidsTable th, #bidsTable td {
-    font-size: 0.8rem;
-    padding: 0.6rem;
-  }
+  section.container { padding: 1.5rem 1rem; }
+  h1 { font-size: 1.6rem; }
+  #bidsTable th, #bidsTable td { font-size: 0.8rem; padding: 0.6rem; }
 }
-
-
 </style>
 
 <section class="container mx-auto px-6 py-16">

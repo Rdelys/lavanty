@@ -8,11 +8,21 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 /* 🎨 Palette : bleu #001a3f | or #ffd700 | vert #00b853 | gris clair #f5f5f5 */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 
+/* 🌐 Typographie globale */
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "DM Sans", sans-serif;
   color: #001a3f;
   background: #fff;
+  line-height: 1.6;
+}
+
+/* 📰 Titres (h1 à h6) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", sans-serif;
+  font-weight: 700;
+  color: #001a3f;
 }
 
 /* HERO SECTION */
@@ -23,17 +33,22 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: linear-gradient(to bottom, #000, #001a3f, #002f6c);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 26, 63, 0.6)); /* 💡 plus de transparence */
   color: white;
   overflow: hidden;
 }
+
 .hero-overlay {
   position: absolute;
   inset: 0;
   background: url('https://c0.wallpaperflare.com/preview/450/707/805/gavel-auction-hammer-justice.jpg') center/cover;
-  opacity: 0.25;
+  opacity: 0.8; /* 🔥 image bien visible */
+  z-index: 1;
 }
-.hero-content { position: relative; z-index: 10; max-width: 800px; padding: 20px; }
+
+
+
+.hero-content { position: relative; z-index: 10; max-width: 800px; padding: 20px;z-index: 2; }
 .hero-badge {
   display: inline-block;
   background: rgba(255,255,255,0.1);

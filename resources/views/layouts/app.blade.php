@@ -7,69 +7,123 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Animation premium */
-        .fade-in { animation: fadeIn 0.4s ease-in-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    /* === Global Premium Lavanty === */
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: #ffffff;
+      color: #1a1a1a;
+    }
+    h1, h2, h3, h4, h5 {
+      font-family: "Playfair Display", serif;
+      color: #002f6c;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
 
-        /* Effet glass VIP */
-        .glass {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            box-shadow: 0 8px 32px rgba(0, 74, 173, 0.15);
-        }
+    /* Animation premium */
+    .fade-in { animation: fadeIn 0.4s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        /* Couleurs royales */
-        .royal-blue { color: #003c9e; }
-        .gold { color: #ffd700; }
+    /* Effet glass VIP */
+    .glass {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      box-shadow: 0 8px 32px rgba(0, 74, 173, 0.15);
+    }
 
-        /* Boutons */
-        .btn-premium {
-            background: linear-gradient(135deg, #004aad, #0077ff);
-            color: #ffd700;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(0, 74, 173, 0.3);
-        }
-        .btn-premium:hover {
-            transform: scale(1.07);
-            background: linear-gradient(135deg, #0058d4, #003c9e);
-        }
+    /* Boutons */
+    .btn-premium {
+      background: linear-gradient(135deg, #002f6c, #004aad);
+      color: #ffd700;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,47,108,0.2);
+    }
+    .btn-premium:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #003c9e, #002f6c);
+      box-shadow: 0 6px 20px rgba(0,47,108,0.3);
+    }
 
-        .btn-yellow {
-            background: linear-gradient(135deg, #ffd700, #ffcc00);
-            color: #003c9e;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .btn-yellow:hover {
-            transform: scale(1.07);
-            background: linear-gradient(135deg, #ffde59, #ffcb00);
-        }
+    .btn-yellow {
+      background: linear-gradient(135deg, #ffd700, #e6c300);
+      color: #002f6c;
+      font-weight: 700;
+      font-family: "DM Sans", sans-serif;
+      transition: all 0.3s ease;
+    }
+    .btn-yellow:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #ffdf5e, #ffd000);
+      box-shadow: 0 6px 20px rgba(255,215,0,0.4);
+    }
 
-        /* Notifications enchères */
-        @keyframes fadeInRight { from {opacity:0;transform:translateX(60px);} to {opacity:1;transform:translateX(0);} }
-        @keyframes fadeOutRight { from {opacity:1;transform:translateX(0);} to {opacity:0;transform:translateX(60px);} }
-        #bidNotifications {
-            position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px;
-            z-index: 9999; pointer-events: none;
-        }
-        .bid-toast {
-            background: #ffffff; border-left: 6px solid #ffd700; box-shadow: 0 5px 25px rgba(0,47,108,0.2);
-            border-radius: 14px; padding: 1rem 1.2rem; min-width: 260px; max-width: 340px;
-            animation: fadeInRight 0.4s ease forwards; position: relative; pointer-events: auto;
-        }
-        .bid-toast.hide { animation: fadeOutRight 0.5s ease forwards; }
-        .bid-toast h4 { color:#002f6c; font-weight:700; font-size:1rem; margin-bottom:0.25rem; }
-        .bid-toast .amount { color:#ffd700; font-weight:700; }
-        .bid-toast button {
-            background:none; border:none; color:#888; font-size:1.2rem; position:absolute; top:6px; right:10px; cursor:pointer;
-        }
-        .bid-toast button:hover { color:#002f6c; }
-    </style>
+    /* Toast enchères */
+    #bidNotifications {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    .bid-toast {
+      background: #fff;
+      border-left: 6px solid #ffd700;
+      box-shadow: 0 5px 25px rgba(0,47,108,0.2);
+      border-radius: 14px;
+      padding: 1rem 1.2rem;
+      min-width: 260px;
+      max-width: 340px;
+      animation: fadeInRight 0.4s ease forwards;
+      font-family: "DM Sans", sans-serif;
+      pointer-events: auto;
+    }
+    .bid-toast.hide { animation: fadeOutRight 0.5s ease forwards; }
+    .bid-toast h4 {
+      color:#002f6c;
+      font-weight:700;
+      font-size:1rem;
+      margin-bottom:0.25rem;
+    }
+    .bid-toast .amount {
+      color:#ffd700;
+      font-weight:700;
+    }
+
+    @keyframes fadeInRight { from {opacity:0;transform:translateX(60px);} to {opacity:1;transform:translateX(0);} }
+    @keyframes fadeOutRight { from {opacity:1;transform:translateX(0);} to {opacity:0;transform:translateX(60px);} }
+
+    /* Menu / Header */
+    header nav a {
+      font-family: "DM Sans", sans-serif;
+      transition: color 0.25s ease;
+    }
+    header nav a:hover {
+      color: #ffd700;
+    }
+
+    /* Footer typographique */
+    footer {
+      font-family: "DM Sans", sans-serif;
+      background-color: #002f6c;
+      color: #e5e5e5;
+    }
+    footer h3 {
+      font-family: "Playfair Display", serif;
+      color: #ffd700;
+    }
+    footer a:hover {
+      color: #ffd700;
+    }
+  </style>
 </head>
 
 <body class="bg-white flex flex-col min-h-screen font-[Inter] text-gray-800">
