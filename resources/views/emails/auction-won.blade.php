@@ -1,16 +1,16 @@
 @component('mail::message')
 {{-- Import des polices et styles Lavanty Premium --}}
 <style>
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Rubik:wght@400;600;700&display=swap");
 
 body, table, td, p {
-  font-family: "DM Sans", sans-serif !important;
+  font-family: "Nunito", sans-serif !important;
   color: #001a3f !important;
   background-color: #ffffff !important;
 }
 
 h1, h2, h3 {
-  font-family: "Playfair Display", serif !important;
+  font-family: "Rubik", sans-serif !important;
   color: #002f6c !important;
   font-weight: 700 !important;
 }

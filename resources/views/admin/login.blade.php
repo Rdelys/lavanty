@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <title>Connexion Administrateur | Lavanty.mg</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Rubik:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     body {
-      font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
       background: radial-gradient(circle at top left, #002f6c, #3b0a91, #120036);
       min-height: 100vh;
       display: flex;
@@ -19,7 +19,7 @@
     }
 
     h2 {
-      font-family: "Playfair Display", serif;
+  font-family: "Rubik", sans-serif;
       color: #ffd700;
       letter-spacing: -0.02em;
     }
@@ -41,7 +41,7 @@
 
     /* Inputs */
     input {
-      font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
       transition: all 0.3s ease;
     }
 
@@ -56,7 +56,7 @@
       background: linear-gradient(135deg, #ffd700, #e6c300);
       color: #002f6c;
       font-weight: 700;
-      font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
       transition: all 0.3s ease;
     }
 

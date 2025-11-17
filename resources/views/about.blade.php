@@ -4,14 +4,13 @@
 
 @section('content')
 <style>
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Rubik:wght@400;600;700&display=swap");
 /* === GLOBAL === */
 .about-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 5rem 1rem;
-    font-family: "DM Sans", sans-serif; /* ✅ Police globale */
+  font-family: "Nunito", sans-serif;
     color: #333;
     background: #fff; /* fond blanc premium */
     line-height: 1.7;
@@ -25,7 +24,7 @@
 .about-team h2,
 .team-member h4,
 .about-cta h3 {
-    font-family: "Playfair Display", serif; /* ✅ Police élégante */
+  font-family: "Rubik", sans-serif;
     font-weight: 700;
     color: #002f6c;
 }
@@ -177,7 +176,7 @@
 .team-member p {
     color: #666;
     font-size: 0.95rem;
-    font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
 }
 
 /* CTA */
@@ -199,7 +198,7 @@
     border-radius: 10px;
     font-weight: 600;
     transition: all 0.3s ease;
-    font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
 }
 
 .about-btn:hover {
@@ -294,11 +293,5 @@
             </div>
         </div>
     </div>
-
-    <div class="about-cta">
-        <h3>Envie d’en savoir plus ?</h3>
-        <a href="{{ route('blog') }}" class="about-btn">Découvrir notre blog</a>
-    </div>
-
 </section>
 @endsection

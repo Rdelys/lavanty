@@ -8,17 +8,16 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Rubik:wght@400;600;700&display=swap");
 /* 🌐 Polices globales */
 body {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
   background-color: #f8fafc;
   color: #002f6c;
 }
 
 h1, h2, h3, h4 {
-  font-family: "Playfair Display", serif;
+  font-family: "Rubik", sans-serif;
   color: #001a3f;
   font-weight: 700;
 }

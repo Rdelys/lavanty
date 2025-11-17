@@ -4,14 +4,13 @@
 
 @section('content')
 <style>
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Rubik:wght@400;600;700&display=swap");
 /* === GLOBAL === */
 .contact-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 5rem 1rem;
-    font-family: "DM Sans", sans-serif; /* ✅ Police principale */
+  font-family: "Nunito", sans-serif;
     background: #fff;
     color: #333;
     line-height: 1.7;
@@ -19,7 +18,7 @@
 
 /* === TITRES === */
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Playfair Display", serif; /* ✅ Police titres */
+  font-family: "Rubik", sans-serif;
     font-weight: 700;
     color: #002f6c;
 }
@@ -43,7 +42,7 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 750px;
     margin: 0 auto;
     line-height: 1.6;
-    font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
 }
 
 .divider {
@@ -81,7 +80,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #002f6c;
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
-    font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
 }
 
 .contact-form input,
@@ -91,7 +90,7 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid #ddd;
     border-radius: 10px;
     margin-bottom: 1.2rem;
-    font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
     font-size: 1rem;
     transition: border-color 0.3s ease;
 }
@@ -117,7 +116,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
 }
 
 .contact-btn:hover {
@@ -148,7 +147,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #555;
     font-size: 1rem;
     line-height: 1.6;
-    font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
 }
 
 .contact-info-box a {

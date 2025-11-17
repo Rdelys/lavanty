@@ -4,11 +4,10 @@
 
 @section('content')
 <style>
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Rubik:wght@400;600;700&display=swap");
 /* 🌐 Police globale */
 body {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
   color: #001a3f;
   background: #fff;
   line-height: 1.6;
@@ -16,7 +15,7 @@ body {
 
 /* 📰 Titres */
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Playfair Display", serif;
+  font-family: "Rubik", sans-serif;
   font-weight: 700;
   color: #001a3f;
 }

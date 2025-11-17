@@ -4,14 +4,13 @@
 
 @section('content')
 <style>
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Rubik:wght@400;600;700&display=swap");
 /* 🌟 --- LAVANTY PREMIUM THEME --- */
 /* Couleurs principales : Bleu #002f6c | Or #ffd700 */
 
 body {
   background-color: #f8f9fc;
-  font-family: "DM Sans", sans-serif; /* ✅ Texte principal */
+  font-family: "Nunito", sans-serif;
   color: #1a1a1a;
   overflow-x: hidden;
 }
@@ -26,7 +25,7 @@ section.container {
 
 /* --- Titres --- */
 h1, h2, h3 {
-  font-family: "Playfair Display", serif; /* ✅ Titres élégants */
+  font-family: "Rubik", sans-serif;
   letter-spacing: -0.03em;
 }
 h1 {
@@ -126,7 +125,7 @@ input[type="number"]:focus {
 
 /* --- Boutons --- */
 button {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
   font-weight: 600;
   transition: all .3s ease;
   border: none;
@@ -204,7 +203,7 @@ button {
 
 /* --- Messages d’état --- */
 .bid-status {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
   font-weight: 600;
   font-size: 1.05rem;
   display: flex;

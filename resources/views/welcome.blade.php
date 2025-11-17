@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 /* 🎨 Palette : bleu #001a3f | or #ffd700 | vert #00b853 | gris clair #f5f5f5 */
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Rubik:wght@400;600;700&display=swap");
 
 /* 🌐 Typographie globale */
 body {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
   color: #001a3f;
   background: #fff;
   line-height: 1.6;
@@ -20,7 +20,7 @@ body {
 
 /* 📰 Titres (h1 à h6) */
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Playfair Display", sans-serif;
+  font-family: "Rubik", sans-serif;
   font-weight: 700;
   color: #001a3f;
 }
@@ -63,7 +63,7 @@ h1, h2, h3, h4, h5, h6 {
 .hero-badge i { color: #ffd700; margin-right: 6px; }
 .hero-content h1 {
   font-size: 3.5rem;
-  font-family: 'Playfair Display', serif;
+  font-family: "Rubik", sans-serif;
   margin-bottom: 15px;
 }
 .gold-text { color: #ffd700; }
@@ -88,7 +88,7 @@ h1, h2, h3, h4, h5, h6 {
 .section { padding: 100px 8%; text-align: left; background: white; }
 .section.light { background: #f9fafb; }
 .section h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Rubik", sans-serif;
   font-size: 2.5rem;
   margin-bottom: 60px;
   text-transform: uppercase;
@@ -202,7 +202,7 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 #categories h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Rubik", sans-serif;
   font-size: 2.4rem;
   color: #001a3f;
   margin-bottom: 15px;
@@ -244,7 +244,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 2rem;
 }
 .category-card h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Rubik", sans-serif;
   font-size: 1.3rem;
   margin-bottom: 8px;
   color: #001a3f;
@@ -282,7 +282,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .about-content h2 {
   font-size: 2.6rem;
-  font-family: 'Playfair Display', serif;
+  font-family: "Rubik", sans-serif;
   color: #001a3f;
   margin-bottom: 20px;
 }
@@ -656,7 +656,7 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 .how-section h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Rubik", sans-serif;
   font-size: 2.5rem;
   margin-bottom: 15px;
   color: #001a3f;
@@ -729,7 +729,7 @@ h1, h2, h3, h4, h5, h6 {
 .step-card h3 {
   font-size: 1.3rem;
   color: #001a3f;
-  font-family: 'Playfair Display', serif;
+  font-family: "Rubik", sans-serif;
   margin-bottom: 15px;
 }
 .step-card ul {
@@ -867,7 +867,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* Header */
 .header { text-align: center; margin-bottom: 35px; }
 .header h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Rubik", sans-serif;
   font-size: 2.2rem;
   color: #001a3f;
 }
@@ -934,7 +934,7 @@ document.addEventListener("DOMContentLoaded", () => {
   color: white;
 }
 .banner-text h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Rubik", sans-serif;
   font-size: 1.4rem;
   line-height: 1.3;
 }
@@ -1138,7 +1138,7 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 .faq-header h2 {
   font-size: 2.3rem;
-  font-family: 'Playfair Display', serif;
+  font-family: "Rubik", sans-serif;
   color: #001a3f;
 }
 .faq-header h2 strong { font-weight: 800; }
@@ -1366,7 +1366,7 @@ AOS.init({ duration: 700, once: true });
 }
 
 .testimonial-header h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Rubik", sans-serif;
   font-size: 2.3rem;
   color: #001a3f;
   margin-bottom: 10px;

@@ -4,11 +4,10 @@
 
 @section('content')
 <style>
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Rubik:wght@400;600;700&display=swap");
 /* 🌟 STYLE PREMIUM LAVANTY.MG */
 body {
-    font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
     background: #f8f9fc;
     color: #1a1a1a;
 }
@@ -36,7 +35,7 @@ body {
 
 /* --- Titres --- */
 h1, h2 {
-    font-family: "Playfair Display", serif;
+  font-family: "Rubik", sans-serif;
     font-weight: 700;
     color: #002f6c;
 }
@@ -61,7 +60,7 @@ input, select {
     border: 1.5px solid #d8dee9;
     transition: all .3s ease;
     background: #fff;
-    font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
 }
 input:focus {
     border-color: #002f6c;
@@ -73,7 +72,7 @@ input:focus {
     background: linear-gradient(90deg, #ffd700, #e6c300);
     color: #002f6c;
     transition: all .3s ease;
-    font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
 }
 .btn-yellow:hover {
     transform: translateY(-2px);
@@ -85,7 +84,7 @@ input:focus {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
     overflow: hidden;
     border-radius: 16px;
 }

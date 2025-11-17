@@ -7,14 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Rubik:wght@400;600;700&display=swap");
+
     /* === Global Premium Lavanty === */
     body {
-      font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
       background-color: #ffffff;
       color: #1a1a1a;
     }
     h1, h2, h3, h4, h5 {
-      font-family: "Playfair Display", serif;
+  font-family: "Rubik", sans-serif;
       color: #002f6c;
       font-weight: 700;
       letter-spacing: -0.02em;
@@ -40,7 +42,7 @@
       background: linear-gradient(135deg, #002f6c, #004aad);
       color: #ffd700;
       font-weight: 600;
-      font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(0,47,108,0.2);
     }
@@ -54,7 +56,7 @@
       background: linear-gradient(135deg, #ffd700, #e6c300);
       color: #002f6c;
       font-weight: 700;
-      font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
       transition: all 0.3s ease;
     }
     .btn-yellow:hover {
@@ -83,7 +85,7 @@
       min-width: 260px;
       max-width: 340px;
       animation: fadeInRight 0.4s ease forwards;
-      font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
       pointer-events: auto;
     }
     .bid-toast.hide { animation: fadeOutRight 0.5s ease forwards; }
@@ -103,7 +105,7 @@
 
     /* Menu / Header */
     header nav a {
-      font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
       transition: color 0.25s ease;
     }
     header nav a:hover {
@@ -112,12 +114,12 @@
 
     /* Footer typographique */
     footer {
-      font-family: "DM Sans", sans-serif;
+  font-family: "Nunito", sans-serif;
       background-color: #002f6c;
       color: #e5e5e5;
     }
     footer h3 {
-      font-family: "Playfair Display", serif;
+  font-family: "Rubik", sans-serif;
       color: #ffd700;
     }
     footer a:hover {
@@ -147,10 +149,10 @@
         <div class="container mx-auto flex items-center justify-between px-6 py-4">
 
             <!-- Logo -->
-            <a href="{{ url('/') }}" class="flex items-center gap-2 text-2xl font-bold text-blue-900">
-                <i class="fas fa-gavel text-yellow-400"></i>
-                <span><span class="text-blue-900">Lavanty</span><span class="text-yellow-500">.mg</span></span>
-            </a>
+            <a href="{{ url('/') }}" class="flex items-center gap-2">
+    <img src="{{ asset('logo.png') }}" alt="Lavanty Logo" class="h-10">
+</a>
+
 
             <!-- Menu principal -->
             <nav class="hidden lg:flex items-center gap-6 font-medium relative">
@@ -196,7 +198,7 @@
 
                 @auth
                     <a href="{{ route('profile.index') }}" class="bg-blue-900 text-yellow-400 px-4 py-2 rounded-full font-semibold">
-                        <i class="fa-regular fa-user mr-1"></i> {{ auth()->user()->pseudo }}
+                        <i class="fa-regular fa-user mr-1"></i> Mon Compte
                     </a>
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
@@ -259,9 +261,8 @@
 
     <!-- 🔹 Colonne 1 : Logo + présentation -->
     <div>
-      <a href="{{ url('/') }}" class="flex items-center gap-2 mb-4 text-2xl font-bold text-yellow-400">
-        <i class="fa-solid fa-gavel"></i>
-        <span>Lavanty<span class="text-white">.mg</span></span>
+      <a href="{{ url('/') }}" class="block mb-4">
+          <img src="{{ asset('logofooter.png') }}" alt="Lavanty Footer Logo" class="h-14">
       </a>
       <p class="text-sm leading-relaxed text-gray-400">
         Votre plateforme d’enchères en ligne à Madagascar.  
