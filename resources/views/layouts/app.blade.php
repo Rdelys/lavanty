@@ -134,8 +134,6 @@
     <div class="w-full bg-blue-950 text-gray-100 text-sm py-2 px-6 flex flex-wrap justify-between items-center">
         <div class="flex items-center gap-4">
             <span><i class="fa-regular fa-envelope text-yellow-400 mr-1"></i> info@lavanty.mg</span>
-            <span class="hidden sm:inline-block border-l border-gray-400 h-4"></span>
-            <span class="flex items-center gap-1"><i class="fa-solid fa-headset text-yellow-400"></i> Support client</span>
         </div>
         <!-- <div class="flex items-center gap-3 mt-1 sm:mt-0">
             <a href="#" class="border border-gray-400 text-xs px-3 py-1 rounded-full hover:bg-yellow-400 hover:text-blue-900 transition">COMMENT ENCHÉRIR</a>
@@ -150,8 +148,8 @@
 
             <!-- Logo -->
             <a href="{{ url('/') }}" class="flex items-center gap-2">
-    <img src="{{ asset('logo.png') }}" alt="Lavanty Logo" class="h-10">
-</a>
+                <img src="{{ asset('logo.png') }}" alt="Lavanty Logo" class="h-10">
+            </a>
 
 
             <!-- Menu principal -->
@@ -183,7 +181,6 @@
                 </div>
 
 
-                <a href="{{ url('/blog') }}" class="text-blue-900 hover:text-yellow-500">Blog</a>
                 <a href="{{ url('/about') }}" class="text-blue-900 hover:text-yellow-500">À propos</a>
                 <a href="{{ url('/contact') }}" class="text-blue-900 hover:text-yellow-500">Contact</a>
             </nav>
@@ -233,7 +230,6 @@
                     <a href="{{ url('/products') }}?category=High tech" class="block py-1 text-blue-900 hover:text-yellow-500">High tech</a>
                 </div>
             </div>
-            <a href="{{ url('/blog') }}" class="block py-2 text-blue-900 hover:text-yellow-500">Blog</a>
             <a href="{{ url('/about') }}" class="block py-2 text-blue-900 hover:text-yellow-500">À propos</a>
             <a href="{{ url('/contact') }}" class="block py-2 text-blue-900 hover:text-yellow-500">Contact</a>
             <div class="border-t border-gray-300 my-2"></div>
