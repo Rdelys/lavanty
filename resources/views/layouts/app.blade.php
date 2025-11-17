@@ -130,17 +130,17 @@
 
 <body class="bg-white flex flex-col min-h-screen font-[Inter] text-gray-800">
 
-    <!-- 🔹 Barre supérieure -->
+    <!-- 🔹 Barre supérieure 
     <div class="w-full bg-blue-950 text-gray-100 text-sm py-2 px-6 flex flex-wrap justify-between items-center">
         <div class="flex items-center gap-4">
             <span><i class="fa-regular fa-envelope text-yellow-400 mr-1"></i> info@lavanty.mg</span>
         </div>
-        <!-- <div class="flex items-center gap-3 mt-1 sm:mt-0">
+        <div class="flex items-center gap-3 mt-1 sm:mt-0">
             <a href="#" class="border border-gray-400 text-xs px-3 py-1 rounded-full hover:bg-yellow-400 hover:text-blue-900 transition">COMMENT ENCHÉRIR</a>
             <a href="#" class="border border-gray-400 text-xs px-3 py-1 rounded-full hover:bg-yellow-400 hover:text-blue-900 transition">VENDRE UN ARTICLE</a>
             <a href="#" class="flex items-center gap-1 hover:text-yellow-400"><i class="fa-solid fa-language"></i> Langue</a>
-        </div> -->
-    </div>
+        </div> 
+    </div>-->
 
     <!-- 🔹 Header principal -->
     <header class="bg-white shadow-md border-b border-gray-200 sticky top-0 z-50 fade-in">
