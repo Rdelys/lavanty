@@ -528,16 +528,14 @@ h1, h2, h3, h4, h5, h6 {
   </div>
 </section>
 
-<!-- 🟫 SECTION À PROPOS / GET TO KNOW -->
+<!-- 🟫 SECTION À PROPOS / GET TO KNOW
 <section id="about" class="about-section">
   <div class="about-container">
     
-    <!-- Image -->
     <div class="about-image">
       <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1000&q=80" alt="Vintage Car Auction">
     </div>
 
-    <!-- Texte -->
     <div class="about-content">
       <h2><span class="bold">Get In</span> <em>Know</em></h2>
       <p class="about-desc">
@@ -572,7 +570,7 @@ h1, h2, h3, h4, h5, h6 {
       </div>
     </div>
   </div>
-</section>
+</section> -->
 <!-- 🟨 SECTION COMMENT ÇA MARCHE -->
 <section id="how-it-works" class="how-section">
   <!-- <h2><i class="fa-solid fa-diagram-project"></i> Comment <em>ça marche</em></h2> -->
@@ -1312,7 +1310,7 @@ document.querySelectorAll(".faq-question").forEach(btn => {
 AOS.init({ duration: 700, once: true });
 </script>
 
-<!-- 💬 SECTION AVIS CLIENTS (3 EN HAUT + 2 EN BAS CENTRÉS) -->
+<!-- 
 <section id="testimonials" class="section light">
   <div class="container">
     <div class="testimonial-header" data-aos="fade-down">
@@ -1320,10 +1318,9 @@ AOS.init({ duration: 700, once: true });
       <p>Ils partagent leur expérience après avoir participé à nos enchères sur <strong>Lavanty.mg</strong></p>
     </div>
 
-    <!-- Grille -->
     <div class="testimonial-grid" data-aos="fade-up">
-      <!-- AVIS 1 -->
-      <div class="testimonial-card">
+
+    <div class="testimonial-card">
         <div class="quote">“</div>
         <h4>Expérience exceptionnelle !</h4>
         <p>« Lavanty m’a permis de remporter une voiture rare à un prix imbattable. Les enchères sont passionnantes et bien encadrées. »</p>
@@ -1336,7 +1333,7 @@ AOS.init({ duration: 700, once: true });
         </div>
       </div>
 
-      <!-- AVIS 2 -->
+
       <div class="testimonial-card">
         <div class="quote">“</div>
         <h4>Service impeccable</h4>
@@ -1350,7 +1347,7 @@ AOS.init({ duration: 700, once: true });
         </div>
       </div>
 
-      <!-- AVIS 3 -->
+
       <div class="testimonial-card">
         <div class="quote">“</div>
         <h4>Simple et efficace</h4>
@@ -1367,8 +1364,7 @@ AOS.init({ duration: 700, once: true });
     </div>
   </div>
 </section>
-
-<!-- 💅 STYLE PREMIUM CENTRÉ -->
+ -->
 <style>
 .section.light {
   background: #fff;
