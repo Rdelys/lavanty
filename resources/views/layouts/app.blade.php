@@ -162,7 +162,7 @@
                         id="dropdownButton" 
                         class="text-blue-900 hover:text-yellow-500 flex items-center gap-1 focus:outline-none"
                     >
-                        Produits
+                        Catégories
                         <i class="fa-solid fa-chevron-down text-xs mt-0.5"></i>
                     </button>
 
@@ -219,7 +219,7 @@
             <!-- Dropdown mobile Produits -->
             <div x-data="{ open: false }" class="relative">
                 <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full text-left flex items-center justify-between py-2 text-blue-900 hover:text-yellow-500">
-                    Produits
+                    Catégories
                     <i class="fa-solid fa-chevron-down text-xs"></i>
                 </button>
                 <div class="hidden pl-4">

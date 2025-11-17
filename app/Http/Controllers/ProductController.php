@@ -148,5 +148,35 @@ return redirect()->route('admin.dashboard')->with('success', 'Produit mis à jou
     return response()->json(['success' => true, 'mise_en_vente' => $product->mise_en_vente]);
 }
 
+public function shop(Request $request)
+{
+    Product::checkExpiredAuctions();
+
+    // 🔎 Recherche
+    $search = $request->search;
+
+    // 📁 Filtre catégorie
+    $category = $request->category;
+
+    // 📦 Requête produits EN COURS UNIQUEMENT
+    $products = Product::query()
+        ->where('status', 'en_cours')        // ← ICI ON FILTRE
+        ->when($search, fn($q) => $q->where('title', 'like', "%$search%"))
+        ->when($category, fn($q) => $q->where('category', $category))
+        ->latest()
+        ->get();
+
+    // 📊 Nombre total par catégorie (on compte tout, pas seulement en cours)
+    $categoriesCount = Product::where('status', 'en_cours')
+    ->select('category')
+    ->selectRaw('COUNT(*) as total')
+    ->groupBy('category')
+    ->pluck('total', 'category');
+
+
+return view('products', compact('products', 'categoriesCount'));
+}
+
+
 }
 
