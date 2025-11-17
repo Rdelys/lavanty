@@ -376,16 +376,22 @@ h1, h2, h3, h4, h5, h6 {
       <h1><span class="gold-text">L’Art</span> de l’Enchère d’Exception</h1>
       <p class="hero-desc">Découvrez des trésors uniques, mis en valeur par l’élégance et la précision du luxe.</p>
 
-      <div class="hero-buttons">
+      <!-- <div class="hero-buttons">
           <a href="#produits" class="btn-primary"><i class="fa-solid fa-gavel"></i> Commencer à Miser</a>
           <a href="{{ url('/products') }}" class="btn-secondary"><i class="fa-solid fa-box-open"></i> Voir Toutes les Enchères</a>
+      </div> -->
+      <div class="hero-buttons">
+          <a href="#produits" class="btn-primary">Commencer à Miser</a>
+          <a href="{{ url('/products') }}" class="btn-secondary">Voir Toutes les Enchères</a>
       </div>
   </div>
 </section>
 
 <!-- 🟨 PRODUITS EN COURS -->
 <section id="produits" class="section">
-  <h2><i class="fa-solid fa-hourglass-half"></i> Enchères en Cours</h2>
+  <!-- <h2><i class="fa-solid fa-hourglass-half"></i> Enchères en Cours</h2> -->
+  <h2>Enchères en Cours</h2>
+
   <div class="product-grid">
       @forelse($products as $product)
           @php
@@ -425,7 +431,9 @@ h1, h2, h3, h4, h5, h6 {
 
 <!-- 🟪 CATÉGORIES D’ENCHÈRES -->
 <section class="section light" id="categories">
-  <h2><i class="fa-solid fa-layer-group"></i> Catégories d’Enchères</h2>
+  <!-- <h2><i class="fa-solid fa-layer-group"></i> Catégories d’Enchères</h2> -->
+     <h2>Catégories d’Enchères</h2>
+
   <p class="mb-12 text-gray-600 text-center">
     Découvrez nos catégories phares et trouvez l’objet de vos envies.
   </p>
@@ -472,7 +480,8 @@ h1, h2, h3, h4, h5, h6 {
 
 <!-- 🟩 PRODUITS ADJUGÉS -->
 <section id="produits-adjuge" class="section light">
-  <h2><i class="fa-solid fa-trophy"></i> Produits Adjugés</h2>
+  <!-- <h2><i class="fa-solid fa-trophy"></i> Produits Adjugés</h2> -->
+  <h2>Produits Adjugés</h2>
 
   @php $countAdjuges = $productsAdjug->where('status', 'adjugé')->count(); @endphp
 
@@ -566,7 +575,8 @@ h1, h2, h3, h4, h5, h6 {
 </section>
 <!-- 🟨 SECTION COMMENT ÇA MARCHE -->
 <section id="how-it-works" class="how-section">
-  <h2><i class="fa-solid fa-diagram-project"></i> Comment <em>ça marche</em></h2>
+  <!-- <h2><i class="fa-solid fa-diagram-project"></i> Comment <em>ça marche</em></h2> -->
+     <h2>Comment <em>ça marche</em></h2>
   <p class="subtitle">Suivez ces étapes simples pour participer à nos enchères d’exception.</p>
 
   <div class="steps-wrapper">
@@ -792,7 +802,8 @@ document.addEventListener("DOMContentLoaded", () => {
 <section id="upcoming-auctions" class="section light">
   <div class="container">
     <div class="header">
-      <h2><i class="fa-solid fa-hourglass-start"></i> Enchères <em>à venir</em></h2>
+      <!-- <h2><i class="fa-solid fa-hourglass-start"></i> Enchères <em>à venir</em></h2> -->
+      <h2>Enchères <em>à venir</em></h2>
       <p>Découvrez les ventes exclusives à venir sur Lavanty.mg</p>
     </div>
 

@@ -18,7 +18,6 @@ body {
 section.container {
   background: #ffffff;
   border-radius: 28px;
-  box-shadow: 0 10px 40px rgba(0, 47, 108, 0.08);
   padding: 4rem 2rem;
   transition: all .3s ease;
 }
