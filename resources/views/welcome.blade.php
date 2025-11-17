@@ -416,7 +416,7 @@ h1, h2, h3, h4, h5, h6 {
               <div class="product-info">
                   <h3>{{ $product->title }}</h3>
                   <p class="desc">{{ Str::limit($product->description, 80) }}</p>
-<p class="price"><i class="fa-solid fa-coins"></i> Prix de départ : {{ number_format($product->starting_price, 0, ',', ' ') }} Ar</p>
+<p class="price">Prix de départ : {{ number_format($product->starting_price, 0, ',', ' ') }} Ar</p>
                   <div class="product-footer">
                       <span class="lot">Lot #{{ $product->id }}</span>
                       <a href="{{ route('product.detail', ['id' => $product->id]) }}" class="btn-bid"><i class="fa-solid fa-hammer"></i> Miser</a>
@@ -847,7 +847,7 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
               <div class="auction-info">
                 <h4>{{ Str::limit($product->title, 30) }}</h4>
-                <p class="price"><i class="fa-solid fa-coins"></i> {{ number_format($product->starting_price, 0, ',', ' ') }} Ar</p>
+                <p class="price">{{ number_format($product->starting_price, 0, ',', ' ') }} Ar</p>
                 <p class="lot">Lot #{{ $product->id }}</p>
                 <button class="notify-btn" disabled>Notifier-moi</button>
               </div>

@@ -188,10 +188,19 @@
 
             <!-- Recherche + compte -->
             <div class="hidden lg:flex items-center gap-3">
-                <div class="flex items-center border rounded-full overflow-hidden shadow-sm">
-                    <input type="text" placeholder="Recherchez un produit..." class="px-4 py-2 outline-none w-64 text-sm">
-                    <button class="bg-yellow-400 px-4 py-2"><i class="fa-solid fa-magnifying-glass text-blue-900"></i></button>
-                </div>
+                <form method="GET" action="{{ url('/products') }}" class="flex items-center border rounded-full overflow-hidden shadow-sm">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        value="{{ request('search') }}"
+                        placeholder="Recherchez un produit..." 
+                        class="px-4 py-2 outline-none w-64 text-sm"
+                    >
+                    <button type="submit" class="bg-yellow-400 px-4 py-2">
+                        <i class="fa-solid fa-magnifying-glass text-blue-900"></i>
+                    </button>
+                </form>
+
 
                 @auth
                     <a href="{{ route('profile.index') }}" class="bg-blue-900 text-yellow-400 px-4 py-2 rounded-full font-semibold">
