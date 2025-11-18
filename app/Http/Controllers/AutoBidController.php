@@ -7,7 +7,6 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
-use App\Jobs\ProcessAutoBidJob;
 
 class AutoBidController extends Controller
 {
@@ -27,34 +26,34 @@ class AutoBidController extends Controller
         );
 
         // Tenter de placer une enchère immédiatement si nécessaire
-        // Récupérer le dernier montant et le dernier enchérisseur
         $lastBid = $product->bids()->orderByDesc('amount')->first();
         $currentAmount = $lastBid ? $lastBid->amount : $product->starting_price;
         $lastBidUserId = $lastBid ? $lastBid->user_id : null;
 
         // Si le nouvel auto-bid peut surenchérir (et que ce n'est pas déjà lui le dernier enchérisseur)
         if ($autoBid->max_price > $currentAmount && $lastBidUserId !== $userId) {
+
+            // ⏳ Attente de 3 secondes avant de placer l'enchère
+            sleep(3);
+
             // Calculer montant proposé (incrément)
-            $increment = 50000; // garder le même incrément que le reste du système
+            $increment = 50000;
             $newAmount = $currentAmount + $increment;
 
-            // Ne pas dépasser le max de l'utilisateur
             if ($newAmount > $autoBid->max_price) {
                 $newAmount = $autoBid->max_price;
             }
 
-            // Création de l'enchère dans une transaction pour éviter race conditions
+            // Création de l'enchère dans une transaction
             DB::transaction(function () use ($product, $userId, $newAmount, $autoBid) {
-                $bid = Bid::create([
+                Bid::create([
                     'user_id'    => $userId,
                     'product_id' => $product->id,
                     'amount'     => $newAmount
                 ]);
 
-                // Mettre à jour dernier enchérisseur
                 $product->last_bid_user_id = $userId;
 
-                // Extension du temps si dans les dernières 5 minutes
                 $remaining = $product->end_time->diffInSeconds(now());
                 if ($remaining <= 300) {
                     $product->end_time = $product->end_time->addMinutes(5);
@@ -63,74 +62,81 @@ class AutoBidController extends Controller
                 $product->save();
             });
 
-            // Après la création on relance le traitement global des auto-bids pour gérer la compétition
+            // Relancer la gestion des auto-bids
             self::processAutoBids($product);
         }
 
         return response()->json(['message' => '✅ Enchère automatique définie avec succès !']);
     }
 
-    // Logique pour vérifier et appliquer les auto-bids (améliorée)
+    // Logique pour vérifier et appliquer les auto-bids
+    public static function processAutoBids(Product $product)
+    {
+        $increment = 50000;
 
-public static function processAutoBids(Product $product)
-{
-    $increment = 50000;
+        while (true) {
+            $lastBid = $product->bids()->orderByDesc('amount')->first();
+            $currentAmount = $lastBid ? $lastBid->amount : $product->starting_price;
+            $lastBidUserId = $lastBid ? $lastBid->user_id : null;
 
-    while (true) {
-        $lastBid = $product->bids()->orderByDesc('amount')->first();
-        $currentAmount = $lastBid ? $lastBid->amount : $product->starting_price;
-        $lastBidUserId = $lastBid ? $lastBid->user_id : null;
+            $autoBids = AutoBid::where('product_id', $product->id)
+                        ->where('max_price', '>', $currentAmount)
+                        ->orderByDesc('max_price')
+                        ->get();
 
-        $autoBids = \App\Models\AutoBid::where('product_id', $product->id)
-                    ->where('max_price', '>', $currentAmount)
-                    ->orderByDesc('max_price')
-                    ->get();
-
-        if ($autoBids->isEmpty()) {
-            break;
-        }
-
-        $placedAny = false;
-
-        foreach ($autoBids as $auto) {
-            if ($lastBidUserId && $lastBidUserId === $auto->user_id) {
-                continue;
+            if ($autoBids->isEmpty()) {
+                break;
             }
 
-            $proposed = $currentAmount + $increment;
-            if ($proposed > $auto->max_price) {
-                $proposed = $auto->max_price;
-            }
+            $placedAny = false;
 
-            if ($proposed <= $currentAmount) {
-                if ($auto->max_price <= $currentAmount) {
+            foreach ($autoBids as $auto) {
+
+                if ($lastBidUserId && $lastBidUserId === $auto->user_id) {
+                    continue;
+                }
+
+                $proposed = $currentAmount + $increment;
+                if ($proposed > $auto->max_price) {
+                    $proposed = $auto->max_price;
+                }
+
+                if ($proposed <= $currentAmount) {
+                    if ($auto->max_price <= $currentAmount) {
+                        $auto->delete();
+                    }
+                    continue;
+                }
+
+                Bid::create([
+                    'user_id' => $auto->user_id,
+                    'product_id' => $product->id,
+                    'amount' => $proposed
+                ]);
+
+                $product->last_bid_user_id = $auto->user_id;
+
+                $remaining = $product->end_time->diffInSeconds(now());
+                if ($remaining <= 300) {
+                    $product->end_time = $product->end_time->addMinutes(5);
+                }
+                $product->save();
+
+                $currentAmount = $proposed;
+                $lastBidUserId = $auto->user_id;
+
+                $placedAny = true;
+
+                if ($auto->max_price <= $proposed) {
                     $auto->delete();
                 }
-                continue;
+
+                break;
             }
 
-            /**
-             * 🕒 Planifier l’enchère automatique après 3 secondes
-             */
-            ProcessAutoBidJob::dispatch($auto, $product->id, $proposed)
-                ->delay(now()->addSeconds(3));
-
-            // Mettre à jour le produit immédiatement pour que le système suive l’état
-            $product->last_bid_user_id = $auto->user_id;
-            $product->save();
-
-            if ($auto->max_price <= $proposed) {
-                $auto->delete();
+            if (! $placedAny) {
+                break;
             }
-
-            $placedAny = true;
-            break;
-        }
-
-        if (! $placedAny) {
-            break;
         }
     }
-}
-
 }
