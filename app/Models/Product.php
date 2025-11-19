@@ -27,8 +27,8 @@ class Product extends Model
 
     protected $casts = [
         'images' => 'array',
-        'start_time' => 'datetime',
-        'end_time' => 'datetime',
+        'end_time' => 'datetime:Y-m-d H:i:s',
+    'start_time' => 'datetime:Y-m-d H:i:s',
         'mise_en_vente' => 'boolean',
     ];
 
@@ -71,5 +71,11 @@ class Product extends Model
     $lastBid = $this->bids()->orderByDesc('amount')->first();
     return $lastBid ? $lastBid->amount : $this->starting_price;
 }
+
+protected function serializeDate(\DateTimeInterface $date)
+{
+    return $date->setTimezone(config('app.timezone'))->format('Y-m-d H:i:s');
+}
+
 }
 

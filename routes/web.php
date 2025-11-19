@@ -112,5 +112,14 @@ Route::get('/contact', function () {
 
 Route::get('/products', [ProductController::class, 'shop'])->name('products.shop');
 Route::get('/test-time', function () {
-    return now();
+    return [
+        'php_tz' => date_default_timezone_get(),
+        'laravel_now' => now()->toDateTimeString(),
+        'mysql_now' => DB::select("SELECT NOW() as now")[0]->now,
+    ];
+});
+Route::get('/products/{product}/end-time', function(App\Models\Product $product) {
+    return response()->json([
+        'end_time' => $product->end_time->format('Y-m-d\TH:i:s')
+    ]);
 });

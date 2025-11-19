@@ -548,9 +548,13 @@ document.querySelectorAll('.countdown').forEach(card => {
         });
     }
 
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const diff = endTime - now;
+   function updateCountdown() {
+
+    // 🔥 Toujours relire la valeur actuelle dans data-end !
+    const endTime = new Date(card.dataset.end).getTime();
+    const now = Date.now();
+
+    const diff = endTime - now;
 
         if (diff <= 0) {
     // ⏱️ Mettre le chrono à 0
@@ -702,6 +706,25 @@ async function loadBids() {
 
 
 loadBids();
+async function refreshEndTime() {
+    try {
+        const res = await fetch(`/products/${productId}/end-time`);
+        if (!res.ok) return;
+
+        const data = await res.json();
+
+        // mise à jour de la date dans le DOM
+        const countdown = document.querySelector(".countdown");
+        if (countdown) {
+            countdown.dataset.end = data.end_time;
+        }
+
+    } catch (e) {
+        console.error("Erreur end_time:", e);
+    }
+}
+setInterval(refreshEndTime, 2000);
+
 setInterval(loadBids, 2000);
 
 @auth
