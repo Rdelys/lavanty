@@ -236,26 +236,44 @@ input:focus {
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($bids->groupBy('product_id') as $productBids)
-                                    @php
-                                        $latestUserBid = $productBids->sortByDesc('created_at')->first();
-                                        $highestBid = $latestUserBid->product->bids()->orderByDesc('amount')->first();
-                                        $isHighest = $highestBid && $highestBid->user_id === auth()->id();
-                                    @endphp
-                                    <tr class="{{ $isHighest ? 'status-good' : 'status-bad' }}">
-                                        <td class="font-semibold text-blue-800">{{ $latestUserBid->product->title }}</td>
-                                        <td class="font-bold text-yellow-700">{{ number_format($latestUserBid->amount, 0, ',', ' ') }}</td>
-                                        <td>
-                                            @if($isHighest)
-                                                <span class="font-semibold">🟢 En tête pour ce produit</span>
-                                            @else
-                                                <span class="font-semibold">🔴 Plus en tête</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-gray-600 text-sm">{{ $latestUserBid->created_at->format('d/m/Y H:i') }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
+                                    @foreach($bids->groupBy('product_id') as $productBids)
+                                        @php
+                                            $latestUserBid = $productBids->sortByDesc('created_at')->first();
+                                            $product = $latestUserBid->product;
+
+                                            // ❌ Ne pas afficher si produit non disponible
+                                            if (in_array($product->status, ['adjugé', 'terminé', 'termine', 'à_venir'])) {
+                                                continue;
+                                            }
+
+                                            // Dernière enchère globale
+                                            $highestBid = $product->bids()->orderByDesc('amount')->first();
+                                            $isHighest = $highestBid && $highestBid->user_id === auth()->id();
+                                        @endphp
+
+                                        <tr class="{{ $isHighest ? 'status-good' : 'status-bad' }}">
+                                            <td class="font-semibold text-blue-800">{{ $product->title }}</td>
+
+                                            <td class="font-bold text-yellow-700">
+                                                {{ number_format($latestUserBid->amount, 0, ',', ' ') }}
+                                            </td>
+
+                                            <td>
+                                                @if($isHighest)
+                                                    <span class="font-semibold">🟢 En tête pour ce produit</span>
+                                                @else
+                                                    <span class="font-semibold">🔴 Plus en tête</span>
+                                                @endif
+                                            </td>
+
+                                            <td class="text-gray-600 text-sm">
+                                                {{ $latestUserBid->created_at->format('d/m/Y H:i') }}
+                                            </td>
+                                        </tr>
+
+                                    @endforeach
+                                </tbody>
+
                         </table>
                     </div>
                 @else
