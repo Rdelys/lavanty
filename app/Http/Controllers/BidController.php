@@ -33,17 +33,14 @@ class BidController extends Controller
 
         if ($request->amount <= $currentAmount) {
             return response()->json([
-                'message' => "Votre enchère doit dépasser le dernier montant : "
-                    . number_format($currentAmount + 1, 0, ',', ' ') . " Ar"
+                'message' => "Votre enchère doit dépasser le dernier montant : " . number_format($currentAmount + 1, 0, ',', ' ') . " Ar"
             ], 422);
         }
 
         // 🔒 Transaction + verrouillage
         \DB::transaction(function () use ($request, $product, $userId) {
 
-            $lockedProduct = Product::where('id', $product->id)
-                ->lockForUpdate()
-                ->first();
+            $lockedProduct = Product::where('id', $product->id)->lockForUpdate()->first();
 
             Bid::create([
                 'user_id'    => $userId,
@@ -55,37 +52,48 @@ class BidController extends Controller
             $lockedProduct->save();
         });
 
-        // Rafraîchir produit après transaction
+        // Rafraîchir produit
         $product = $product->fresh();
 
-        // ---------------------------------------------
-        // 📌 Calcul FIABLE du temps restant (MySQL)
-        // ---------------------------------------------
-        $remainingSeconds = FacadeDB::selectOne("
-            SELECT TIMESTAMPDIFF(SECOND, NOW(), end_time) AS diff
-            FROM products
-            WHERE id = ?
-        ", [$product->id])->diff;
+        // 🟢 LIRE LA DATE SQL SANS CONVERSION (FIX ULTRA IMPORTANT)
+        $rawEnd = $product->getRawOriginal('end_time');   // YYYY-mm-dd HH:ii:ss EXACT SQL
+        $end = Carbon::createFromFormat('Y-m-d H:i:s', $rawEnd);
 
-        \Log::info("MYSQL REMAINING = {$remainingSeconds} seconds for product {$product->id}");
+        $now = now(); // GMT+3 réel
+        $remainingSeconds = $end->diffInSeconds($now, false);
 
-        // ---------------------------------------------
-        // 📌 Ajouter +5 minutes SI (≤ 5 minutes restantes)
-        // ---------------------------------------------
+        \Log::info("DIFF CHECK FIX: NOW={$now}, RAW_END={$end}, REMAINS={$remainingSeconds}");
+
+        // 🟢 SI end_time <= 5 minutes OU DÉJÀ PASSÉ → ajouter +5 minutes
         if ($remainingSeconds <= 300) {
 
-            FacadeDB::table('products')
-                ->where('id', $product->id)
-                ->update([
-                    'end_time' => FacadeDB::raw("DATE_ADD(end_time, INTERVAL 5 MINUTE)")
-                ]);
+            // Si déjà expiré → repartir sur maintenant + 5 min
+            if ($remainingSeconds < 0) {
+                FacadeDB::table('products')
+                    ->where('id', $product->id)
+                    ->update([
+                        'end_time' => $now->addMinutes(5)
+                    ]);
 
+                \Log::info("EXTENSION RESTART (expired): new_end_time=" . $now);
+            }
+
+            // Sinon → prolonger normal
+            else {
+                FacadeDB::table('products')
+                    ->where('id', $product->id)
+                    ->update([
+                        'end_time' => FacadeDB::raw("DATE_ADD(end_time, INTERVAL 5 MINUTE)")
+                    ]);
+
+                \Log::info("EXTENSION +5 MIN: OK");
+            }
+
+            // Recharger après extension
             $product = $product->fresh();
-
-            \Log::info("EXTENDED +5 MINUTES: NEW END TIME = {$product->end_time}");
         }
 
-        // Traitement des auto-bids
+        // Auto-bids
         AutoBidController::processAutoBids($product);
 
         // Notifications
@@ -105,11 +113,8 @@ class BidController extends Controller
             ));
         }
 
-        // Retour
-        $bids = $product->bids()
-            ->with('user')
-            ->orderByDesc('amount')
-            ->get();
+        // Retour AJAX
+        $bids = $product->bids()->with('user')->orderByDesc('amount')->get();
 
         return response()->json([
             'message' => '✅ Enchère placée avec succès !',
@@ -129,6 +134,7 @@ class BidController extends Controller
             $query->where('product_id', $request->produit);
         }
 
-        return response()->json($query->take(30)->get());
+        $bids = $query->take(30)->get();
+        return response()->json($bids);
     }
 }
