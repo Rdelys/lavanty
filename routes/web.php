@@ -111,3 +111,6 @@ Route::get('/contact', function () {
 })->name('contact');
 
 Route::get('/products', [ProductController::class, 'shop'])->name('products.shop');
+Route::get('/test-time', function () {
+    return now();
+});

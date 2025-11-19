@@ -365,7 +365,7 @@ input:focus, select:focus, textarea:focus {
                 </div>
               </td>
 
-              <td class="p-3 text-right align-middle font-semibold">{{ number_format($product->starting_price, 0, ',', ' ') }} €</td>
+              <td class="p-3 text-right align-middle font-semibold">{{ number_format($product->starting_price, 0, ',', ' ') }} Ariary</td>
               <td class="p-3 align-middle text-sm text-gray-600">{{ $product->start_time->format('d/m/Y H:i') }}</td>
               <td class="p-3 align-middle text-sm text-gray-600">{{ $product->end_time->format('d/m/Y H:i') }}</td>
 
@@ -708,7 +708,7 @@ input:focus, select:focus, textarea:focus {
           </div>
 
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1">Prix de départ (€)</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Prix de départ (Ariary)</label>
             <input type="number" id="editPrice" name="starting_price" class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-200">
           </div>
 
