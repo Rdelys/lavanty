@@ -103,14 +103,139 @@
     @keyframes fadeInRight { from {opacity:0;transform:translateX(60px);} to {opacity:1;transform:translateX(0);} }
     @keyframes fadeOutRight { from {opacity:1;transform:translateX(0);} to {opacity:0;transform:translateX(60px);} }
 
-    /* Menu / Header */
-    header nav a {
+    /* ===============================
+   HEADER STYLE TEMPLATE NILAMEX
+================================= */
+
+header {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 4px 25px rgba(0,0,0,0.04);
+  transition: all 0.3s ease;
+}
+
+/* Logo */
+header img {
+  transition: transform 0.3s ease;
+}
+header img:hover {
+  transform: scale(1.05);
+}
+
+/* Menu principal */
+header nav a {
+  position: relative;
   font-family: "Nunito", sans-serif;
-      transition: color 0.25s ease;
-    }
-    header nav a:hover {
-      color: #ffd700;
-    }
+  font-weight: 600;
+  color: #1f2937;
+  padding: 6px 0;
+  transition: all 0.3s ease;
+}
+
+/* Effet underline animé */
+header nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  transition: width 0.3s ease;
+}
+
+header nav a:hover {
+  color: #6366f1;
+}
+
+header nav a:hover::after {
+  width: 100%;
+}
+
+/* Dropdown */
+#dropdownMenu {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(16px);
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+#dropdownMenu a {
+  transition: all 0.25s ease;
+}
+
+#dropdownMenu a:hover {
+  background: #f3f4f6;
+  padding-left: 20px;
+}
+
+/* Barre de recherche */
+header form {
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(12px);
+  border-radius: 9999px;
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+header form:focus-within {
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
+
+header form input {
+  background: transparent;
+}
+
+/* Bouton recherche */
+header form button {
+  background: #6366f1;
+  transition: all 0.3s ease;
+}
+
+header form button:hover {
+  background: #4f46e5;
+}
+
+/* Boutons compte */
+header .btn-premium {
+  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  color: white;
+  box-shadow: 0 5px 18px rgba(99,102,241,0.3);
+}
+
+header .btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99,102,241,0.4);
+}
+
+header .btn-yellow {
+  background: #facc15;
+  color: #111827;
+}
+
+header .btn-yellow:hover {
+  background: #eab308;
+}
+
+/* Icônes (mobile + user) */
+#mobileMenuButton {
+  transition: all 0.3s ease;
+}
+
+#mobileMenuButton:hover {
+  color: #6366f1;
+  transform: scale(1.1);
+}
+
+/* Menu mobile */
+#mobileMenu {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(16px);
+}
+
 
     /* Footer typographique */
     footer {
