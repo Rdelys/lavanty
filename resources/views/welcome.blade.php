@@ -25,25 +25,226 @@ h1, h2, h3, h4, h5, h6 {
   color: #001a3f;
 }
 
-/* HERO SECTION */
+/* HERO SECTION MODERNE STYLE STARTUP */
 .hero-section {
   position: relative;
-  height: 95vh;
+  min-height: 95vh;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 26, 63, 0.6)); /* 💡 plus de transparence */
-  color: white;
+  padding: 0 8%;
   overflow: hidden;
+  color: white;
 }
 
+/* 🔥 On garde ton image */
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: url('https://c0.wallpaperflare.com/preview/450/707/805/gavel-auction-hammer-justice.jpg') center/cover;
-  opacity: 0.8; /* 🔥 image bien visible */
+  background:
+    linear-gradient(
+      110deg,
+      rgba(0,15,40,0.95) 0%,
+      rgba(0,26,63,0.9) 40%,
+      rgba(0,26,63,0.75) 65%,
+      rgba(0,0,0,0.5) 100%
+    ),
+    url('https://c0.wallpaperflare.com/preview/450/707/805/gavel-auction-hammer-justice.jpg') center/cover no-repeat;
   z-index: 1;
+}
+
+/* Container */
+.hero-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+/* LEFT */
+.hero-left {
+  max-width: 600px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 8px 22px;
+  border-radius: 40px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+  margin-bottom: 25px;
+}
+.hero-left h1 {
+  font-size: 4rem;
+  line-height: 1.05;
+  font-weight: 800;
+  margin-bottom: 25px;
+  color: #ffffff;
+  text-shadow: 0 4px 25px rgba(0,0,0,0.4);
+}
+
+.hero-left h1 span {
+  background: linear-gradient(135deg, #ffd700, #ffb800);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-desc {
+  font-size: 1.15rem;
+  color: #e6e6e6;
+  margin-bottom: 40px;
+  max-width: 520px;
+}
+
+/* Effet glow premium derrière la carte */
+.hero-card::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(255,215,0,0.6) 0%, rgba(255,215,0,0.3) 40%, transparent 70%);
+  bottom: 40px;
+  left: -60px;
+  filter: blur(25px);
+  z-index: -1;
+}
+
+/* BUTTONS (les tiens gardés) */
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* RIGHT SIDE DECORATION */
+.hero-right {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* Grand cercle flou */
+.hero-circle.big {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(0,184,83,0.25) 0%, rgba(0,184,83,0.05) 60%, transparent 80%);
+  border-radius: 50%;
+  filter: blur(40px);
+}
+
+/* Cartes décoratives */
+/* Carte commune */
+.hero-card {
+  position: absolute;
+  width: 250px;
+  height: 300px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px);
+  border-radius: 30px;
+  border: 1px solid rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+/* 🟢 BAS GAUCHE */
+.hero-card.bottom {
+  bottom: 40px;
+  left: 40px;
+  animation: floatLeft 6s ease-in-out infinite;
+}
+
+/* 🔵 HAUT DROITE */
+.hero-card.top {
+  top: 40px;
+  right: 40px;
+  animation: floatRight 6s ease-in-out infinite;
+}
+
+/* Animation premium */
+@keyframes floatLeft {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes floatRight {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(15px); }
+}
+
+/* Hover premium */
+.hero-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+}
+
+
+/* Style bouton */
+.hero-card-btn {
+  background: linear-gradient(135deg, #ffd700, #ffcd00);
+  color: #001a3f;
+  padding: 12px 20px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all .3s ease;
+  box-shadow: 0 6px 20px rgba(255,215,0,0.3);
+}
+
+.hero-card-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(255,215,0,0.5);
+}
+
+/* Version outline */
+.hero-card-btn.outline {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  box-shadow: none;
+}
+
+.hero-card-btn.outline:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+
+
+.hero-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+
+/* Responsive */
+@media (max-width: 992px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-right {
+    display: none;
+  }
+
+  .hero-left h1 {
+    font-size: 2.5rem;
+  }
 }
 
 
@@ -369,21 +570,46 @@ h1, h2, h3, h4, h5, h6 {
 <!-- 🟦 HERO SECTION -->
 <section class="hero-section">
   <div class="hero-overlay"></div>
-  <div class="hero-content">
-      <p class="hero-badge">
-          <i class="fa-solid fa-crown"></i> LAVANTY.MG — L’EXCELLENCE DES ENCHÈRES DE LUXE
-      </p>
-      <h1><span class="gold-text">L’Art</span> de l’Enchère d’Exception</h1>
-      <p class="hero-desc">Découvrez des trésors uniques, mis en valeur par l’élégance et la précision du luxe.</p>
 
-      <!-- <div class="hero-buttons">
-          <a href="#produits" class="btn-primary"><i class="fa-solid fa-gavel"></i> Commencer à Miser</a>
-          <a href="{{ url('/products') }}" class="btn-secondary"><i class="fa-solid fa-box-open"></i> Voir Toutes les Enchères</a>
-      </div> -->
+  <div class="hero-container">
+    
+    <!-- COLONNE GAUCHE -->
+    <div class="hero-left">
+      <p class="hero-badge">LAVANTY.MG — ENCHÈRES DE LUXE</p>
+
+      <h1>
+        Découvrez Votre Prochaine
+        <span>Opportunité</span>
+      </h1>
+
+      <p class="hero-desc">
+        Découvrez des trésors uniques et participez aux enchères
+        en temps réel sur Lavanty.
+      </p>
+
       <div class="hero-buttons">
-          <a href="#produits" class="btn-primary">Commencer à Miser</a>
-          <a href="{{ url('/products') }}" class="btn-secondary">Voir Toutes les Enchères</a>
+        <a href="#produits" class="btn-primary">Commencer à Miser</a>
+        <a href="{{ url('/products') }}" class="btn-secondary">Voir Toutes les Enchères</a>
       </div>
+    </div>
+
+    <!-- COLONNE DROITE (formes décoratives) -->
+    <div class="hero-right">
+  <div class="hero-circle big"></div>
+
+  <div class="hero-card top">
+    <a href="{{ url('/products') }}" class="hero-card-btn">
+      Voir les produits
+    </a>
+  </div>
+
+  <div class="hero-card bottom">
+    <a href="{{ url('/products') }}" class="hero-card-btn outline">
+      Explorer les enchères
+    </a>
+  </div>
+</div>
+
   </div>
 </section>
 
