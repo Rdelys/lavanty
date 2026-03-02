@@ -106,14 +106,75 @@
     /* ===============================
    HEADER STYLE TEMPLATE NILAMEX
 ================================= */
+/* HEADER PAR DÉFAUT (transparent) */
+#mainHeader {
+  background: transparent;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+}
 
-header {
-  background: rgba(255, 255, 255, 0.75);
+/* HEADER AU SCROLL */
+#mainHeader.scrolled {
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-  box-shadow: 0 4px 25px rgba(0,0,0,0.04);
-  transition: all 0.3s ease;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+}
+
+/* MENU SUR HEADER TRANSPARENT */
+#mainHeader:not(.scrolled) nav a {
+  color: #ffffff;
+  font-weight: 600;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+#mainHeader:not(.scrolled) nav a:hover {
+  color: #ffd700;
+}
+
+/* SEARCH GLASS MODE */
+#mainHeader:not(.scrolled) form {
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+#mainHeader:not(.scrolled) form input {
+  background: transparent;
+  color: white;
+}
+
+#mainHeader:not(.scrolled) form input::placeholder {
+  color: rgba(255,255,255,0.85);
+}
+
+#mainHeader:not(.scrolled) form button {
+  background: #ffd700;
+}
+
+#mainHeader:not(.scrolled) form button i {
+  color: #002f6c;
+}
+
+#mainHeader:not(.scrolled) #openLogin {
+  color: white;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+#mainHeader:not(.scrolled) #openLogin:hover {
+  color: #ffd700;
+}
+
+/* Bouton Catégories en mode transparent */
+#mainHeader:not(.scrolled) #dropdownButton {
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+#mainHeader:not(.scrolled) #dropdownButton:hover {
+  color: #ffd700;
 }
 
 /* Logo */
@@ -125,7 +186,7 @@ header img:hover {
 }
 
 /* Menu principal */
-header nav a {
+#mainHeader.scrolled nav a {
   position: relative;
   font-family: "Nunito", sans-serif;
   font-weight: 600;
@@ -136,40 +197,42 @@ header nav a {
 
 /* Effet underline animé */
 header nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 0%;
-  height: 2px;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6);
-  transition: width 0.3s ease;
+  display: none;
 }
 
 header nav a:hover {
   color: #6366f1;
 }
 
-header nav a:hover::after {
-  width: 100%;
-}
 
-/* Dropdown */
+
+/* ===== DROPDOWN GLASS PREMIUM ===== */
 #dropdownMenu {
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(16px);
-  border-radius: 14px;
-  border: 1px solid rgba(0,0,0,0.05);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+  padding: 12px 0;
+  min-width: 220px;
 }
 
+/* Liens */
 #dropdownMenu a {
+  color: white;
+  font-weight: 500;
+  padding: 12px 22px;
+  display: block;
   transition: all 0.25s ease;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
+/* Hover */
 #dropdownMenu a:hover {
-  background: #f3f4f6;
-  padding-left: 20px;
+  background: rgba(255,255,255,0.12);
+  color: white;
+  padding-left: 28px;
 }
 
 /* Barre de recherche */
@@ -250,6 +313,17 @@ header .btn-yellow:hover {
     footer a:hover {
       color: #ffd700;
     }
+
+    /* SUPPRESSION TOTALE DES LIGNES JAUNES */
+#dropdownMenu,
+#dropdownMenu a,
+#dropdownMenu hr {
+  border-color: rgba(255,255,255,0.2) !important;
+}
+
+#dropdownMenu {
+  border-bottom: none !important;
+}
   </style>
 </head>
 
@@ -268,8 +342,7 @@ header .btn-yellow:hover {
     </div>-->
 
     <!-- 🔹 Header principal -->
-    <header class="bg-white shadow-md border-b border-gray-200 sticky top-0 z-50 fade-in">
-        <div class="container mx-auto flex items-center justify-between px-6 py-4">
+<header id="mainHeader" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">  <div class="container mx-auto flex items-center justify-between px-6 py-4">
 
             <!-- Logo -->
             <a href="{{ url('/') }}" class="flex items-center gap-2">
@@ -292,12 +365,11 @@ header .btn-yellow:hover {
                     </button>
 
                     <!-- Sous-menu -->
-                    <div 
-                        id="dropdownMenu"
-                        class="absolute hidden bg-white shadow-lg rounded-lg mt-2 py-2 w-48 border border-gray-100 z-50"
-                    >
+<div 
+    id="dropdownMenu"
+    class="absolute hidden mt-2 py-2 w-56 z-50"
+>
                         <a href="{{ url('/products') }}" class="block px-4 py-2 hover:bg-yellow-50 text-blue-900 font-medium">Tous les produits</a>
-                        <hr class="my-1 border-gray-200">
                         <a href="{{ url('/products') }}?category=Mobilier" class="block px-4 py-2 hover:bg-yellow-50 text-blue-900">Mobilier</a>
                         <a href="{{ url('/products') }}?category=Voitures" class="block px-4 py-2 hover:bg-yellow-50 text-blue-900">Voitures</a>
                         <a href="{{ url('/products') }}?category=Equipements" class="block px-4 py-2 hover:bg-yellow-50 text-blue-900">Équipements</a>
@@ -670,6 +742,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
+  const header = document.getElementById("mainHeader");
+
+  function handleScroll() {
+    if (window.scrollY > 50) {
+      header.classList.add("scrolled");
+    } else {
+      header.classList.remove("scrolled");
+    }
+  }
+
+  handleScroll();
+  window.addEventListener("scroll", handleScroll);
+
+});
+</script>
 </body>
 </html>
