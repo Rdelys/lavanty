@@ -565,6 +565,89 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: center;
   }
 }
+
+/* 🟣 SECTION STATS INTÉGRÉE AU HERO */
+.stats-section {
+  position: relative;
+  margin-top: -60px; /* 🔥 remonte dans la bannière */
+  padding: 80px 8% 70px;
+  background: linear-gradient(
+      to bottom,
+      rgba(0,26,63,0.95),
+      rgba(0,26,63,1)
+  );
+  overflow: hidden;
+}
+
+/* 🔘 Cercle transparent élégant */
+.stats-circle {
+  position: absolute;
+  top: -180px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: transparent;
+  backdrop-filter: blur(3px);
+}
+
+/* Container */
+.stats-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 35px;
+  flex-wrap: wrap;
+}
+
+/* Cartes */
+.stat-box {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 20px 30px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 220px;
+  transition: all 0.4s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-6px);
+  background: rgba(255,255,255,0.15);
+}
+
+/* Icône */
+.stat-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: rgba(255,215,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #ffd700;
+}
+
+/* Texte */
+.stat-number {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.stat-box p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #d1d5db;
+}
 </style>
 
 <!-- 🟦 HERO SECTION -->
@@ -612,7 +695,54 @@ h1, h2, h3, h4, h5, h6 {
 
   </div>
 </section>
+<!-- 🟣 SECTION STATISTIQUES -->
+<section class="stats-section" id="stats">
+    <div class="stats-circle"></div>
 
+    <div class="stats-container">
+
+        <div class="stat-box">
+            <div class="stat-icon">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <div>
+                <h3 class="stat-number" data-target="5600">0</h3>
+                <p>Happy Customer</p>
+            </div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-icon">
+                <i class="fa-solid fa-comment-dots"></i>
+            </div>
+            <div>
+                <h3 class="stat-number" data-target="1375">0</h3>
+                <p>Good Reviews</p>
+            </div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-icon">
+                <i class="fa-regular fa-face-smile"></i>
+            </div>
+            <div>
+                <h3 class="stat-number" data-target="4690">0</h3>
+                <p>Winner Customer</p>
+            </div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-icon">
+                <i class="fa-regular fa-message"></i>
+            </div>
+            <div>
+                <h3 class="stat-number" data-target="790">0</h3>
+                <p>New Comments</p>
+            </div>
+        </div>
+
+    </div>
+</section>
 <!-- 🟨 PRODUITS EN COURS -->
 <section id="produits" class="section">
   <!-- <h2><i class="fa-solid fa-hourglass-half"></i> Enchères en Cours</h2> -->
@@ -1794,6 +1924,44 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.3 });
 
   observer.observe(document.querySelector("#about"));
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const counters = document.querySelectorAll(".stat-number");
+  const speed = 120;
+
+  const animate = (counter) => {
+    const target = +counter.getAttribute("data-target");
+    let count = 0;
+
+    const update = () => {
+      const increment = target / speed;
+      count += increment;
+
+      if (count < target) {
+        counter.innerText = Math.ceil(count).toLocaleString();
+        requestAnimationFrame(update);
+      } else {
+        counter.innerText = target.toLocaleString() + "+";
+      }
+    };
+
+    update();
+  };
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        counters.forEach(counter => animate(counter));
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.4 });
+
+  observer.observe(document.querySelector("#stats"));
+
 });
 </script>
 @endsection
