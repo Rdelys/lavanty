@@ -743,6 +743,314 @@ h1, h2, h3, h4, h5, h6 {
 
     </div>
 </section>
+
+<!-- 🟨 SECTION COMMENT ÇA MARCHE (STYLE MODERNE) -->
+<section id="how-it-works" class="how-modern">
+
+  <div class="how-header">
+    <span class="how-badge">
+      <i class="fa-solid fa-diagram-project"></i>
+      Comment ça marche
+    </span>
+    <h2>Comment Fonctionnent Nos Enchères</h2>
+  </div>
+
+  <div class="how-steps">
+
+    <!-- STEP 1 -->
+    <div class="how-step">
+      <div class="step-dot"></div>
+      <span class="step-bg">01</span>
+      <h3>Inscription</h3>
+      <p>
+        Créez votre compte, validez votre profil et activez votre accès
+        pour commencer à participer aux enchères.
+      </p>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="how-step">
+      <div class="step-dot"></div>
+      <span class="step-bg">02</span>
+      <h3>Sélectionnez un produit</h3>
+      <p>
+        Explorez les catégories, consultez les détails
+        et choisissez le lot qui vous intéresse.
+      </p>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="how-step">
+      <div class="step-dot"></div>
+      <span class="step-bg">03</span>
+      <h3>Participez à l’enchère</h3>
+      <p>
+        Placez votre mise, suivez la progression
+        et surenchérissez jusqu’à la clôture.
+      </p>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="how-step">
+      <div class="step-dot"></div>
+      <span class="step-bg">04</span>
+      <h3>Effectuez le paiement</h3>
+      <p>
+        Si vous remportez l’enchère, finalisez le paiement
+        et recevez votre bien en toute sécurité.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- 💅 STYLES -->
+<style>
+
+  /* ============================= */
+/* 🟨 HOW IT WORKS - MODERNE */
+/* ============================= */
+
+.how-modern {
+  background: #f5f7fa;
+  padding: 110px 8%;
+  text-align: center;
+}
+
+/* HEADER */
+.how-header {
+  margin-bottom: 80px;
+}
+
+.how-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 15px;
+}
+
+.how-badge i {
+  color: #00b853;
+}
+
+.how-modern h2 {
+  font-size: 2.8rem;
+  font-family: "Rubik", sans-serif;
+  font-weight: 800;
+  color: #111;
+}
+
+/* STEPS WRAPPER */
+.how-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 50px;
+  position: relative;
+}
+
+/* STEP */
+.how-step {
+  position: relative;
+  padding-top: 40px;
+  text-align: center;
+}
+
+/* Petit point vert */
+.step-dot {
+  width: 14px;
+  height: 14px;
+  background: #00b853;
+  border-radius: 50%;
+  margin: 0 auto 25px;
+}
+
+/* Gros numéro en fond */
+.step-bg {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 100px;
+  font-weight: 900;
+  color: rgba(0,0,0,0.04);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Titre */
+.how-step h3 {
+  position: relative;
+  z-index: 2;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #111827;
+}
+
+/* Texte */
+.how-step p {
+  position: relative;
+  z-index: 2;
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.6;
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .how-modern h2 {
+    font-size: 2rem;
+  }
+
+  .step-bg {
+    font-size: 70px;
+  }
+}
+.how-section {
+  background: #fff;
+  padding: 100px 8%;
+  text-align: center;
+}
+.how-section h2 {
+  font-family: "Rubik", sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #001a3f;
+}
+.how-section h2 i { color: #ffd700; margin-right: 10px; }
+.how-section h2 em { font-style: italic; color: #666; }
+.how-section .subtitle {
+  color: #555;
+  font-size: 1rem;
+  margin-bottom: 60px;
+}
+
+/* 🧭 Container aligné */
+.steps-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 20px;
+}
+.step-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+  min-width: 260px;
+}
+.step-card {
+  flex: none;
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 25px;
+  text-align: left;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+  transition: all 0.3s ease;
+  width: 260px;
+}
+.step-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+.step-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+.step1 { background: #fff7ed; }
+.step1 .step-icon { background: #fef3c7; color: #f59e0b; }
+.step2 { background: #ecfdf5; }
+.step2 .step-icon { background: #d1fae5; color: #10b981; }
+.step3 { background: #fff1f2; }
+.step3 .step-icon { background: #ffe4e6; color: #e11d48; }
+.step4 { background: #eff6ff; }
+.step4 .step-icon { background: #dbeafe; color: #2563eb; }
+
+.step-num {
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+.step-card h3 {
+  font-size: 1.3rem;
+  color: #001a3f;
+  font-family: "Rubik", sans-serif;
+  margin-bottom: 15px;
+}
+.step-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.step-card ul li {
+  font-size: 0.95rem;
+  color: #444;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Flèches */
+.arrow {
+  flex-shrink: 0;
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.arrow svg path {
+  stroke-dashoffset: 1000;
+  animation: drawLine 2s ease forwards;
+}
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .steps-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  .step-group {
+    flex-direction: column;
+  }
+  .arrow {
+    transform: rotate(90deg);
+    margin: 10px 0;
+  }
+}
+</style>
+
+<!-- 🎬 ANIMATION LIBRARY -->
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  AOS.init({
+    duration: 1000,
+    once: true,
+    offset: 100
+  });
+});
+</script>
+
+
 <!-- 🟨 PRODUITS EN COURS -->
 <section id="produits" class="section">
   <!-- <h2><i class="fa-solid fa-hourglass-half"></i> Enchères en Cours</h2> -->
@@ -927,231 +1235,7 @@ h1, h2, h3, h4, h5, h6 {
     </div>
   </div>
 </section> -->
-<!-- 🟨 SECTION COMMENT ÇA MARCHE -->
-<section id="how-it-works" class="how-section">
-  <!-- <h2><i class="fa-solid fa-diagram-project"></i> Comment <em>ça marche</em></h2> -->
-     <h2>Comment <em>ça marche</em></h2>
-  <p class="subtitle">Suivez ces étapes simples pour participer à nos enchères d’exception.</p>
 
-  <div class="steps-wrapper">
-
-    <!-- ÉTAPE 1 -->
-    <div class="step-group" data-aos="fade-up" data-aos-delay="100">
-      <div class="step-card step1">
-        <div class="step-icon"><i class="fa-solid fa-id-card"></i></div>
-        <p class="step-num">ÉTAPE 01</p>
-        <h3>Inscription</h3>
-        <ul>
-          <li><strong>01.</strong> Renseignez vos informations</li>
-          <li><strong>02.</strong> Validez votre profil</li>
-          <li><strong>03.</strong> Activez votre compte</li>
-        </ul>
-      </div>
-      <div class="arrow">
-        <svg xmlns="http://www.w3.org/2000/svg" width="90" height="30" fill="none" viewBox="0 0 90 30">
-          <path d="M0 15 C30 5, 60 25, 90 15" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 6"/>
-          <path d="M85 10 L90 15 L85 20" fill="#0d9488"/>
-        </svg>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 2 -->
-    <div class="step-group" data-aos="fade-up" data-aos-delay="200">
-      <div class="step-card step2">
-        <div class="step-icon"><i class="fa-solid fa-box-open"></i></div>
-        <p class="step-num">ÉTAPE 02</p>
-        <h3>Sélectionnez un produit</h3>
-        <ul>
-          <li><strong>01.</strong> Explorez les catégories</li>
-          <li><strong>02.</strong> Consultez les détails</li>
-          <li><strong>03.</strong> Choisissez votre lot</li>
-        </ul>
-      </div>
-      <div class="arrow">
-        <svg xmlns="http://www.w3.org/2000/svg" width="90" height="30" fill="none" viewBox="0 0 90 30">
-          <path d="M0 15 C30 25, 60 5, 90 15" stroke="#e11d48" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 6"/>
-          <path d="M85 10 L90 15 L85 20" fill="#e11d48"/>
-        </svg>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 3 -->
-    <div class="step-group" data-aos="fade-up" data-aos-delay="300">
-      <div class="step-card step3">
-        <div class="step-icon"><i class="fa-solid fa-gavel"></i></div>
-        <p class="step-num">ÉTAPE 03</p>
-        <h3>Participez à l’enchère</h3>
-        <ul>
-          <li><strong>01.</strong> Placez votre mise</li>
-          <li><strong>02.</strong> Surveillez la progression</li>
-          <li><strong>03.</strong> Surenchérissez si nécessaire</li>
-        </ul>
-      </div>
-      <div class="arrow">
-        <svg xmlns="http://www.w3.org/2000/svg" width="90" height="30" fill="none" viewBox="0 0 90 30">
-          <path d="M0 15 C30 5, 60 25, 90 15" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 6"/>
-          <path d="M85 10 L90 15 L85 20" fill="#f59e0b"/>
-        </svg>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 4 -->
-    <div class="step-group" data-aos="fade-up" data-aos-delay="400">
-      <div class="step-card step4">
-        <div class="step-icon"><i class="fa-solid fa-wallet"></i></div>
-        <p class="step-num">ÉTAPE 04</p>
-        <h3>Effectuez le paiement</h3>
-        <ul>
-          <li><strong>01.</strong> Payez en toute sécurité</li>
-          <li><strong>02.</strong> Recevez votre confirmation</li>
-          <li><strong>03.</strong> Obtenez votre bien</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- 💅 STYLES -->
-<style>
-.how-section {
-  background: #fff;
-  padding: 100px 8%;
-  text-align: center;
-}
-.how-section h2 {
-  font-family: "Rubik", sans-serif;
-  font-size: 2.5rem;
-  margin-bottom: 15px;
-  color: #001a3f;
-}
-.how-section h2 i { color: #ffd700; margin-right: 10px; }
-.how-section h2 em { font-style: italic; color: #666; }
-.how-section .subtitle {
-  color: #555;
-  font-size: 1rem;
-  margin-bottom: 60px;
-}
-
-/* 🧭 Container aligné */
-.steps-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 25px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  padding-bottom: 20px;
-}
-.step-group {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  flex: 1;
-  min-width: 260px;
-}
-.step-card {
-  flex: none;
-  background: #fff;
-  border-radius: 16px;
-  padding: 40px 25px;
-  text-align: left;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  border: 1px solid #eee;
-  transition: all 0.3s ease;
-  width: 260px;
-}
-.step-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-}
-.step-icon {
-  width: 70px;
-  height: 70px;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-.step1 { background: #fff7ed; }
-.step1 .step-icon { background: #fef3c7; color: #f59e0b; }
-.step2 { background: #ecfdf5; }
-.step2 .step-icon { background: #d1fae5; color: #10b981; }
-.step3 { background: #fff1f2; }
-.step3 .step-icon { background: #ffe4e6; color: #e11d48; }
-.step4 { background: #eff6ff; }
-.step4 .step-icon { background: #dbeafe; color: #2563eb; }
-
-.step-num {
-  color: #94a3b8;
-  font-weight: 700;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-}
-.step-card h3 {
-  font-size: 1.3rem;
-  color: #001a3f;
-  font-family: "Rubik", sans-serif;
-  margin-bottom: 15px;
-}
-.step-card ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.step-card ul li {
-  font-size: 0.95rem;
-  color: #444;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-
-/* Flèches */
-.arrow {
-  flex-shrink: 0;
-  width: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.arrow svg path {
-  stroke-dashoffset: 1000;
-  animation: drawLine 2s ease forwards;
-}
-@keyframes drawLine {
-  to { stroke-dashoffset: 0; }
-}
-
-/* Responsive */
-@media (max-width: 992px) {
-  .steps-wrapper {
-    flex-direction: column;
-    align-items: center;
-  }
-  .step-group {
-    flex-direction: column;
-  }
-  .arrow {
-    transform: rotate(90deg);
-    margin: 10px 0;
-  }
-}
-</style>
-
-<!-- 🎬 ANIMATION LIBRARY -->
-<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  AOS.init({
-    duration: 1000,
-    once: true,
-    offset: 100
-  });
-});
-</script>
 <!-- 🟧 SECTION ENCHÈRES À VENIR -->
 <section id="upcoming-auctions" class="section light">
   <div class="container">
