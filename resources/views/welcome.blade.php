@@ -297,105 +297,161 @@ h1, h2, h3, h4, h5, h6 {
 }
 .section h2 i { color: #ffd700; margin-right: 10px; }
 
-/* PRODUITS */
+/* ============================= */
+/* 🟨 AUCTION CARD STYLE EXACT */
+/* ============================= */
+
+#produits {
+  background: #f3f4f6;
+}
+
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 25px;
-  justify-items: start;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
+
+@media (max-width: 1024px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .product-grid { grid-template-columns: 1fr; }
+}
+
 .product-card {
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: transform .3s, box-shadow .3s;
-  max-width: 300px;
-  margin: 0; /* ❌ supprime le centrage auto */
+  background: #f9fafb;
+  border-radius: 20px;
+  padding: 18px;
+  transition: all .25s ease;
+  border: 1px solid #e5e7eb;
 }
+
 .product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
+
+/* IMAGE */
 .product-image {
-  position: relative;
-  height: 160px;
+  height: 180px;
+  border-radius: 14px;
   overflow: hidden;
+  background: #ddd;
+  margin-bottom: 14px;
 }
+
 .product-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform .5s;
 }
-.product-card:hover img { transform: scale(1.08); }
 
-.product-status {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: linear-gradient(to right, #e11d48, #b91c1c);
-  color: white;
-  padding: 5px 12px;
-  border-radius: 20px;
+/* CATEGORY */
+.product-category {
   font-size: 12px;
+  color: #9ca3af;
+  display: block;
+  margin-bottom: 6px;
 }
-.product-status.sold { background: linear-gradient(to right, #001a3f, #00397a); color: #ffd700; }
 
-.countdown {
-  display: flex;
-  justify-content: space-around;
-  padding: 8px 0;
-  background: #fafafa;
-  border-top: 1px solid #eee;
-  font-size: 13px;
+/* TITLE */
+.product-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 14px;
 }
-.countdown p { font-weight: bold; font-size: 16px; margin: 0; }
-.countdown span { color: #666; font-size: 10px; }
 
-.product-info { padding: 15px; text-align: left; }
-.product-info h3 { font-size: 1rem; margin-bottom: 5px; color: #001a3f; }
-.product-info .desc { color: #666; font-size: 0.85rem; margin-bottom: 8px; }
-.product-info .price {
-  color: #00b853;
-  font-weight: bold;
-  margin-bottom: 10px;
+.product-title a {
+  text-decoration: none;
+  color: #111827;
+  transition: .2s;
 }
-.product-footer {
+
+.product-card:hover .product-title a {
+  color: #7c3aed;
+  text-decoration: underline;
+}
+
+/* META */
+.product-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-.lot {
-  background: #e8f5e9;
-  color: #00b853;
-  padding: 4px 10px;
-  border-radius: 15px;
-  font-size: 11px;
-}
-.btn-bid {
-  background: linear-gradient(to right, #001a3f, #00397a);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: 0.3s;
   font-size: 13px;
-}
-.btn-bid:hover { transform: scale(1.05); }
-
-.no-product {
-  text-align: center;
-  color: #666;
-  padding: 50px 0;
+  color: #6b7280;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .hero-content h1 { font-size: 2.2rem; }
-  .section { padding: 70px 5%; }
+.meta-left,
+.meta-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
+.product-meta strong {
+  color: #111;
+  font-weight: 600;
+}
+
+/* BOTTOM */
+.product-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+}
+
+/* PRICE */
+.price {
+  font-size: 22px;
+  font-weight: 800;
+  color: #111;
+}
+
+/* BUTTON */
+.btn-bid-modern {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 40px;
+  padding: 8px 16px 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  text-decoration: none;
+  transition: all .25s ease;
+}
+
+/* Petit cercle flèche */
+.btn-bid-modern i {
+  width: 28px;
+  height: 28px;
+  background: #f3f4f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: .25s ease;
+}
+
+/* Hover violet comme image */
+.product-card:hover .btn-bid-modern {
+  background: #7c3aed;
+  color: white;
+  border-color: #7c3aed;
+}
+
+.product-card:hover .btn-bid-modern i {
+  background: white;
+  color: #7c3aed;
+}
 /* 🟪 SECTION CATÉGORIE */
 #categories {
   background: #fff;
@@ -1219,7 +1275,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <!-- 🟨 PRODUITS EN COURS -->
 <section id="produits" class="section">
-  <!-- <h2><i class="fa-solid fa-hourglass-half"></i> Enchères en Cours</h2> -->
   <h2>Enchères en Cours</h2>
 
   <div class="product-grid">
@@ -1231,35 +1286,54 @@ document.addEventListener("DOMContentLoaded", () => {
           @endphp
 
           <div class="product-card">
+
               <div class="product-image">
                   <img src="{{ $image ? asset('storage/'.$image) : 'https://via.placeholder.com/400x300?text=Produit' }}" alt="{{ $product->title }}">
-                  <span class="product-status"><i class="fa-solid fa-fire"></i> En cours</span>
               </div>
 
-              <div class="countdown" data-end="{{ $product->end_time }}">
-                  <div><p class="days">00</p><span>Jours</span></div>
-                  <div><p class="hours">00</p><span>Heures</span></div>
-                  <div><p class="minutes">00</p><span>Minutes</span></div>
-                  <div><p class="seconds">00</p><span>Secondes</span></div>
-              </div>
+              <span class="product-category">
+                  {{ $product->category ?? 'Accessories, Electronics' }}
+              </span>
 
-              <div class="product-info">
-                  <h3>{{ $product->title }}</h3>
-                  <p class="desc">{{ Str::limit($product->description, 80) }}</p>
-<p class="price">Prix de départ : {{ number_format($product->starting_price, 0, ',', ' ') }} Ar</p>
-                  <div class="product-footer">
-                      <span class="lot">Lot #{{ $product->id }}</span>
-                      <a href="{{ route('product.detail', ['id' => $product->id]) }}" class="btn-bid"><i class="fa-solid fa-hammer"></i> Miser</a>
+              <h3 class="product-title">
+                  <a href="{{ route('product.detail', ['id' => $product->id]) }}">
+                      {{ $product->title }}
+                  </a>
+              </h3>
+
+              <div class="product-meta">
+                  <div class="meta-left">
+                      <i class="fa-regular fa-clock"></i>
+                      Closes in:
+                      <strong class="countdown-inline" data-end="{{ $product->end_time }}">
+                          00d 00h 00m 00s
+                      </strong>
+                  </div>
+
+                  <div class="meta-right">
+                      <i class="fa-solid fa-chart-line"></i>
+                      Bids: <strong>{{ $product->bids()->count() }}</strong>
                   </div>
               </div>
+
+              <div class="product-bottom">
+                  <div class="price">
+                      {{ number_format($product->starting_price, 0, ',', ' ') }} Ar
+                  </div>
+
+                  <a href="{{ route('product.detail', ['id' => $product->id]) }}" class="btn-bid-modern">
+                      Place a bid
+                      <i class="fa-solid fa-arrow-up-right"></i>
+                  </a>
+              </div>
+
           </div>
+
       @empty
           <p class="no-product">Aucun produit en cours.</p>
       @endforelse
   </div>
 </section>
-
-
 
 
 <!-- 🟩 PRODUITS ADJUGÉS -->
@@ -2072,26 +2146,30 @@ AOS.init({ duration: 700, once: true });
 @endif
 
 <script>
-document.querySelectorAll('.countdown').forEach(card => {
-  const endTime = new Date(card.dataset.end).getTime();
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const diff = endTime - now;
-    if (diff <= 0) {
-      card.querySelectorAll("p").forEach(p => p.textContent = "00");
-      return;
+document.querySelectorAll('.countdown-inline').forEach(el => {
+
+    const endTime = new Date(el.dataset.end).getTime();
+
+    function update() {
+        const now = new Date().getTime();
+        const diff = endTime - now;
+
+        if (diff <= 0) {
+            el.innerHTML = "Ended";
+            return;
+        }
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+
+        el.innerHTML = `${d}d ${h}h ${m}m ${s}s`;
+
+        requestAnimationFrame(update);
     }
-    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const s = Math.floor((diff % (1000 * 60)) / 1000);
-    card.querySelector(".days").textContent = d;
-    card.querySelector(".hours").textContent = h;
-    card.querySelector(".minutes").textContent = m;
-    card.querySelector(".seconds").textContent = s;
-    requestAnimationFrame(updateCountdown);
-  }
-  updateCountdown();
+
+    update();
 });
 
 // 🔢 Animation des compteurs (count-up)
