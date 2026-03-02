@@ -1050,6 +1050,172 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<!-- 🟪 CATÉGORIES D’ENCHÈRES - VERSION AVEC TITRES -->
+<section id="categories" class="categories-modern">
+
+  <!-- HEADER -->
+  <div class="categories-header">
+    <span class="categories-badge">
+      <i class="fa-solid fa-layer-group"></i>
+      Nos Catégories
+    </span>
+
+    <h2>Explorez Nos Univers d’Enchères</h2>
+
+    <p>
+      Découvrez une sélection exclusive de catégories soigneusement choisies
+      pour vous offrir des opportunités uniques et prestigieuses.
+    </p>
+  </div>
+
+  <!-- BLOCS CATÉGORIES -->
+  <div class="categories-wrapper">
+
+    <a href="{{ url('/products') }}?category=Mobilier" class="cat-item active">
+      <i class="fa-solid fa-couch"></i>
+      <span>Mobilier</span>
+    </a>
+
+    <a href="{{ url('/products') }}?category=Voitures" class="cat-item">
+      <i class="fa-solid fa-car"></i>
+      <span>Voitures</span>
+    </a>
+
+    <a href="{{ url('/products') }}?category=Equipements" class="cat-item">
+      <i class="fa-solid fa-toolbox"></i>
+      <span>Équipements</span>
+    </a>
+
+    <a href="{{ url('/products') }}?category=High tech" class="cat-item">
+      <i class="fa-solid fa-microchip"></i>
+      <span>High-Tech</span>
+    </a>
+
+  </div>
+
+</section>
+
+<style>
+  /* ============================= */
+/* 🟪 CATÉGORIES STYLE MODERNE */
+/* ============================= */
+
+.categories-modern {
+  padding: 100px 8%;
+  background: #f5f7fa;
+  text-align: center;
+}
+
+/* HEADER */
+.categories-header {
+  max-width: 700px;
+  margin: 0 auto 60px auto;
+}
+
+.categories-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #00b853;
+  margin-bottom: 15px;
+}
+
+.categories-modern h2 {
+  font-size: 2.6rem;
+  font-family: "Rubik", sans-serif;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 15px;
+}
+
+.categories-header p {
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* WRAPPER */
+.categories-wrapper {
+  display: flex;
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.06);
+}
+
+/* ITEM */
+.cat-item {
+  flex: 1;
+  padding: 45px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-family: "Rubik", sans-serif;
+  font-weight: 600;
+  color: #444;
+  background: #f3f4f6;
+  border-right: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.cat-item:last-child {
+  border-right: none;
+}
+
+.cat-item i {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 15px;
+  transition: 0.3s;
+}
+
+.cat-item span {
+  display: block;
+  font-size: 1rem;
+}
+
+/* Hover */
+.cat-item:hover {
+  background: #e5e7eb;
+}
+
+.cat-item:hover i {
+  transform: scale(1.1);
+}
+
+/* ACTIVE */
+.cat-item.active {
+  background: #00b853;
+  color: white;
+}
+
+.cat-item.active i {
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .categories-wrapper {
+    flex-direction: column;
+  }
+
+  .cat-item {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .cat-item:last-child {
+    border-bottom: none;
+  }
+
+  .categories-modern h2 {
+    font-size: 2rem;
+  }
+}
+</style>
 
 <!-- 🟨 PRODUITS EN COURS -->
 <section id="produits" class="section">
@@ -1093,53 +1259,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </section>
 
-<!-- 🟪 CATÉGORIES D’ENCHÈRES -->
-<section class="section light" id="categories">
-  <!-- <h2><i class="fa-solid fa-layer-group"></i> Catégories d’Enchères</h2> -->
-     <h2>Catégories d’Enchères</h2>
 
-  <p class="mb-12 text-gray-600 text-center">
-    Découvrez nos catégories phares et trouvez l’objet de vos envies.
-  </p>
-
-  <div class="category-grid">
-    <!-- 🛋️ Mobilier -->
-    <a href="{{ url('/products') }}?category=Mobilier" class="category-card">
-      <div class="category-icon">
-        <i class="fa-solid fa-couch"></i>
-      </div>
-      <h3>Mobilier</h3>
-      <p>Enchères de meubles et décorations d’intérieur</p>
-    </a>
-
-    <!-- 🚗 Voitures -->
-    <a href="{{ url('/products') }}?category=Voitures" class="category-card">
-      <div class="category-icon">
-        <i class="fa-solid fa-car"></i>
-      </div>
-      <h3>Voitures</h3>
-      <p>Véhicules de prestige et collection</p>
-    </a>
-
-    <!-- 🧰 Équipements -->
-    <a href="{{ url('/products') }}?category=Equipements" class="category-card">
-      <div class="category-icon">
-        <i class="fa-solid fa-toolbox"></i>
-      </div>
-      <h3>Équipements</h3>
-      <p>Matériels professionnels et industriels</p>
-    </a>
-
-    <!-- 💻 High-Tech -->
-    <a href="{{ url('/products') }}?category=High tech" class="category-card">
-      <div class="category-icon">
-        <i class="fa-solid fa-microchip"></i>
-      </div>
-      <h3>High-Tech</h3>
-      <p>Technologie, multimédia et gadgets</p>
-    </a>
-  </div>
-</section>
 
 
 <!-- 🟩 PRODUITS ADJUGÉS -->
