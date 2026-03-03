@@ -5,7 +5,6 @@
 @section('content')
 
 <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 /* 🎨 Palette : bleu #001a3f | or #ffd700 | vert #00b853 | gris clair #f5f5f5 */
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Rubik:wght@400;600;700&display=swap");
@@ -321,11 +320,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .product-card {
-  background: #f9fafb;
-  border-radius: 20px;
-  padding: 18px;
-  transition: all .25s ease;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 22px;
+  transition: all .3s ease;
   border: 1px solid #e5e7eb;
+  height: 440px; /* 🔥 hauteur premium */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .product-card:hover {
@@ -335,11 +338,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* IMAGE */
 .product-image {
-  height: 180px;
-  border-radius: 14px;
+  height: 250px; /* 🔥 image plus grande */
+  border-radius: 16px;
   overflow: hidden;
-  background: #ddd;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .product-image img {
@@ -358,9 +360,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* TITLE */
 .product-title {
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 700;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .product-title a {
@@ -407,9 +409,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* PRICE */
 .price {
-  font-size: 22px;
+  font-size: 25px;
   font-weight: 800;
-  color: #111;
+  color: #001a3f;
 }
 
 /* BUTTON */
@@ -452,6 +454,8 @@ h1, h2, h3, h4, h5, h6 {
   background: white;
   color: #7c3aed;
 }
+
+
 /* 🟪 SECTION CATÉGORIE */
 #categories {
   background: #fff;
@@ -1323,8 +1327,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                   <a href="{{ route('product.detail', ['id' => $product->id]) }}" class="btn-bid-modern">
                       Place a bid
-                      <i class="fa-solid fa-arrow-up-right"></i>
-                  </a>
+<i class="fa-solid fa-arrow-right"></i>                  </a>
               </div>
 
           </div>
@@ -1337,9 +1340,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <!-- 🟩 PRODUITS ADJUGÉS -->
-<section id="produits-adjuge" class="section light">
+<!-- <section id="produits-adjuge" class="section light"> -->
   <!-- <h2><i class="fa-solid fa-trophy"></i> Produits Adjugés</h2> -->
-  <h2>Produits Adjugés</h2>
+  <!-- <h2>Produits Adjugés</h2>
 
   @php $countAdjuges = $productsAdjug->where('status', 'adjugé')->count(); @endphp
 
@@ -1384,7 +1387,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="swiper-button-prev"></div>
       @endif
   </div>
-</section>
+</section> -->
 
 <!-- 🟫 SECTION À PROPOS / GET TO KNOW
 <section id="about" class="about-section">
@@ -1431,272 +1434,353 @@ document.addEventListener("DOMContentLoaded", () => {
 </section> -->
 
 <!-- 🟧 SECTION ENCHÈRES À VENIR -->
-<section id="upcoming-auctions" class="section light">
-  <div class="container">
-    <div class="header">
-      <!-- <h2><i class="fa-solid fa-hourglass-start"></i> Enchères <em>à venir</em></h2> -->
-      <h2>Enchères <em>à venir</em></h2>
-      <p>Découvrez les ventes exclusives à venir sur Lavanty.mg</p>
+<section id="upcoming-auctions" class="popular-section">
+
+    @php
+        $upcomingProducts = $products->where('status','à_venir')->take(3);
+    @endphp
+
+    <!-- HEADER -->
+    <div class="popular-header">
+        <span class="mini-badge">
+            <i class="fa-solid fa-cube"></i>
+            Sélection Exclusive
+        </span>
+        <h2>Nos Produits à Venir</h2>
+        <p>Participez prochainement à nos enchères exclusives et découvrez des opportunités uniques.</p>
     </div>
 
-    <!-- Catégories -->
-    <div class="categories">
-      <button class="cat-btn active">Tout</button>
-      <button class="cat-btn">Automobile</button>
-      <button class="cat-btn">Antiquités</button>
-      <button class="cat-btn">Art & Design</button>
-      <button class="cat-btn">High-Tech</button>
-      <button class="cat-btn">Mobilier</button>
-    </div>
+    @if($upcomingProducts->count() > 0)
 
-    <div class="upcoming-layout">
-      <!-- Bannière gauche -->
-      <aside class="banner">
-        <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=900&q=80" alt="Vintage car">
-        <div class="banner-overlay"></div>
-        <div class="banner-text">
-          <h3><span>Véhicules</span> de Collection</h3>
-          <p>Des voitures classiques et iconiques à découvrir bientôt.</p>
+    <div class="popular-layout">
+
+        <!-- IMAGE GAUCHE UNSPLASH -->
+        <div class="popular-big">
+            <img src="https://plus.unsplash.com/premium_photo-1726718415593-ac5b610787a7?q=80&w=1120&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Enchère de luxe">
         </div>
-      </aside>
 
-      <!-- Grille des enchères -->
-      <div class="upcoming-grid">
-        @php $count = 0; @endphp
-        @foreach($products as $product)
-          @if($product->status === 'à_venir')
+        <!-- COLONNE DROITE -->
+        <div class="popular-right">
+
+            @foreach($upcomingProducts as $product)
+
             @php
-              $count++;
-              $image = $product->images 
-                  ? (is_array($product->images) ? $product->images[0] : json_decode($product->images, true)[0] ?? null)
-                  : null;
+                $image = $product->images 
+                    ? (is_array($product->images) ? $product->images[0] : json_decode($product->images, true)[0] ?? null)
+                    : null;
             @endphp
 
-            <div class="auction-card" data-aos="fade-up">
-              <div class="auction-image">
-                <img src="{{ $image ? asset('storage/'.$image) : 'https://via.placeholder.com/400x300?text=Produit+à+venir' }}" alt="{{ $product->title }}">
-                <span class="status upcoming">À venir</span>
-              </div>
-              <div class="auction-info">
-                <h4>{{ Str::limit($product->title, 30) }}</h4>
-                <p class="price">{{ number_format($product->starting_price, 0, ',', ' ') }} Ar</p>
-                <p class="lot">Lot #{{ $product->id }}</p>
-                <button class="notify-btn" disabled>Notifier-moi</button>
-              </div>
-            </div>
-          @endif
-        @endforeach
+            <div class="popular-card">
 
-        <!-- ✅ Aucun produit à venir -->
-        @if($count === 0)
-          <div class="no-upcoming" data-aos="zoom-in">
-            <div class="emoji">😴</div>
-            <h4>Aucune enchère à venir pour le moment</h4>
-            <p>De nouvelles ventes exclusives seront bientôt disponibles. Restez connectés !</p>
-          </div>
-        @endif
-      </div>
+                <div class="popular-thumb">
+                    <img src="{{ $image ? asset('storage/'.$image) : 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=400&q=80' }}">
+                </div>
+
+                <div class="popular-content">
+
+                    <h4>{{ $product->title }}</h4>
+
+                    <div class="meta">
+                        <span>Référence : {{ $product->id }}</span>
+                    </div>
+
+                    <div class="meta light">
+                        <span>
+                            <i class="fa-regular fa-clock"></i>
+                            Se termine dans :
+                            <strong class="countdown-inline" data-end="{{ $product->end_time }}">
+                                00j 00h 00m 00s
+                            </strong>
+                        </span>
+
+                        <span>
+                            <i class="fa-solid fa-chart-line"></i>
+                            Offres : {{ $product->bids()->count() }}
+                        </span>
+                    </div>
+
+                    <div class="bottom">
+                        <div class="price">
+                            {{ number_format($product->starting_price,0,',',' ') }} Ar
+                        </div>
+
+                        <a href="{{ route('product.detail',$product->id) }}" class="btn-bid">
+                            Enchérir
+                            <span class="circle">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+            @endforeach
+
+            <!-- BOUTON -->
+            <div class="explore-wrapper">
+                <a href="{{ url('/products') }}" class="btn-explore">
+                    Voir toutes les enchères
+                    <span class="circle">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </a>
+            </div>
+
+        </div>
     </div>
-  </div>
+
+    @else
+
+    <!-- AUCUN PRODUIT -->
+    <div class="no-upcoming-state">
+        <div class="emoji">⏳</div>
+        <h3>Aucune enchère à venir pour le moment</h3>
+        <p>De nouvelles ventes exclusives seront bientôt disponibles. Restez connectés et consultez régulièrement notre plateforme.</p>
+        <a href="{{ url('/products') }}" class="btn-explore">
+            Découvrir les enchères en cours
+            <span class="circle">
+                <i class="fa-solid fa-arrow-right"></i>
+            </span>
+        </a>
+    </div>
+
+    @endif
+
 </section>
 
 <!-- 💅 STYLE -->
 <style>
-.section.light {
-  background: #f9f9f6;
-  padding: 80px 7%;
+  /* Etat vide */
+.no-upcoming-state{
+  text-align:center;
+  padding:80px 20px;
+  background:white;
+  border-radius:25px;
+  max-width:700px;
+  margin:0 auto;
+  box-shadow:0 8px 25px rgba(0,0,0,0.05);
 }
 
-/* Header */
-.header { text-align: center; margin-bottom: 35px; }
-.header h2 {
-  font-family: "Rubik", sans-serif;
-  font-size: 2.2rem;
-  color: #001a3f;
-}
-.header h2 i { color: #ffd700; margin-right: 10px; }
-.header em { font-style: italic; color: #777; }
-.header p { color: #666; margin-top: 8px; }
-
-/* Catégories */
-.categories {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 35px;
-}
-.cat-btn {
-  border: 1px solid #ddd;
-  background: #fff;
-  color: #555;
-  font-size: 0.85rem;
-  padding: 6px 14px;
-  border-radius: 20px;
-  cursor: not-allowed;
-  transition: .3s;
-}
-.cat-btn.active {
-  background: #ffd700;
-  color: #001a3f;
+.no-upcoming-state .emoji{
+  font-size:3rem;
+  margin-bottom:15px;
 }
 
-/* Layout */
-.upcoming-layout {
-  display: grid;
-  grid-template-columns: 250px 1fr;
-  gap: 30px;
-  align-items: start;
+.no-upcoming-state h3{
+  font-size:1.5rem;
+  margin-bottom:10px;
 }
 
-/* Bannière */
-.banner {
-  position: relative;
-  border-radius: 15px;
-  overflow: hidden;
-  height: 100%;
-  min-height: 380px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+.no-upcoming-state p{
+  color:#6b7280;
+  margin-bottom:25px;
 }
-.banner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform .5s;
-}
-.banner:hover img { transform: scale(1.05); }
-.banner-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.1));
-}
-.banner-text {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  color: white;
-}
-.banner-text h3 {
-  font-family: "Rubik", sans-serif;
-  font-size: 1.4rem;
-  line-height: 1.3;
-}
-.banner-text span { color: #ffd700; }
-.banner-text p {
-  font-size: 0.9rem;
-  color: #f3f3f3;
+/* ============================= */
+/* 🔥 POPULAR AUCTION FULL LAYOUT */
+/* ============================= */
+
+.popular-section{
+  background:#eef0f4;
+  padding:110px 8%;
 }
 
-/* Grille produits */
-.upcoming-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 18px;
-  justify-items: center;
-}
-.auction-card {
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  transition: all .3s;
-  width: 180px;
-  height: 240px;
-  display: flex;
-  flex-direction: column;
-}
-.auction-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
-}
-.auction-image {
-  position: relative;
-  height: 120px;
-  overflow: hidden;
-}
-.auction-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.status.upcoming {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  background: #2563eb;
-  color: white;
-  padding: 3px 8px;
-  border-radius: 8px;
-  font-size: 10px;
-  font-weight: 600;
-}
-.auction-info {
-  padding: 8px 10px;
-  text-align: left;
-  flex-grow: 1;
-}
-.auction-info h4 {
-  font-size: 0.85rem;
-  color: #001a3f;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-.auction-info .price {
-  color: #00b853;
-  font-weight: 600;
-  font-size: 0.8rem;
-  margin-bottom: 3px;
-}
-.auction-info .lot {
-  color: #888;
-  font-size: 0.75rem;
-  margin-bottom: 8px;
-}
-.notify-btn {
-  background: #001a3f;
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  border: none;
-  opacity: 0.8;
-  cursor: not-allowed;
+/* HEADER */
+.popular-header{
+  text-align:center;
+  margin-bottom:70px;
 }
 
-/* 💤 Aucune enchère à venir */
-.no-upcoming {
-  grid-column: 1 / -1;
-  text-align: center;
-  color: #333;
-  margin-top: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.no-upcoming .emoji {
-  font-size: 3rem;
-  animation: float 2s ease-in-out infinite;
-}
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-.no-upcoming h4 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #001a3f;
-}
-.no-upcoming p {
-  font-size: 0.9rem;
-  color: #666;
+.mini-badge{
+  font-size:13px;
+  font-weight:600;
+  color:#7c3aed;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
 }
 
-/* Responsive */
-@media (max-width: 992px) {
-  .upcoming-layout { grid-template-columns: 1fr; }
-  .banner { height: 220px; min-height: unset; }
-  .upcoming-grid { justify-content: center; }
+.popular-header h2{
+  font-size:2.5rem;
+  font-family:"Rubik",sans-serif;
+  margin-bottom:10px;
+}
+
+.popular-header p{
+  color:#6b7280;
+  font-size:0.95rem;
+}
+
+/* LAYOUT */
+.popular-layout{
+  display:grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap:40px;
+  align-items:start;
+}
+
+/* LEFT BIG IMAGE */
+.popular-big{
+  background:#dcdcdc;
+  border-radius:30px;
+  overflow:hidden;
+  height:620px;
+}
+
+.popular-big img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* RIGHT SIDE */
+.popular-right{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+/* CARD */
+.popular-card{
+  background:white;
+  border-radius:20px;
+  padding:18px;
+  display:flex;
+  gap:18px;
+  align-items:center;
+  box-shadow:0 6px 20px rgba(0,0,0,0.05);
+  transition:.3s;
+}
+
+.popular-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 30px rgba(0,0,0,0.08);
+}
+
+.popular-thumb{
+  width:110px;
+  height:110px;
+  border-radius:18px;
+  overflow:hidden;
+  background:#dcdcdc;
+}
+
+.popular-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.popular-content{
+  flex:1;
+}
+
+.popular-content h4{
+  font-size:1rem;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.meta{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#6b7280;
+  margin-bottom:6px;
+}
+
+.meta.light{
+  color:#8b8b8b;
+}
+
+.bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:10px;
+}
+
+.price{
+  font-size:1.2rem;
+  font-weight:800;
+}
+
+/* BUTTON */
+.btn-bid{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#ffffff;
+  border:1px solid #d1d5db;
+  padding:7px 15px;
+  border-radius:30px;
+  font-size:12px;
+  font-weight:600;
+  text-decoration:none;
+  color:#111;
+  transition:.3s;
+}
+
+.circle{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:#f3f4f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+}
+
+.popular-card:hover .btn-bid{
+  background:#7c3aed;
+  color:white;
+  border-color:#7c3aed;
+}
+
+.popular-card:hover .circle{
+  background:white;
+  color:#7c3aed;
+}
+
+/* EXPLORE BUTTON */
+.explore-wrapper{
+  margin-top:20px;
+  text-align:center;
+}
+
+.btn-explore{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  background:#7c3aed;
+  color:white;
+  padding:12px 28px;
+  border-radius:40px;
+  font-weight:600;
+  text-decoration:none;
+  transition:.3s;
+}
+
+.btn-explore .circle{
+  background:white;
+  color:#7c3aed;
+}
+
+.btn-explore:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(124,58,237,0.4);
+}
+
+/* RESPONSIVE */
+@media(max-width:992px){
+  .popular-layout{
+    grid-template-columns:1fr;
+  }
+  .popular-big{
+    height:350px;
+  }
 }
 </style>
 
