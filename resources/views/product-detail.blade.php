@@ -243,8 +243,86 @@ button {
   h1 { font-size: 1.6rem; }
   #bidsTable th, #bidsTable td { font-size: 0.8rem; padding: 0.6rem; }
 }
-</style>
+/* --- BANNIERE PRODUIT --- */
+.product-banner{
+  position: relative;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  margin-bottom: 60px;
+  overflow: hidden;
+}
 
+/* Image Unsplash en arrière-plan */
+.product-banner::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2000&auto=format&fit=crop") center/cover no-repeat;
+  filter: blur(4px) brightness(0.7);
+  transform: scale(1.1);
+  z-index: 1;
+}
+
+/* Overlay bleu Lavanty */
+.product-banner::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,47,108,0.85), rgba(0,47,108,0.65));
+  z-index: 2;
+}
+
+/* Contenu au-dessus */
+.product-banner .banner-content{
+  position: relative;
+  z-index: 3;
+  max-width: 900px;
+  padding: 20px;
+}
+
+.product-banner h1{
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.product-banner p{
+  margin-top: 10px;
+  font-size: 1.05rem;
+  opacity: .9;
+}
+
+.product-banner .breadcrumb{
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+
+.product-banner .breadcrumb a{
+  color: #ffd700;
+  text-decoration: none;
+}
+
+.product-banner .breadcrumb a:hover{
+  text-decoration: underline;
+}
+</style>
+<!-- 🌟 Bannière produit -->
+<section class="product-banner">
+    <div class="banner-content">
+        <h1>{{ $product->title }}</h1>
+
+        <p>Découvrez les détails et participez à l'enchère pour ce produit exclusif sur Lavanty.</p>
+
+        <div class="breadcrumb">
+            <a href="{{ url('/products') }}">Produits</a> /
+            <span>{{ $product->title }}</span>
+        </div>
+    </div>
+</section>
 <section class="container mx-auto px-6 py-16">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
